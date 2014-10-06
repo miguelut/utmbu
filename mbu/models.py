@@ -6,25 +6,25 @@ class Course(models.Model):
     name = models.CharField(max_length=200)
 
 class Session(models.Model):
-    start_time = model.DateTimeField()
-    end_time = model.DateTimeField()
-    counselor = models.ForeignKey(Counselor)
-    course = models.ForeignKey(Course)
-    teaching_assistants = models.ManyToManyField(User)
-    merit_badge_university = models.ForeignKey(MeritBadgeUniversity)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    counselor = models.ForeignKey('Counselor')
+    course = models.ForeignKey('Course')
+    teaching_assistants = models.ManyToManyField('User')
+    merit_badge_university = models.ForeignKey('MeritBadgeUniversity')
 
 class Scout(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField('User')
     dob = models.DateTimeField()
     rank = models.CharField(max_length=15)
-    troop = models.ForeignKey(Troop)
+    troop = models.ForeignKey('Troop')
     
 class Troop(models.Model):
     council = models.CharField(max_length=100)
 
 class TroopContact(models.Model):
-    user = models.OneToOneField(User)
-    address = models.ForeignKey(Address)
+    user = models.OneToOneField('User')
+    address = models.ForeignKey('Address')
     phone_number = models.CharField(max_length=12)
 
 class Address(models.Model):
@@ -35,12 +35,12 @@ class Address(models.Model):
     zip_code = models.CharField(max_length=10)
 
 class Counselor(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField('User')
     phone_number = models.CharField(max_length=12)
 
 
 class Venture(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField('User')
     dob = models.DateTimeField()
 
 #This class will represent the yearly MBU so we can 
@@ -49,6 +49,6 @@ class MeritBadgeUniversity(models.Model):
     year = models.DateTimeField()
 
 class WaitingList(models.Model):
-    scout = models.ForeignKey(Scout)
-    course = models.ForeignKey(Course)
-    position_in_line = models.IntegerField
+    scout = models.ForeignKey('Scout')
+    course = models.ForeignKey('Course')
+    position_in_line = models.IntegerField()
