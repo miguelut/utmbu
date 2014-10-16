@@ -4,7 +4,7 @@
 	<title>User Login</title>
 </head>
 <body>
-	<form method="post" action="{% url 'django.comntrib.auth.views.login' %}">
+	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 		<div>{{form.username.label_tag}}</div>	
 		<div>{{form.username}}</div>	
 		<div>{{form.password.label_tag}}</div>	
