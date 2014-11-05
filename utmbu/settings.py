@@ -26,6 +26,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Trying Something
+APPEND_SLASH = True
+
 
 # Application definition
 
@@ -85,3 +88,7 @@ STATIC_URL = '/static/'
 
 #Template Directories
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
+LOGIN_URL = 'mbu_login'
+LOGOUT_URL = 'mbu_logout'
+LOGIN_REDIRECT_URL = 'mbu_home'

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+	<title>User Login</title>
+</head>
+<body>
+	{{ message }}
+	<form method="post" action="{% url 'mbu_login' %}">
+
+		{% csrf_token %}
+
+		<label for"username"> username: </label>
+		<input id="username" type="text" name="username" value="{{username}}">
+		<br />
+		<label for"password"> password: </label>
+		<input id="password" type="text" name="password" value="{{password}}">
+		<br />
+		<input type="submit" value="login"/>
+		<input type="hidden" value="{{next}}" name="next"/>
+	</form>
+</body>
+</html>
