@@ -26,3 +26,9 @@ def login_user(request):
 	args.update({'message': message})
 	args.update({'username': username_given})
 	return render_to_response('login.html', args)
+
+def home(request):
+	args = {}
+	args.update(csrf(request))
+
+	return render_to_response('home.html')
