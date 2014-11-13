@@ -1,9 +1,7 @@
-<!doctype html>
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
-	YOU ARE HOME!
-</body>
-</html>
+{% extends "base.html" %} 
+{% block content %}
+HUZZAH! 
+<a href="{% url "mbu_home" %}">home</a>
+{% endblock %}
+
+
