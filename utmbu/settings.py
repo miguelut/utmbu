@@ -26,6 +26,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Trying Something
+APPEND_SLASH = True
+
 
 # Application definition
 
@@ -36,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mbu'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +85,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#Template Directories
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
+LOGIN_URL = 'mbu_login'
+LOGOUT_URL = 'mbu_logout'
+LOGIN_REDIRECT_URL = 'mbu_home'
