@@ -10,7 +10,9 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^$', auth_views.login, {'template_name':'mbu/login.html'})
-    url(r'^$', 'mbu.views.home', name = 'mbu_home')
+    url(r'^$', 'mbu.views.home', name = 'mbu_home'),
+    url(r'^classlist/', 'mbu.views.classlist', name = 'class_list'),
+    url(r'^classrequirements/(\d)/$', 'mbu.views.classrequirements', name = 'class_requirements')
 )
 
 #Authentication Views
