@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends 'base.html' %} 
 {% block navbar %}
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -9,10 +9,9 @@
             </ul>
         </div>
     </nav>
-{% endblock %}
+{% endblock navbar %}
 {% block content %}
-HUZZAH! 
-<a href="{% url "mbu_home" %}">home</a>
-{% endblock %}
+	<a href="{% url "mbu_home" %}">home</a>
+{% endblock content %}
 
 
