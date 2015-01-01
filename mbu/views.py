@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
+from mbu.forms import EditProfileForm
 
 # Create your views here.
 def login_user(request):
@@ -32,3 +33,19 @@ def home(request):
     args.update(csrf(request))
     args.update({'links': [{'href':'mbu_home', 'label':'Home'}]})
     return render_to_response('mbu/home.html', args)
+
+def edit_profile(request):
+    args = {
+        'links': [
+            {'href':'mbu_home', 'label':'Home'}
+        ]}
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST)
+        if form.is_valid():
+            # Process form if valid
+            pass
+    else:
+        form = EditProfileForm()
+        args.update({'form': form})
+    
+    return render(request, 'mbu/edit_profile.html', args)

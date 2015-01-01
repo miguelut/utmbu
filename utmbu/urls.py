@@ -10,14 +10,13 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^$', auth_views.login, {'template_name':'mbu/login.html'})
-    url(r'^$', 'mbu.views.home', name = 'mbu_home')
+    url(r'^$', 'mbu.views.home', name = 'mbu_home'),
+    url(r'^profile/edit/', 'mbu.views.edit_profile', name = 'mbu_home')
 )
 
 #Authentication Views
 urlpatterns += patterns(
 	'django.contrib.auth.views',
 
-	url(r'^login/', 'login',
-		{'template_name': 'login.html'},
-		name = 'mbu_login')
+	url(r'^login/', 'login', {'template_name': 'login.html'}, name = 'mbu_login')
 )
