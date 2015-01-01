@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+	<title>Home</title>
+	<link rel="stylesheet" type="text/css" href="{% static "mbu/css/bootstrap.css" %}"/>
+</head>
+<body>
+	<div id="navbar">
+		{% block navbar %}{% endblock navbar %}
+	</div>
+	<div id="content">
+		{% block content %}{% endblock content %}
+	</div>
+</body>
+{% block links %} {% endblock %}
+</html>
