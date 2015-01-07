@@ -1,7 +1,16 @@
-{% extends "base.html" %} 
+{% extends 'base.html' %} 
+{% block navbar %}
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav">
+                {% for link in links %}
+                <li><a href="{% url link.href %}">{{ link.label }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+{% endblock navbar %}
 {% block content %}
-HUZZAH! 
-<a href="{% url "mbu_home" %}">home</a>
-{% endblock %}
-
+	<a href="{% url "mbu_home" %}">home</a>
+{% endblock content %}
 
