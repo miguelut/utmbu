@@ -3,9 +3,15 @@
 <html>
 <head>
 	<title>Home</title>
+	<link rel="stylesheet" type="text/css" href="{% static "mbu/css/bootstrap.css" %}"/>
 </head>
 <body>
-{% block content %}{% endblock %}
+	<div id="navbar">
+		{% block navbar %}{% endblock navbar %}
+	</div>
+	<div id="content">
+		{% block content %}{% endblock content %}
+	</div>
 </body>
-<link rel="stylesheet" type="text/css" href="{% static "mbu/css/bootstrap.css" %}"/>
+{% block links %} {% endblock %}
 </html>

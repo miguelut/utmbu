@@ -87,7 +87,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 #Template Directories
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'mbu/templates/mbu')]
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 LOGIN_URL = 'mbu_login'
 LOGOUT_URL = 'mbu_logout'
