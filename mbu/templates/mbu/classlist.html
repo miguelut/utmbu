@@ -1,26 +1,28 @@
 <!doctype html>
 <html>
 <head>
-	<title>Class Listing</title>
+    <title>Class Listing</title>
 </head>
 <body>
-	<table class="table">
-		<tr>
+    <table class="table">
+        <tr>
             <td>ID</td>
-			<td>Name</td>
-			<td>Location</td>
-			<td>Teacher</td>
-			<td>Requirements</td>
-		</tr>
-		{% for class in classlist %}
-		<tr>
+            <td>Name</td>
+            <td>Time</td>
+            <td>Location</td>
+            <td>Teacher</td>
+            <td>Requirements</td>
+        </tr>
+        {% for class in classlist %}
+        <tr>
             <td>{{ class.id }}</td>
-			<td>{{ class.name }}</td>
-			<td>{{ class.location }}</td>
-			<td>{{ class.teacher }}</td>
-			<td><a href="{% url class.link class.id %}">Link</a></td>
-		</tr>
-		{% endfor %}
-	</table>
+            <td>{{ class.name }}</td>
+            <td>{{ class.time }}</td>
+            <td>{{ class.location }}</td>
+            <td>{{ class.teacher }}</td>
+            <td><a href="{% url class.link class.id %}">Link</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
