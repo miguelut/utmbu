@@ -21,3 +21,9 @@ urlpatterns += patterns(
 		{'template_name': 'login.html'},
 		name = 'mbu_login')
 )
+
+# Scout URLS
+urlpatterns += patterns(
+        '',
+	url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout')
+)
