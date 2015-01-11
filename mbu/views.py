@@ -57,5 +57,10 @@ def register_scout(request):
           # save user
           # save scout
           # redirect login
-    
-   
+
+def scoutmaster(request):
+    args = {}
+    args.update(csrf(request))
+    args.update({'links':[{'href':'mbu_home', 'label':'Home'}]})
+    # Set session info?
+    return render_to_response('mbu/scoutmaster.html',args)
