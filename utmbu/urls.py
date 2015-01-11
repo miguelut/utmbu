@@ -25,5 +25,6 @@ urlpatterns += patterns(
 # Scout URLS
 urlpatterns += patterns(
         '',
-	url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout')
+	url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
+        url(r'^scoutmaster/', 'mbu.views.scoutmaster', name = 'scoutmaster')
 )
