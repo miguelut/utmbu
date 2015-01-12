@@ -10,21 +10,21 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^$', auth_views.login, {'template_name':'mbu/login.html'})
-    url(r'^$', 'mbu.views.home', name = 'mbu_home')
+    url(r'^$', 'mbu.views.home', name = 'mbu_home'),
+    url(r'^classlist/', 'mbu.views.classlist', name = 'class_list'),
+    url(r'^classrequirements/(\d)/$', 'mbu.views.classrequirements', name = 'class_requirements')
 )
 
 #Authentication Views
 urlpatterns += patterns(
-	'django.contrib.auth.views',
-
-	url(r'^login/', 'login',
-		{'template_name': 'login.html'},
-		name = 'mbu_login')
+    '',
+    url(r'^login/$', 'django.contrib.auth.views.login', { 'template_name': 'login.html' },  name = 'login'),
+    url(r'^logout/$', 'mbu.views.logout_user', name = 'logout'),
 )
 
 # Scout URLS
 urlpatterns += patterns(
-        '',
-	url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
-        url(r'^scoutmaster/', 'mbu.views.scoutmaster', name = 'scoutmaster')
+    '',
+    url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
+    url(r'^scoutmaster/', 'mbu.views.scoutmaster', name = 'scoutmaster'),
 )
