@@ -1,39 +1,25 @@
 from django.shortcuts import render, render_to_response
 from django.core.context_processors import csrf
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
 from django import forms
+from django.template import RequestContext
 from mbu.models import Scout, User
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
-def login_user(request):
-    args = {}
-    args.update(csrf(request))
-    message = "Please log in below..."
-    username_given = ''
-    password_given = ''
-    if request.POST:
-        username_given = request.POST.get('username')
-        password_given = request.POST.get('password')
-
-        user = authenticate(username=username_given, password=password_given)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                message = "You're logged in!"
-            else:
-                message = "Youraccount exists, but is not active."
-        else:
-            message= "Your username/password combination was invalid..."
-
-    args.update({'message': message})
-    args.update({'username': username_given})
-    return render_to_response('login.html', args)
+def logout_user(request):
+    logout(request)
+    return redirect('mbu_home')
 
 def home(request):
     args = {}
     args.update(csrf(request))
     args.update({'links': [{'href':'mbu_home', 'label':'Home'}]})
-    return render_to_response('mbu/home.html', args)
+    context = RequestContext(request)
+    return render_to_response('mbu/home.html', args, context_instance=context)
 
 class RegisterScoutForm(forms.Form):
     username = forms.CharField(label='Username')
@@ -53,10 +39,6 @@ def register_scout(request):
         user.save()
 
     return render_to_response('mbu/register_scout.html',args)
-        # if validation
-          # save user
-          # save scout
-          # redirect login
 
 def scoutmaster(request):
     args = {}
@@ -64,3 +46,28 @@ def scoutmaster(request):
     args.update({'links':[{'href':'mbu_home', 'label':'Home'}]})
     # Set session info?
     return render_to_response('mbu/scoutmaster.html',args)
+
+def classlist(request):
+	args = {}
+	args.update(csrf(request))
+	classList = [];
+	getClasslist(classList)
+	args.update({ 'classlist': classList })
+	return render_to_response('classlist.html', args)
+
+
+def getClasslist(classList):
+	# add timeslot info
+	classList.append({'id': 1, 'name': 'class1', 'location': 'location1', 'teacher': 'teacher1', 'link': 'class_requirements'})
+	classList.append({'id': 2, 'name': 'class2', 'location': 'location2', 'teacher': 'teacher2', 'link': 'class_requirements'})
+	classList.append({'id': 3, 'name': 'class3', 'location': 'location3', 'teacher': 'teacher3', 'link': 'class_requirements'})
+
+	return
+
+def classrequirements(request, id=-1):
+	args = {}
+	args.update(csrf(request))
+	#if (id < 0):
+		#handle error
+	args.update({'id': id})
+	return render_to_response('classrequirements.html', args)

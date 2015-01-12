@@ -89,7 +89,7 @@ STATICFILES_DIRS = (
 )
 
 #Template Directories
-TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'mbu/templates/mbu'))
 
 LOGIN_URL = 'mbu_login'
 LOGOUT_URL = 'mbu_logout'
