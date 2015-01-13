@@ -20,7 +20,7 @@ def logout_user(request):
     logout(request)
     return redirect('mbu_home')
 
-def home(request):
+def view_home_page(request):
     context = RequestContext(request)
     return render_to_response('mbu/home.html', args, context_instance=context)
 
@@ -52,11 +52,11 @@ def edit_profile(request):
     
     return render(request, 'mbu/edit_profile.html', args)
 
-def scoutmaster(request):
+def view_scoutmaster_page(request):
     # Set session info?
     return render_to_response('mbu/scoutmaster.html', args)
 
-def classlist(request):
+def view_class_list(request):
 	args = {}
 	args.update(csrf(request))
 	classList = [];
@@ -86,7 +86,7 @@ def getClasslist(classList):
         'link': 'class_requirements'})
     return
 
-def classrequirements(request, id=-1):
+def view_class_requirements(request, id=-1):
 	args = {}
 	args.update(csrf(request))
 	#if (id < 0):
@@ -94,5 +94,5 @@ def classrequirements(request, id=-1):
 	args.update({'id': id})
 	return render_to_response('classrequirements.html', args)
 
-def class_schedule(request):
+def view_class_schedule(request):
     return render_to_response('class_schedule.html', args)
