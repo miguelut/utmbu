@@ -60,14 +60,27 @@ def classlist(request):
 	args.update({ 'classlist': classList })
 	return render_to_response('classlist.html', args)
 
-
 def getClasslist(classList):
-	# add timeslot info
-	classList.append({'id': 1, 'name': 'class1', 'location': 'location1', 'teacher': 'teacher1', 'link': 'class_requirements'})
-	classList.append({'id': 2, 'name': 'class2', 'location': 'location2', 'teacher': 'teacher2', 'link': 'class_requirements'})
-	classList.append({'id': 3, 'name': 'class3', 'location': 'location3', 'teacher': 'teacher3', 'link': 'class_requirements'})
-
-	return
+    # add timeslot info
+    classList.append({'id': 1,
+        'name': 'class1',
+        'time': '9:00-10:30',
+        'location': 'location1',
+        'teacher': 'teacher1',
+        'link': 'class_requirements'})
+    classList.append({'id': 2,
+        'name': 'class2',
+        'time': '9:00-10:30',
+        'location': 'location2',
+        'teacher': 'teacher2',
+        'link': 'class_requirements'})
+    classList.append({'id': 3,
+        'name': 'class3',
+        'time': '9:00-10:30',
+        'location': 'location3',
+        'teacher': 'teacher3',
+        'link': 'class_requirements'})
+    return
 
 def classrequirements(request, id=-1):
 	args = {}
