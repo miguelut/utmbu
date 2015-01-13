@@ -13,7 +13,8 @@ args = {}
 args.update({'links': [
     {'href':'mbu_home', 'label':'Home'}, 
     {'href':'edit_profile', 'label':'Edit Profile'},
-    {'href':'class_schedule', 'label':'View Class Schedule'}
+    {'href':'class_schedule', 'label':'Class Schedule'},
+    {'href':'reports', 'label':'Reports'}
 ]})
 
 def logout_user(request):
@@ -96,3 +97,6 @@ def view_class_requirements(request, id=-1):
 
 def view_class_schedule(request):
     return render_to_response('class_schedule.html', args)
+
+def view_reports(request):
+    return render_to_response('reports.html', args)
