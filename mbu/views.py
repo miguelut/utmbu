@@ -17,7 +17,7 @@ def logout_user(request):
 def home(request):
     args = {}
     args.update(csrf(request))
-    args.update({'links': [{'href':'mbu_home', 'label':'Home'}]})
+    args.update({'links': [{'href':'mbu_home', 'label':'Home'}, {'href':'edit_profile', 'label':'Edit Profile'}]})
     context = RequestContext(request)
     return render_to_response('mbu/home.html', args, context_instance=context)
 
