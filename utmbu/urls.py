@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'mbu.views.home', name = 'mbu_home'),
-    url(r'^profile/edit/', 'mbu.views.edit_profile', name = 'mbu_home'),
+    url(r'^profile/edit/', 'mbu.views.edit_profile', name = 'edit_profile'),
     url(r'^classlist/', 'mbu.views.classlist', name = 'class_list'),
     url(r'^classrequirements/(\d)/$', 'mbu.views.classrequirements', name = 'class_requirements')
 )
