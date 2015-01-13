@@ -4,15 +4,13 @@ from django.contrib.auth import views as auth_views
 
 #General Views
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'utmbu.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'^$', auth_views.login, {'template_name':'mbu/login.html'})
-    url(r'^$', 'mbu.views.home', name = 'mbu_home'),
-    url(r'^classlist/', 'mbu.views.classlist', name = 'class_list'),
-    url(r'^classrequirements/(\d)/$', 'mbu.views.classrequirements', name = 'class_requirements')
+    url(r'^$', 'mbu.views.view_home_page', name = 'mbu_home'),
+    url(r'^profile/edit/', 'mbu.views.edit_profile', name = 'edit_profile'),
+    url(r'^class/list/$', 'mbu.views.view_class_list', name = 'class_list'),
+    url(r'^class/requirements/(\d)/$', 'mbu.views.view_class_requirements', name = 'class_requirements'),
+    url(r'^class/schedule/$', 'mbu.views.view_class_schedule', name = 'class_schedule'),
+    url(r'^reports/$', 'mbu.views.view_reports', name = 'reports')
 )
 
 #Authentication Views
@@ -26,5 +24,5 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
-    url(r'^scoutmaster/', 'mbu.views.scoutmaster', name = 'scoutmaster'),
+    url(r'^scoutmaster/', 'mbu.views.view_scoutmaster_page', name = 'scoutmaster'),
 )
