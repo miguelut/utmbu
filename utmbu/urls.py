@@ -7,8 +7,9 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'mbu.views.home', name = 'mbu_home'),
     url(r'^profile/edit/', 'mbu.views.edit_profile', name = 'edit_profile'),
-    url(r'^classlist/', 'mbu.views.classlist', name = 'class_list'),
-    url(r'^classrequirements/(\d)/$', 'mbu.views.classrequirements', name = 'class_requirements')
+    url(r'^class/list/$', 'mbu.views.classlist', name = 'class_list'),
+    url(r'^class/requirements/(\d)/$', 'mbu.views.classrequirements', name = 'class_requirements'),
+    url(r'^class/schedule/$', 'mbu.views.class_schedule', name = 'class_schedule')
 )
 
 #Authentication Views

@@ -10,7 +10,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 args = {}
-args.update({'links': [{'href':'mbu_home', 'label':'Home'}, {'href':'edit_profile', 'label':'Edit Profile'}]})
+args.update({'links': [
+    {'href':'mbu_home', 'label':'Home'}, 
+    {'href':'edit_profile', 'label':'Edit Profile'},
+    {'href':'class_schedule', 'label':'View Class Schedule'}
+]})
 
 def logout_user(request):
     logout(request)
@@ -89,3 +93,6 @@ def classrequirements(request, id=-1):
 		#handle error
 	args.update({'id': id})
 	return render_to_response('classrequirements.html', args)
+
+def class_schedule(request):
+    return render_to_response('class_schedule.html', args)
