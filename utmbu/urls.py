@@ -17,9 +17,14 @@ urlpatterns = patterns('',
 
 #Authentication Views
 urlpatterns += patterns(
-	'django.contrib.auth.views',
+    '',
+    url(r'^login/$', 'django.contrib.auth.views.login', { 'template_name': 'login.html' },  name = 'login'),
+    url(r'^logout/$', 'mbu.views.logout_user', name = 'logout'),
+)
 
-	url(r'^login/', 'login',
-		{'template_name': 'login.html'},
-		name = 'mbu_login')
+# Scout URLS
+urlpatterns += patterns(
+    '',
+    url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
+    url(r'^scoutmaster/', 'mbu.views.scoutmaster', name = 'scoutmaster'),
 )

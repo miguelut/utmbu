@@ -17,7 +17,8 @@ class Scout(models.Model):
     user = models.OneToOneField(User)
     dob = models.DateTimeField()
     rank = models.CharField(max_length=15)
-    troop = models.ForeignKey('Troop')
+    # troop = models.ForeignKey('Troop')
+    troop = models.CharField(max_length=15)
     
 class Troop(models.Model):
     council = models.CharField(max_length=100)
