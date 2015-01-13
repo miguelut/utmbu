@@ -39,12 +39,6 @@ def register_scout(request):
         user.save()
     return render_to_response('mbu/register_scout.html', args)
 
-def home(request):
-    args = {}
-    args.update(csrf(request))
-    args.update({'links': [{'href':'mbu_home', 'label':'Home'}]})
-    return render_to_response('home.html', args)
-
 def edit_profile(request):
     args = {
         'links': [
