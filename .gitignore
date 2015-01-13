@@ -78,3 +78,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# DB Stuff
+*.sqlite3
+
+# Migrations
+migrations/
