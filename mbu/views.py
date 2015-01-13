@@ -9,15 +9,14 @@ from mbu.models import Scout, User
 import logging
 
 logger = logging.getLogger(__name__)
+args = {}
+args.update({'links': [{'href':'mbu_home', 'label':'Home'}, {'href':'edit_profile', 'label':'Edit Profile'}]})
 
 def logout_user(request):
     logout(request)
     return redirect('mbu_home')
 
 def home(request):
-    args = {}
-    args.update(csrf(request))
-    args.update({'links': [{'href':'mbu_home', 'label':'Home'}, {'href':'edit_profile', 'label':'Edit Profile'}]})
     context = RequestContext(request)
     return render_to_response('mbu/home.html', args, context_instance=context)
 
@@ -29,8 +28,6 @@ class RegisterScoutForm(forms.Form):
     troop = forms.CharField(label='Troop', max_length=15)
 
 def register_scout(request):
-    args = {}
-    args.update(csrf(request))
     args.update({'form':RegisterScoutForm()})
     if request.POST:
         user = User()
@@ -40,10 +37,6 @@ def register_scout(request):
     return render_to_response('mbu/register_scout.html', args)
 
 def edit_profile(request):
-    args = {
-        'links': [
-            {'href':'mbu_home', 'label':'Home'}
-        ]}
     if request.method == 'POST':
         form = EditProfileForm(request.POST)
         if form.is_valid():
@@ -56,9 +49,6 @@ def edit_profile(request):
     return render(request, 'mbu/edit_profile.html', args)
 
 def scoutmaster(request):
-    args = {}
-    args.update(csrf(request))
-    args.update({'links':[{'href':'mbu_home', 'label':'Home'}]})
     # Set session info?
     return render_to_response('mbu/scoutmaster.html', args)
 
