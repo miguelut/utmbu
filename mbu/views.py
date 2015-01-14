@@ -14,7 +14,8 @@ args.update({'links': [
     {'href':'mbu_home', 'label':'Home'}, 
     {'href':'edit_profile', 'label':'Edit Profile'},
     {'href':'class_schedule', 'label':'Class Schedule'},
-    {'href':'reports', 'label':'Reports'}
+    {'href':'reports', 'label':'Reports'},
+    {'href':'class_list', 'label':'Class List'}
 ]})
 
 def logout_user(request):
