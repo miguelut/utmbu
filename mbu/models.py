@@ -2,16 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Course(models.Model):
-    name = models.CharField(max_length=200)
-
-class Session(models.Model):
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    counselor = models.ForeignKey('Counselor')
-    course = models.ForeignKey('Course')
-    teaching_assistants = models.ManyToManyField(User)
-    merit_badge_university = models.ForeignKey('MeritBadgeUniversity')
 
 class Scout(models.Model):
     user = models.OneToOneField(User)
@@ -51,5 +41,5 @@ class MeritBadgeUniversity(models.Model):
 
 class WaitingList(models.Model):
     scout = models.ForeignKey('Scout')
-    course = models.ForeignKey('Course')
+    course = models.ForeignKey('course.Course')
     position_in_line = models.IntegerField()
