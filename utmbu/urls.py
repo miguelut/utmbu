@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     url(r'^class/list/$', 'mbu.views.view_class_list', name = 'class_list'),
     url(r'^class/requirements/(\d)/$', 'mbu.views.view_class_requirements', name = 'class_requirements'),
     url(r'^class/schedule/$', 'mbu.views.view_class_schedule', name = 'class_schedule'),
-    url(r'^reports/$', 'mbu.views.view_reports', name = 'reports')
+    url(r'^reports/$', 'mbu.views.view_reports', name = 'reports'),
 )
 
 #Authentication Views
