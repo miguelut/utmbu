@@ -84,3 +84,6 @@ target/
 
 # Migrations
 migrations/
+
+# Eclispse/PyDev
+.project
