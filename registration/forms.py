@@ -4,4 +4,4 @@ from scout.models import Scout
 class ScoutForm(ModelForm):
     class Meta:
         model = Scout
-        fields = ['User.username']
+        fields = ['User.first_name']
