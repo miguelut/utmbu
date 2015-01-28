@@ -20,11 +20,11 @@ urlpatterns += patterns(
     url(r'^logout/$', 'mbu.views.logout_user', name = 'logout'),
 )
 
-# Scout URLS
+# Registration URLS
 urlpatterns += patterns(
     '',
-    url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
-    url(r'^scoutmaster/', 'mbu.views.view_scoutmaster_page', name = 'scoutmaster'),
+    url(r'^scout/register/', 'registration.views.register_scout', name = 'register_scout'),
+    url(r'^scoutmaster/register/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
 )
 
 #Course URLs
