@@ -4,17 +4,15 @@
 {% endblock title %}
 
 {% block content %}
-	<form method="post" action="{% url 'register_scout' %}">
-
-	    {% csrf_token %}
-
-	    {% for field in form  %}
-		{{field.label}}
-		{{field}}
-		</br>
-	    {% endfor %}
-	    <input type="submit" value="Add"/>
-	    <input type="hidden" value="{{next}}" name="next"/>
-	</form>
+    <form method="post" action="/">
+        <table>
+            {% csrf_token %}
+            {{ form.as_table }}
+            {{ formset.as_table }}
+            <tr>
+                <td> <input type="submit" value="Register" /> </td>
+            </tr>
+        </table>
+    </form>
 {% endblock %}
 
