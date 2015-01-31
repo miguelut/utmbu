@@ -2,10 +2,11 @@ from django.shortcuts import render, render_to_response
 from django.core.context_processors import csrf
 from mbu.forms import EditProfileForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django import forms
 from django.template import RequestContext
-from mbu.models import Scout, User
+from scout.models import Scout
 import logging
 
 logger = logging.getLogger(__name__)
