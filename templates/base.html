@@ -10,7 +10,6 @@
             <div class="row">
                 <div class="col-md-10">
                     <h1>Header</h1>
-                    {{ message }}
                 </div>
                 <div id="user-options" class="col-md-2">
                     {% if user.is_authenticated %}
@@ -33,7 +32,9 @@
             {% endblock navbar %}
         </div>
     {% endblock header %}
-
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
     {% block content %}{% endblock content %}
 
 </body>
