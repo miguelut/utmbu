@@ -7,8 +7,8 @@
     <form method="post" action="/">
         <table>
             {% csrf_token %}
-            {{ form.as_table }}
-            {{ formset.as_table }}
+            {{ form }}
+            {{ formset }}
             <tr>
                 <td> <input type="submit" value="Register" /> </td>
             </tr>
