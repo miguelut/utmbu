@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'mbu',
     'course',
     'scout',
+    'scoutmaster',
     'registration',
     'troop',
 )
