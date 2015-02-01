@@ -87,3 +87,4 @@ migrations/
 
 # Eclispse/PyDev
 .project
+.pydevproject
