@@ -2,20 +2,19 @@ from django.shortcuts import render, render_to_response
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from scout.models import Scout
 from django.contrib import messages
-from registration.forms import ScoutFormSet
+from registration.forms import ScoutFormSet, ScoutUserCreationForm
 
 # Create your views here.
 
 def register_scout(request):
     args = {}
     user = User()
-    form = UserCreationForm()
+    form = ScoutUserCreationForm()
     formset = ScoutFormSet()
     if request.POST:
-        form = UserCreationForm(request.POST)
+        form = ScoutUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             scout_formset = ScoutFormSet(request.POST, instance=user)
