@@ -9,17 +9,16 @@ from registration.forms import ScoutFormSet, ScoutmasterFormSet, MbuUserCreation
 # Create your views here.
 
 def register_scout(request):
-    url = 'registration/register_scout.html'
+    args = {'title': 'Register Scout'}
     FormSet = ScoutFormSet
-    return _register(request, FormSet, url)
+    return _register(request, FormSet, args)
 
 def register_scoutmaster(request):
-    url = 'registration/register_scoutmaster.html'
+    args = {'title': 'Register Scoutmaster'}
     FormSet = ScoutmasterFormSet
-    return _register(request, FormSet, url)
+    return _register(request, FormSet, args)
 
-def _register(request, FormSet, url):
-    args = {}
+def _register(request, FormSet, args):
     user = User()
     form = MbuUserCreationForm()
     formset = FormSet()
@@ -37,4 +36,4 @@ def _register(request, FormSet, url):
     args.update(csrf(request))
     args.update({'form' : form })
     args.update({'formset': formset })  
-    return render_to_response(url, args)
+    return render_to_response('registration/register.html', args)
