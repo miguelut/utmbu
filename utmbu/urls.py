@@ -23,8 +23,8 @@ urlpatterns += patterns(
 # Registration URLS
 urlpatterns += patterns(
     '',
-    url(r'^scout/register/', 'registration.views.register_scout', name = 'register_scout'),
-    url(r'^scoutmaster/register/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
+    url(r'^register/scout/', 'registration.views.register_scout', name = 'register_scout'),
+    url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
 )
 
 #Course URLs
