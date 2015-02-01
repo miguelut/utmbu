@@ -84,6 +84,9 @@ target/
 
 # Migrations
 migrations/
+<<<<<<< HEAD
 
 # Eclispse/PyDev
 .project
+=======
+>>>>>>> refs/heads/develop
