@@ -32,16 +32,3 @@ urlpatterns += patterns(
     '',
     url(r'^course/add', 'course.views.add_course', name = 'add_course')
 )
-
-# Scout URLS
-urlpatterns += patterns(
-    '',
-    url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
-    url(r'^scoutmaster/', 'mbu.views.view_scoutmaster_page', name = 'scoutmaster'),
-)
-
-#Course URLs
-urlpatterns += patterns(
-    '',
-    url(r'^course/add', 'course.views.add_course', name = 'add_course')
-)
