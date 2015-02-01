@@ -27,22 +27,6 @@ def view_home_page(request):
     context = RequestContext(request)
     return render_to_response('mbu/home.html', args, context_instance=context)
 
-class RegisterScoutForm(forms.Form):
-    username = forms.CharField(label='Username')
-    password = forms.CharField(label='Password',widget=forms.PasswordInput)
-    dob = forms.DateField(label='Date of Birth')
-    rank = forms.CharField(label='Rank', max_length=15)
-    troop = forms.CharField(label='Troop', max_length=15)
-
-def register_scout(request):
-    args.update({'form':RegisterScoutForm()})
-    if request.POST:
-        user = User()
-        user.username = request.POST.get('username')
-        user.password = request.POST.get('password')
-        user.save()
-    return render_to_response('mbu/register_scout.html', args)
-
 def edit_profile(request):
     if request.method == 'POST':
         form = EditProfileForm(request.POST)
@@ -54,10 +38,6 @@ def edit_profile(request):
         args.update({'form': form})
     
     return render(request, 'mbu/edit_profile.html', args)
-
-def view_scoutmaster_page(request):
-    # Set session info?
-    return render_to_response('mbu/scoutmaster.html', args)
 
 def view_class_list(request):
 	args = {}
