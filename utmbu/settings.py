@@ -42,7 +42,9 @@ INSTALLED_APPS = (
     'mbu',
     'course',
     'scout',
-    'registration'
+    'scoutmaster',
+    'registration',
+    'troop',
 )
 
 MIDDLEWARE_CLASSES = (

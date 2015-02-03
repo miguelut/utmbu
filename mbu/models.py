@@ -1,18 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from scout.models import Scout
 
 # Create your models here.
-
-class Troop(models.Model):
-    number = models.CharField(max_length=6)
-    council = models.CharField(max_length=100)
-
-class TroopContact(models.Model):
-    user = models.OneToOneField(User)
-    address = models.ForeignKey('Address')
-    phone_number = models.CharField(max_length=12)
-
 class Address(models.Model):
     street_address = models.CharField(max_length=200)
     street_address2 = models.CharField(max_length=200)
@@ -33,8 +22,3 @@ class Venture(models.Model):
 #retain inforamation across multiple years
 class MeritBadgeUniversity(models.Model):
     year = models.DateTimeField()
-
-class WaitingList(models.Model):
-    scout = models.ForeignKey('scout.Scout')
-    course = models.ForeignKey('course.Course')
-    position_in_line = models.IntegerField()
