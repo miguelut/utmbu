@@ -38,6 +38,8 @@
     {% block content %}{% endblock content %}
 
 </body>
+{% block links %} 
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
-{% block links %} {% endblock links %}
+<script src="{% static 'js/jQuery-2.1.3.min.js' %}"/>
+{% endblock links %}
 </html>

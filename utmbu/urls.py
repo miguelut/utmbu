@@ -30,5 +30,11 @@ urlpatterns += patterns(
 #Course URLs
 urlpatterns += patterns(
     '',
-    url(r'^course/add', 'course.views.add_course', name = 'add_course')
+    url(r'^course/add/', 'course.views.add_course', name = 'add_course')
+)
+
+#Scout URLs
+urlpatterns += patterns(
+    '',
+    url(r'^scout/editclasses/', 'scout.views.edit_classes', name = 'scout_edit_classes')
 )
