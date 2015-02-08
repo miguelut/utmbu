@@ -1,5 +1,5 @@
 from django import forms
-from course.models import Session, Course
+from course.models import CourseInstance
 
 class EditClassesForm(forms.Form):
-	session = forms.ModelChoiceField(queryset=Session.objects.all(), initial={'pk': 1})
+	session = forms.ModelChoiceField(queryset=CourseInstance.objects.all())

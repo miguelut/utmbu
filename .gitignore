@@ -88,3 +88,6 @@ migrations/
 # Eclispse/PyDev
 .project
 .pydevproject
+
+# Vim swap files
+*.swp

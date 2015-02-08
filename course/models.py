@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from scout.models import Scout
 from mbu.models import Counselor, MeritBadgeUniversity
 
-# Create your models here.
+# Models owned by the course app
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -17,17 +17,17 @@ class Session(models.Model):
     end_time = models.DateTimeField()
 
     def __str__(self):
-        return self.name + '(' + str(start_time) + str(end_time) + ')'
+        return "%s (%s - %s)" % (self.name, str(start_time), str(end_time))
 
 class CourseInstance(models.Model):
     course = models.ForeignKey(Course)
-    sessions = models.ManyToManyField(Session)
+    session = models.ForeignKey(Session)
     counselor = models.ForeignKey(Counselor)
     merit_badge_university = models.ForeignKey(MeritBadgeUniversity)
     teaching_assistants = models.ManyToManyField(User)
 
     def __str__(self):
-        return self.course.name + str(self.start_time)
+        return self.course.name + str(session)
 
 class WaitingList(models.Model):
     scout = models.ForeignKey(Scout)
