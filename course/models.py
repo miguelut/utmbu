@@ -15,21 +15,23 @@ class Session(models.Model):
     name = models.CharField(max_length=255)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    mbu = models.ForeignKey(MeritBadgeUniversity)
 
     def __str__(self):
-        return "%s (%s - %s)" % (self.name, str(start_time), str(end_time))
+        return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))
 
 class CourseInstance(models.Model):
     course = models.ForeignKey(Course)
     session = models.ForeignKey(Session)
-    counselor = models.ForeignKey(Counselor)
-    merit_badge_university = models.ForeignKey(MeritBadgeUniversity)
-    teaching_assistants = models.ManyToManyField(User)
+    counselor = models.ForeignKey(Counselor, null=True, blank=True)
+    mbu = models.ForeignKey(MeritBadgeUniversity)
+    enrollees = models.ManyToManyField(User, related_name='enrollees', blank=True)
+    teaching_assistants = models.ManyToManyField(User, related_name='teaching_assistants', blank=True)
 
     def __str__(self):
-        return self.course.name + str(session)
+        return self.course.name + str(self.session)
 
 class WaitingList(models.Model):
-    scout = models.ForeignKey(Scout)
+    user = models.ForeignKey(User)
     course = models.ForeignKey(Course)
     position_in_line = models.IntegerField()

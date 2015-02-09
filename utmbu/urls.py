@@ -27,12 +27,6 @@ urlpatterns += patterns(
     url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
 )
 
-#Course URLs
-urlpatterns += patterns(
-    '',
-    url(r'^course/add/', 'course.views.add_course', name = 'add_course')
-)
-
 #Scout URLs
 urlpatterns += patterns(
     '',
