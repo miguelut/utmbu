@@ -3,10 +3,8 @@ from django.contrib.auth.decorators import permission_required
 from scout.forms import EditClassesForm
 
 # Create your views here.
-@permission_required('scout.edit_scout_schedule')
+@permission_required('scout.edit_scout_schedule',raise_exception=True)
 def edit_classes(request):
     args = {}
     args.update({'form': EditClassesForm()})
-    return render_to_response('scout/edit_classes.html', args)
-
-
+    return render(request, 'scout/edit_classes.html', args)

@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User, Permission
@@ -47,4 +47,4 @@ def _register(request, FormSet, args):
     args.update(csrf(request))
     args.update({'form' : form })
     args.update({'formset': formset })  
-    return render_to_response('registration/register.html', args)
+    return render(request, 'registration/register.html', args)

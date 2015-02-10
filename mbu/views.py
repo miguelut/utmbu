@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.core.context_processors import csrf
 from mbu.forms import EditProfileForm
 from django.contrib.auth import authenticate, login, logout
@@ -24,8 +24,7 @@ def logout_user(request):
     return redirect('mbu_home')
 
 def view_home_page(request):
-    context = RequestContext(request)
-    return render_to_response('mbu/home.html', args, context_instance=context)
+    return render(request, 'mbu/home.html', args)
 
 def edit_profile(request):
     if request.method == 'POST':
@@ -45,7 +44,7 @@ def view_class_list(request):
 	classList = [];
 	getClasslist(classList)
 	args.update({ 'classlist': classList })
-	return render_to_response('classlist.html', args)
+	return render(request, 'classlist.html', args)
 
 def getClasslist(classList):
     # add timeslot info
@@ -75,10 +74,10 @@ def view_class_requirements(request, id=-1):
 	#if (id < 0):
 		#handle error
 	args.update({'id': id})
-	return render_to_response('classrequirements.html', args)
+	return render(request, 'classrequirements.html', args)
 
 def view_class_schedule(request):
-    return render_to_response('class_schedule.html', args)
+    return render(request, 'class_schedule.html', args)
 
 def view_reports(request):
-    return render_to_response('reports.html', args)
+    return render(request, 'reports.html', args)
