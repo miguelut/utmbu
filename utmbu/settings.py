@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'scoutmaster',
     'registration',
     'troop',
+    'dev',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -96,6 +97,6 @@ STATICFILES_DIRS = (
 #Template Directories
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'mbu/templates/mbu'))
 
-LOGIN_URL = 'mbu_login'
-LOGOUT_URL = 'mbu_logout'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'mbu_home'

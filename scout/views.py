@@ -1,10 +1,9 @@
 from django.shortcuts import render, render_to_response
-from django.forms.formsets import formset_factory
+from django.contrib.auth.decorators import permission_required
 from scout.forms import EditClassesForm
-from mbu.models import MeritBadgeUniversity
-from course.models import Session
 
 # Create your views here.
+@permission_required('scout.edit_scout_schedule')
 def edit_classes(request):
     args = {}
     args.update({'form': EditClassesForm()})
