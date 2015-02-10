@@ -7,6 +7,7 @@ from mbu.models import Counselor, MeritBadgeUniversity
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
+    requirements = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -26,11 +27,12 @@ class CourseInstance(models.Model):
     counselor = models.ForeignKey(Counselor, null=True, blank=True)
     enrollees = models.ManyToManyField(User, related_name='enrollees', blank=True)
     teaching_assistants = models.ManyToManyField(User, related_name='teaching_assistants', blank=True)
+    max_enrollees = models.IntegerField()
 
     def __str__(self):
         return self.course.name + str(self.session)
 
 class WaitingList(models.Model):
     user = models.ForeignKey(User)
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(CourseInstance)
     position_in_line = models.IntegerField()
