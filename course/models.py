@@ -24,7 +24,6 @@ class CourseInstance(models.Model):
     course = models.ForeignKey(Course)
     session = models.ForeignKey(Session)
     counselor = models.ForeignKey(Counselor, null=True, blank=True)
-    mbu = models.ForeignKey(MeritBadgeUniversity)
     enrollees = models.ManyToManyField(User, related_name='enrollees', blank=True)
     teaching_assistants = models.ManyToManyField(User, related_name='teaching_assistants', blank=True)
 
