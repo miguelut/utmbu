@@ -27,8 +27,14 @@ urlpatterns += patterns(
     url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
 )
 
-#Course URLs
+#Scout URLs
 urlpatterns += patterns(
     '',
-    url(r'^course/add', 'course.views.add_course', name = 'add_course')
+    url(r'^scout/editclasses/', 'scout.views.edit_classes', name = 'scout_edit_classes')
+)
+
+#Dev URLs -- REMOVE BEFORE DEPLOYMENT
+urlpatterns += patterns(
+    '',
+    url(r'^setup_dummy_data/', 'dev.views.setup_dummy_data', name ='setup_dummy_data')
 )
