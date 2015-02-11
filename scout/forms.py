@@ -11,5 +11,5 @@ class EditClassesForm(forms.Form):
         sessions = Session.objects.filter(mbu=mbu)
         for session in sessions:
             queryset = CourseInstance.objects.filter(session=session)
-            self.fields['class-for-session-%d' % session.pk] = forms.ModelChoiceField(queryset=queryset, label=session.name)
+            self.fields['class-for-session-%d' % session.pk] = forms.ModelChoiceField(queryset=queryset, label=session.name, required=False)
 
