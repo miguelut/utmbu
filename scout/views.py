@@ -1,6 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import permission_required
+from django.contrib import messages
 from scout.forms import EditClassesForm
 from course.models import CourseInstance
 
@@ -16,6 +17,8 @@ def edit_classes(request):
                 if course_instance is not None:
                     user.course_instances.add(course_instance)
             user.save()
+            messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
+            return render(request, 'mbu/home.html')
 
     args.update({'form': EditClassesForm()})
     args.update(csrf(request))

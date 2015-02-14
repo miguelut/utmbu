@@ -29,6 +29,17 @@ ALLOWED_HOSTS = []
 # Trying Something
 APPEND_SLASH = True
 
+# Template Context Processors
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'mbu.context_processors.default_links',
+)
 
 # Application definition
 
@@ -95,8 +106,15 @@ STATICFILES_DIRS = (
 )
 
 #Template Directories
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'mbu/templates/mbu'))
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'mbu_home'
+
+#MBU Settings
+DEFAULT_LINKS = [
+    {'href':'mbu_home', 'label':'Home'}, 
+    {'href':'reports', 'label':'Reports'},
+    {'href':'class_list', 'label':'Class List'}
+]
