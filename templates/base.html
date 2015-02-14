@@ -35,9 +35,11 @@
             {% endblock navbar %}
         </div>
     {% endblock header %}
-    {% for message in messages %}
-        {{ message }}
-    {% endfor %}
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class='alert {{message.tags}}' {% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
     {% block content %}{% endblock content %}
 
 </body>

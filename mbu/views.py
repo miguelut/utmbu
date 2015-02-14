@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.core.context_processors import csrf
 from mbu.forms import EditProfileForm
+from mbu.models import MeritBadgeUniversity
+from course.models import Session, CourseInstance, Course
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import redirect
@@ -32,40 +34,13 @@ def edit_profile(request):
     return render(request, 'mbu/edit_profile.html', args)
 
 def view_class_list(request):
-	args = {}
-	args.update(csrf(request))
-	classList = getClasslist()
-	args.update({ 'classlist': classList })
-	return render(request, 'mbu/classlist.html', args)
-
-def getClasslist():
-    # add timeslot info
-    classList = [
-        {
-            'id': 1,
-            'name': 'class1',
-            'time': '9:00-10:30',
-            'location': 'location1',
-            'teacher': 'teacher1',
-            'link': 'class_requirements'
-        },
-        {
-            'id': 2,
-            'name': 'class2',
-            'time': '9:00-10:30',
-            'location': 'location2',
-            'teacher': 'teacher2',
-            'link': 'class_requirements'
-        },
-        {
-            'id': 3,
-            'name': 'class3',
-            'time': '9:00-10:30',
-            'location': 'location3',
-            'teacher': 'teacher3',
-            'link': 'class_requirements'
-        }]
-    return classList
+    args = {}
+    args.update(csrf(request))
+    mbu = MeritBadgeUniversity.objects.get(current=True)
+    sessions = Session.objects.filter(mbu=mbu).values('pk')
+    course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
+    args.update({ 'classlist': course_instances })
+    return render(request, 'mbu/classlist.html', args)
 
 def view_class_requirements(request, id=-1):
 	args = {}

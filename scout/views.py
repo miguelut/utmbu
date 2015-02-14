@@ -15,7 +15,8 @@ def edit_classes(request):
         if form.is_valid():
             for name, course_instance in form.cleaned_data.items():
                 if course_instance is not None:
-                    user.course_instances.add(course_instance)
+                    user.enrollments.clear()
+                    user.enrollments.add(course_instance)
             user.save()
             messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
             return render(request, 'mbu/home.html')

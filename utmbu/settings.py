@@ -1,3 +1,5 @@
+from django.contrib.messages import constants as messages
+
 """
 Django settings for utmbu project.
 
@@ -111,6 +113,14 @@ TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'mbu_home'
+
+#Setting up Message Tags to be Bootstrap Compliant
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+    messages.INFO: 'alert-info',
+}
 
 #MBU Settings
 DEFAULT_LINKS = [
