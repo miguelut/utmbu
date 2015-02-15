@@ -15,4 +15,8 @@ class EditClassesForm(forms.Form):
             queryset = CourseInstance.objects.filter(session=session)
             initial = user.enrollments.filter(session=session).first()
             self.fields['class-for-session-%d' % session.pk] = forms.ModelChoiceField(queryset=queryset, label=session.name, required=False, initial=initial)
+    
+    def clean(self):
+        cleaned_data = super(EditClassesForm, self).clean()
 
+        return cleaned_data

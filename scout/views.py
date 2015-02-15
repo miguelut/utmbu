@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import permission_required
 from django.contrib import messages
@@ -11,15 +11,15 @@ def edit_classes(request):
     args = {}
     user = request.user
     if request.POST:
-        form = EditClassesForm(request.POST)
+        form = EditClassesForm(request.POST, user=user)
         if form.is_valid():
+            user.enrollments.clear()
             for name, course_instance in form.cleaned_data.items():
                 if course_instance is not None:
-                    user.enrollments.clear()
                     user.enrollments.add(course_instance)
             user.save()
             messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
-            return render(request, 'mbu/home.html')
+            return redirect('mbu_home')
 
     args.update({'form': EditClassesForm(user=user)})
     args.update(csrf(request))
