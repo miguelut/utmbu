@@ -9,8 +9,8 @@ from course.models import CourseInstance
 @permission_required('scout.edit_scout_schedule',raise_exception=True)
 def edit_classes(request):
     args = {}
+    user = request.user
     if request.POST:
-        user = request.user
         form = EditClassesForm(request.POST)
         if form.is_valid():
             for name, course_instance in form.cleaned_data.items():
@@ -21,6 +21,6 @@ def edit_classes(request):
             messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
             return render(request, 'mbu/home.html')
 
-    args.update({'form': EditClassesForm()})
+    args.update({'form': EditClassesForm(user=user)})
     args.update(csrf(request))
     return render(request, 'scout/edit_classes.html', args)
