@@ -29,7 +29,8 @@ urlpatterns += patterns(
 #Scout URLs
 urlpatterns += patterns(
     '',
-    url(r'^scout/editclasses/', 'scout.views.edit_classes', name = 'scout_edit_classes')
+    url(r'^scout/editclasses/', 'scout.views.edit_classes', name = 'scout_edit_classes'),
+    url(r'^scout/viewclasses/', 'scout.views.view_registered_classes', name = 'scout_view_classes')
 )
 
 #Dev URLs -- REMOVE BEFORE DEPLOYMENT

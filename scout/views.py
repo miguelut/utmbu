@@ -24,3 +24,6 @@ def edit_classes(request):
     args.update({'form': EditClassesForm(user=user)})
     args.update(csrf(request))
     return render(request, 'scout/edit_classes.html', args)
+
+def view_registered_classes(request):
+    return render(request, 'scout/view_classes.html')
