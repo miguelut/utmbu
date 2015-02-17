@@ -9,7 +9,7 @@
         <div id="header">
             <div class="row">
                 <div class="col-md-10">
-                    <h1>Header</h1>
+                    <h1>{% block header_text %}Header{% endblock %}</h1>
                 </div>
                 <div id="user-options" class="col-md-2">
                     {% if user.is_authenticated %}

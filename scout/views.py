@@ -24,3 +24,10 @@ def edit_classes(request):
     args.update({'form': EditClassesForm(user=user)})
     args.update(csrf(request))
     return render(request, 'scout/edit_classes.html', args)
+
+def view_registered_classes(request):
+    args = {}
+    user = request.user
+    enrolled_courses = user.enrollments.all()
+    args.update({'enrolled_courses': enrolled_courses})
+    return render(request, 'scout/view_classes.html', args)
