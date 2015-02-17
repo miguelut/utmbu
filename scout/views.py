@@ -26,4 +26,12 @@ def edit_classes(request):
     return render(request, 'scout/edit_classes.html', args)
 
 def view_registered_classes(request):
-    return render(request, 'scout/view_classes.html')
+    args = {}
+    user = request.user
+    # registered_courses = CourseInstance.enrollees.through.objects.filter(user=user)
+    # args.update({'registered_courses': registered_courses})
+    # for course in registered_courses:
+    #     CourseInstance.objects.get(course=course)
+    enrolled_courses = user.enrollments.all()
+    args.update({'enrolled_courses': enrolled_courses})
+    return render(request, 'scout/view_classes.html', args)
