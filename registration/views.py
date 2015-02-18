@@ -6,7 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 from scout.models import Scout 
 from scoutmaster.models import Scoutmaster
 from django.contrib import messages
-from registration.forms import ScoutFormSet, ScoutmasterFormSet, MbuUserCreationForm
+from registration.forms import *
+from mbu_users.models import Venture, Volunteer, TroopContact
 
 # Create your views here.
 
@@ -47,4 +48,27 @@ def _register(request, FormSet, args):
     args.update(csrf(request))
     args.update({'form' : form })
     args.update({'formset': formset })  
-    return render(request, 'registration/register.html', args)
+    return render(request, 'registration/register_user.html', args)
+
+def register(request):
+    return render(request, 'registration/register.html')
+
+def register_venture(request):
+    args = {'title': 'Register Venture'}
+    ct = ContentType.objects.get_for_model(Venture)
+    #p = Permission.objects.get(content_type=ct, codename='can_modify_venture_enrollments')
+    #args.update({'perms':p})
+    FormSet = VentureFormSet
+    return _register(request, FormSet, args)
+
+def register_troopcontact(request):
+    args = {'title': 'Register TroopContact'}
+    ct = ContentType.objects.get_for_model(TroopContact)
+    FormSet = TroopContactFormSet
+    return _register(request, FormSet, args)
+
+def register_volunteer(request):
+    args = {'title': 'Register Volunteer'}
+    ct = ContentType.objects.get_for_model(Volunteer)
+    FormSet = VolunteerFormSet
+    return _register(request, FormSet, args)

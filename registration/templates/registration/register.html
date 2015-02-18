@@ -1,18 +1,8 @@
-{% extends "base.html" %}
-{% block title %}
-    {{ title }}
-{% endblock title %}
-
+{% extends 'base.html' %}
 {% block content %}
-    <form method="post" action=".">
-        <table>
-            {% csrf_token %}
-            {{ form }}
-            {{ formset }}
-            <tr>
-                <td> <input type="submit" value="Register" /> </td>
-            </tr>
-        </table>
-    </form>
+<a class='btn btn-danger' href="{% url 'register_scout' %}">I am a scout</a>
+<a class='btn btn-warning' href="{% url 'register_scoutmaster' %}">I am a scoutmaster</a>
+<a class='btn btn-success' href="{% url 'register_venture' %}">I am a venture</a>
+<a class='btn btn-info' href="{% url 'register_troopcontact' %}">I am a troop contact</a>
+<a class='btn btn-primary' href="{% url 'register_volunteer' %}">I am a volunteer</a>
 {% endblock %}
-

@@ -22,8 +22,12 @@ urlpatterns += patterns(
 # Registration URLS
 urlpatterns += patterns(
     '',
+    url(r'^register/$', 'registration.views.register', name = 'register'),
     url(r'^register/scout/', 'registration.views.register_scout', name = 'register_scout'),
     url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
+    url(r'^register/venture/', 'registration.views.register_venture', name = 'register_venture'),
+    url(r'^register/troopcontact/', 'registration.views.register_troopcontact', name = 'register_troopcontact'),
+    url(r'^register/volunteer/', 'registration.views.register_volunteer', name = 'register_volunteer'),
 )
 
 #Scout URLs
