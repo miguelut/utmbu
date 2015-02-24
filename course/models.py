@@ -8,6 +8,7 @@ from mbu.models import Counselor, MeritBadgeUniversity
 class Course(models.Model):
     name = models.CharField(max_length=200)
     requirements = models.CharField(max_length=200)
+    price = models.FloatField(default=50.00)
 
     def __str__(self):
         return self.name
@@ -17,6 +18,7 @@ class Session(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     mbu = models.ForeignKey(MeritBadgeUniversity)
+
 
     def __str__(self):
         return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))

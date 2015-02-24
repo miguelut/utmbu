@@ -9,6 +9,7 @@ class Scout(models.Model):
     dob = models.DateField()
     rank = models.CharField(max_length=15)
     troop = models.ForeignKey(Troop)
+    numClasses = models.IntegerField()
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
