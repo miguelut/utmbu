@@ -72,3 +72,10 @@ def register_volunteer(request):
     ct = ContentType.objects.get_for_model(Volunteer)
     FormSet = VolunteerFormSet
     return _register(request, FormSet, args)
+
+def register_troop(request):
+    args = {'title': 'Register Troop'}
+    troop_form = TroopForm()
+    council_form = CouncilForm()
+    args.update({'troop_form':troop_form, 'council_form':council_form})
+    return render(request, 'registration/register_troop.html', args)

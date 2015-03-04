@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block content %}
+    <form method="post" action=".">
+        <table>
+            {% csrf_token %}
+            {{ troop_form }}
+            {{ council_form }}
+            <tr>
+                <td> <input type="submit" value="Register" /> </td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}
+

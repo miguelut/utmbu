@@ -5,6 +5,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm
 from scout.models import Scout
 from scoutmaster.models import Scoutmaster
+from troop.models import Troop, Council
 from mbu_users.models import Venture, Volunteer, TroopContact
 
 ScoutFormSet = inlineformset_factory(User, Scout, can_delete=False, widgets={'dob': SelectDateWidget()}, fields='__all__')
@@ -31,3 +32,17 @@ class MbuUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['first_name','last_name','email','username']
+
+class TroopForm(forms.ModelForm):
+    
+    class Meta:
+        model = Troop
+        fields = '__all__'
+
+class CouncilForm(forms.ModelForm):
+    not_present = forms.BooleanField(label='New Council', widget=forms.CheckboxInput(attrs={'onClick':'alert("Hello!")'}))
+    name = forms.CharField(max_length=30, widget=forms.HiddenInput())
+
+    class Meta:
+        model = Council
+        fields = '__all__'
