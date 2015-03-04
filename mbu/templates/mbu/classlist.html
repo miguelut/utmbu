@@ -19,12 +19,12 @@
    	<tbody class="table-striped">
         {% for class in classlist %}
         <tr>
-            <td>{{ class.id }}</td>
-            <td>{{ class.name }}</td>
-            <td>{{ class.time }}</td>
+            <td>{{ class.pk }}</td>
+            <td>{{ class.course.name }}</td>
+            <td>{{ class.session.start_time }} - {{class.session.end_time}}</td>
             <td>{{ class.location }}</td>
-            <td>{{ class.teacher }}</td>
-            <td><a href="{% url class.link class.id %}">Link</a></td>
+            <td>{{ class.counselor }}</td>
+            <td><a href="{{ class.course.requirements }}">Link</a></td>
         </tr>
         {% endfor %}
     </tbody>

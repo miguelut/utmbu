@@ -11,3 +11,8 @@ class Scoutmaster(models.Model):
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
+
+    class Meta:
+        permissions = (
+            ('can_modify_troop_enrollments','Can modify schedules of scouts in own troop.'),
+        )

@@ -12,3 +12,8 @@ class Scout(models.Model):
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
+
+    class Meta:
+        permissions = (
+            ('edit_scout_schedule','Can edit schedule'),
+        )

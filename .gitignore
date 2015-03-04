@@ -87,3 +87,10 @@ migrations/
 
 # Eclispse/PyDev
 .project
+<<<<<<< HEAD
+=======
+.pydevproject
+
+# Vim swap files
+*.swp
+>>>>>>> refs/heads/develop
