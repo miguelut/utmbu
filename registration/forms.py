@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 from django.forms.models import inlineformset_factory
 from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm
-from scout.models import Scout
+from scout.models import Scout, Parent
 from scoutmaster.models import Scoutmaster
 
-ScoutFormSet = inlineformset_factory(User, Scout, can_delete=False, widgets={'dob': SelectDateWidget()}, fields='__all__')
+ScoutFormSet = inlineformset_factory(User, Scout, can_delete=False, widgets={'dob': SelectDateWidget()}, exclude = ['parent'])
 ScoutmasterFormSet = inlineformset_factory(User, Scoutmaster, can_delete=False, fields='__all__')
+ParentFormSet =inlineformset_factory(User, Parent, can_delete=False, widgets={'dob': SelectDateWidget()}, fields='__all__')
+
 
 class MbuUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)

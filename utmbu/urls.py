@@ -24,6 +24,7 @@ urlpatterns += patterns(
     '',
     url(r'^register/scout/', 'registration.views.register_scout', name = 'register_scout'),
     url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
+    url(r'^register/parent/', 'registration.views.register_parent', name = 'register_parent')
 )
 
 #Scout URLs

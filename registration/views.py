@@ -3,10 +3,11 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from scout.models import Scout 
+from scout.models import Scout, Parent
 from scoutmaster.models import Scoutmaster
 from django.contrib import messages
-from registration.forms import ScoutFormSet, ScoutmasterFormSet, MbuUserCreationForm
+from registration.forms import ScoutFormSet, ScoutmasterFormSet, MbuUserCreationForm, ParentFormSet
+from lib2to3.fixer_util import parenthesize
 
 # Create your views here.
 
@@ -24,6 +25,14 @@ def register_scoutmaster(request):
     p = Permission.objects.get(content_type=ct, codename='can_modify_troop_enrollments')
     args.update({'perms':p})
     FormSet = ScoutmasterFormSet
+    return _register(request, FormSet, args)
+
+def register_parent(request):
+    args = {'title': 'Register Parent'}
+    ct = ContentType.objects.get_for_model(Parent)
+    p = Permission.objects.get(content_type=ct, codename='')
+    args.update({})
+    FormSet = ParentFormSet
     return _register(request, FormSet, args)
 
 def _register(request, FormSet, args):
