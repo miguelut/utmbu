@@ -10,12 +10,18 @@ class Council(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        unique_together = ('name',)
+
 class Troop(models.Model):
     number = models.CharField(max_length=10)
     council = models.ForeignKey(Council)
 
     def __str__(self):
         return "%s - %s" % (self.number, self.council)
+
+    class Meta:
+        unique_together = ('number','council')
 
 
 class TroopContact(models.Model):

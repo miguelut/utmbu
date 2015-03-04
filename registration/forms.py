@@ -6,8 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from scout.models import Scout
 from scoutmaster.models import Scoutmaster
 
-ScoutFormSet = inlineformset_factory(User, Scout, can_delete=False, widgets={'dob': SelectDateWidget()})
-ScoutmasterFormSet = inlineformset_factory(User, Scoutmaster, can_delete=False)
+ScoutFormSet = inlineformset_factory(User, Scout, can_delete=False, widgets={'dob': SelectDateWidget()}, fields='__all__')
+ScoutmasterFormSet = inlineformset_factory(User, Scoutmaster, can_delete=False, fields='__all__')
 
 class MbuUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
