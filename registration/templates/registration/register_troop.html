@@ -9,8 +9,40 @@
             {% csrf_token %}
             {{ form }}
             <tr>
-                <td> <input type="submit" value="Register" /> </td>
+                <td> <a href="{% url 'register_council' %}">Add Council</a></td>
+            </tr>
+            <tr>
+                <td> <input type="submit" value="Add Troop" /> </td>
             </tr>
         </table>
     </form>
+    <a id="open_council_modal" class="btn btn-primary" href="{% url 'register_council' %}" data-toggle="modal" data-target="#modal">Add Council</a>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+        </div>
+    </div>
 {% endblock %}
+<!-- {% block script %}
+<script>
+    // $('#open_council_modal').click(function(ev) {
+    //     ev.preventDefault();
+    //     var url = '/register/council';
+    //     $("#contactModal").load(url, function() { // load the url into the modal
+    //         $(this).modal('show'); // display the modal on url load
+    //     });
+    //     return false;
+    // });
+    // $('.contact-open_council_modal').on('submit', function() {
+    //         $.ajax({ 
+    //             type: 'POST', 
+    //             url: '/register/council', 
+    //             data: $(this).serialize(),
+    //             context: this,
+    //             success: function(data, status) {
+    //                 $('#contactModal').html(data);
+    //             }
+    //         });
+    //         return false;
+    //     });
+</script>
+{% endblock script %} -->

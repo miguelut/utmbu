@@ -17,13 +17,6 @@ VolunteerFormSet = inlineformset_factory(User, Volunteer, can_delete=False, fiel
 TroopContactFormSet = inlineformset_factory(User, TroopContact, can_delete=False, fields='__all__')
 TroopFormSet = inlineformset_factory(Council, Troop, can_delete=False, fields='__all__')
 
-class CouncilForm(ModelForm):
-    name = forms.CharField(max_length=30, widget=forms.HiddenInput())
-
-    class Meta:
-        model = Troop
-        fields = ['number','council','name']
-
 class MbuUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=30)
     last_name = forms.CharField(max_length=30)
@@ -38,12 +31,16 @@ class MbuUserCreationForm(UserCreationForm):
             user.save()
         return user
         
-        
     class Meta:
         model = User
         fields = ['first_name','last_name','email','username']
 
-# class TroopForm(ModelForm):
-#     class Meta:
-#         model = Council
-#         fields = ['name']
+class TroopForm(forms.ModelForm):
+    class Meta:
+        model = Troop
+        fields = '__all__'
+
+class CouncilForm(forms.ModelForm):
+    class Meta:
+        model = Council
+        fields = '__all__'

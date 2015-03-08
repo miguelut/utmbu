@@ -28,7 +28,8 @@ urlpatterns += patterns(
     url(r'^register/venture/', 'registration.views.register_venture', name = 'register_venture'),
     url(r'^register/troopcontact/', 'registration.views.register_troopcontact', name = 'register_troopcontact'),
     url(r'^register/volunteer/', 'registration.views.register_volunteer', name = 'register_volunteer'),
-    url(r'^test/$', 'registration.views.register_troop', name = 'register_troop'),
+    url(r'^register/troop/$', 'registration.views.register_troop', name = 'register_troop'),
+    url(r'^register/council/$', 'registration.views.register_council', name = 'register_council')
 )
 
 #Scout URLs

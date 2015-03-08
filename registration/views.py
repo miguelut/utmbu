@@ -30,6 +30,8 @@ def register_scoutmaster(request):
 def _register(request, FormSet, args):
     user = User()
     form = MbuUserCreationForm()
+    troop_modal_form = TroopForm()
+    council_modal_form = CouncilForm()
     formset = FormSet()
     if request.POST:
         form = MbuUserCreationForm(request.POST)
@@ -47,7 +49,11 @@ def _register(request, FormSet, args):
 
     args.update(csrf(request))
     args.update({'form' : form })
-    args.update({'formset': formset })  
+    args.update({'formset': formset })
+    args.update({'troop_modal_form': troop_modal_form})
+    args.update({'council_modal_form': council_modal_form})
+    args.update({'troop_modal_title': "Add Troop"})
+    args.update({'council_modal_title': "Add Council"})
     return render(request, 'registration/register_user.html', args)
 
 def register(request):
@@ -75,6 +81,13 @@ def register_volunteer(request):
 
 def register_troop(request):
     args = {'title': 'Add Troop'}
-    form = CouncilForm()
-    args.update({'form':form})
+    troop_form = TroopForm()
+    args.update({'form': troop_form})
     return render(request, 'registration/register_troop.html', args)
+
+def register_council(request):
+    args = {'title': 'Add Council'}
+    council_form = CouncilForm()
+    args.update({'council_modal_title': "Add Council"})
+    args.update({'council_modal_form': council_form})
+    return render(request, 'registration/council_form.html', args)
