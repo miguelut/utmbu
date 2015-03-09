@@ -90,7 +90,7 @@ def register_troop(request):
     args.update({'endpoint': '/register/troop/'})
     troop_form = TroopForm()
     args.update({'modal_form': troop_form})
-    return render(request, 'registration/base_modal_form.html', args)
+    return render(request, 'registration/add_troop_modal.html', args)
 
 def register_council(request):
     if request.POST:
@@ -103,4 +103,4 @@ def register_council(request):
     council_form = CouncilForm()
     args.update({'modal_title': "Add Council"})
     args.update({'modal_form': council_form})
-    return render(request, 'registration/council_form.html', args)
+    return render(request, 'registration/add_council_modal.html', args)

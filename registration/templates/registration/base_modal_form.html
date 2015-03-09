@@ -3,13 +3,14 @@
    <h4 class="modal-title" id="myModalLabel">{{ modal_title }}</h4>
 </div>
 <div class="modal-body">
-   <form method="post" action="." id="modal_form">
-      {% csrf_token %}
-      {{ modal_form.as_p }}
-   </form>
+    <form method="post" action="" id="modal_form">
+		{% csrf_token %}
+		{{ modal_form.as_p }}
+    </form>
 </div>
 <div>
-{% block buttons %}{% endblock buttons %}
+{% block buttons %}
+{% endblock buttons %}
 </div>
 <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
