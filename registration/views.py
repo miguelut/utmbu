@@ -8,6 +8,7 @@ from scoutmaster.models import Scoutmaster
 from django.contrib import messages
 from registration.forms import *
 from mbu_users.models import Venture, Volunteer, TroopContact
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -86,6 +87,8 @@ def register_troop(request):
     return render(request, 'registration/register_troop.html', args)
 
 def register_council(request):
+    if request.POST:
+        return HttpResponse()
     args = {'title': 'Add Council'}
     council_form = CouncilForm()
     args.update({'council_modal_title': "Add Council"})
