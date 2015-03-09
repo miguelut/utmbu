@@ -81,10 +81,16 @@ def register_volunteer(request):
     return _register(request, FormSet, args)
 
 def register_troop(request):
-    args = {'title': 'Add Troop'}
+    if request.POST:
+        form = TroopForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse(form)
+    args = {'modal_title': 'Add Troop'}
+    args.update({'endpoint': '/register/troop/'})
     troop_form = TroopForm()
-    args.update({'form': troop_form})
-    return render(request, 'registration/register_troop.html', args)
+    args.update({'modal_form': troop_form})
+    return render(request, 'registration/base_modal_form.html', args)
 
 def register_council(request):
     if request.POST:
@@ -92,8 +98,9 @@ def register_council(request):
         if form.is_valid():
             form.save()
             return HttpResponse(form)
-    args = {'title': 'Add Council'}
+    args = {'modal_title': 'Add Council'}
+    args.update({'endpoint': '/register/scout/'})
     council_form = CouncilForm()
-    args.update({'council_modal_title': "Add Council"})
-    args.update({'council_modal_form': council_form})
+    args.update({'modal_title': "Add Council"})
+    args.update({'modal_form': council_form})
     return render(request, 'registration/council_form.html', args)

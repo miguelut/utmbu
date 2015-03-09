@@ -1,25 +1,28 @@
 <div class="modal-header">
    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-   <h4 class="modal-title" id="myModalLabel">{{ council_modal_title }}</h4>
+   <h4 class="modal-title" id="myModalLabel">{{ modal_title }}</h4>
 </div>
 <div class="modal-body">
-   <form method="post" action="." id="add_council_form">
+   <form method="post" action="." id="modal_form">
       {% csrf_token %}
-      {{ council_modal_form.as_p }}
+      {{ modal_form.as_p }}
    </form>
+</div>
+<div>
+{% block buttons %}{% endblock buttons %}
 </div>
 <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">Add Council</button>
+      <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ modal_title }}</button>
 </div>
 
 <script>
     function create_post() {
         console.log("create post is working!")
-        var form_data = $('#add_council_form').serialize();
+        var form_data = $('#modal_form').serialize();
 
         $.ajax({
-            url : "/register/council/", // the endpoint
+            url : "{{ endpoint }}", // the endpoint
             type : "POST", // http method
             data : form_data, // data sent with the post request
 
@@ -39,10 +42,10 @@
     };
 
     $('#submit_button').on('click', function() {
-        $('#add_council_form').submit();
+        $('#modal_form').submit();
     });
 
-    $('#add_council_form').on('submit', function(event){
+    $('#modal_form').on('submit', function(event){
        event.preventDefault();
        console.log("form submitted!")
        create_post();

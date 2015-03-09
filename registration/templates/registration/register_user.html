@@ -14,7 +14,10 @@
             </tr>
         </table>
     </form>
-    <a data-toggle="modal" class="btn btn-primary" href="#add_troop_modal">Add Troop</a>
-    {% include "registration/add_troop_modal.html" %}
-    {% include "registration/add_council_modal.html" %}
+    <a id="open_modal" class="btn btn-primary" href="{% url 'register_troop' %}" data-toggle="modal" data-target="#modal">Add Troop</a>
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog">
+            <div class="modal-content"></div>
+        </div>
+    </div>
 {% endblock %}
