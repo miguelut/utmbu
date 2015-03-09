@@ -1,5 +1,15 @@
-{% extends "registration/base_modal_form.html" %}
-{% block buttons %}
+<div class="modal-header">
+   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+   <h4 class="modal-title" id="myModalLabel">{{ modal_title }}</h4>
+</div>
+<div class="modal-body">
+    <form method="post" action="" id="modal_form">
+        {% csrf_token %}
+        {{ modal_form.as_p }}
+    </form>
+</div>
+<div>
+
     <a class="btn btn-primary" href="{% url 'register_council' %}" data-toggle="modal" data-target="#modal2">Is your council not listed? Add it</a>
 
     <div class="modal fade" id="modal2">
@@ -7,4 +17,45 @@
             <div class="modal-content"></div>
         </div>
     </div>
-{% endblock buttons %}
+
+</div>
+<div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ modal_title }}</button>
+</div>
+
+<script>
+    function create_post() {
+        console.log("create post is working!")
+        var form_data = $('#modal_form').serialize();
+
+        $.ajax({
+            url : "{{ endpoint }}", // the endpoint
+            type : "POST", // http method
+            data : form_data, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                console.log(json); // log the returned json to the console
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+
+    $('#submit_button').on('click', function() {
+        $('#modal_form').submit();
+    });
+
+    $('#modal_form').on('submit', function(event){
+       event.preventDefault();
+       console.log("form submitted!")
+       create_post();
+    });
+</script>
