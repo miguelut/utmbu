@@ -88,7 +88,10 @@ def register_troop(request):
 
 def register_council(request):
     if request.POST:
-        return HttpResponse()
+        form = CouncilForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse(form)
     args = {'title': 'Add Council'}
     council_form = CouncilForm()
     args.update({'council_modal_title': "Add Council"})

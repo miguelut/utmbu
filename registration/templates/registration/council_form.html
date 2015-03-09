@@ -6,12 +6,10 @@
    <form method="post" action="/register/council/" id="add_council_form">
       {% csrf_token %}
       {{ council_modal_form.as_p }}
-      <input type="submit" id="add_council_form-submit" />
    </form>
 </div>
 <div class="modal-footer">
       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <!-- <label class="btn btn-primary" for="add_council_form-submit">Add Council</label> -->
       <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">Add Council</button>
 </div>
 

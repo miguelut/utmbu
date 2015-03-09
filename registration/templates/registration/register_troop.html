@@ -5,16 +5,9 @@
 
 {% block content %}
     <form method="post" action=".">
-        <table>
-            {% csrf_token %}
-            {{ form }}
-            <tr>
-                <td> <a href="{% url 'register_council' %}">Add Council</a></td>
-            </tr>
-            <tr>
-                <td> <input type="submit" value="Add Troop" /> </td>
-            </tr>
-        </table>
+
+        {% csrf_token %}
+        {{ form.as_p }}
     </form>
     <a id="open_council_modal" class="btn btn-primary" href="{% url 'register_council' %}" data-toggle="modal" data-target="#modal">Add Council</a>
     <div class="modal fade" id="modal">
