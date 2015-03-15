@@ -14,10 +14,6 @@
             </tr>
         </table>
     </form>
-    <a id="open_modal" class="btn btn-primary" href="{% url 'register_troop' %}" data-toggle="modal" data-target="#modal">Is your troop not listed? Add it</a>
-    <div class="modal fade" id="modal">
-        <div class="modal-dialog">
-            <div class="modal-content"></div>
-        </div>
-    </div>
+    {% include "registration/add_troop_modal.html" %}
+    {% include "registration/add_council_modal.html" %}
 {% endblock %}

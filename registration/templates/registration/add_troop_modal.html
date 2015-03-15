@@ -1,61 +1,54 @@
-<div class="modal-header">
-   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-   <h4 class="modal-title" id="myModalLabel">{{ modal_title }}</h4>
-</div>
-<div class="modal-body">
-    <form method="post" action="" id="modal_form">
-        {% csrf_token %}
-        {{ modal_form.as_p }}
-    </form>
-</div>
-<div>
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#troop_modal">
+  Troop not listed? Add it
+</button>
 
-    <a class="btn btn-primary" href="{% url 'register_council' %}" data-toggle="modal" data-target="#modal2">Is your council not listed? Add it</a>
-
-    <div class="modal fade" id="modal2">
-        <div class="modal-dialog">
-            <div class="modal-content"></div>
+<!-- Modal -->
+<div class="modal fade" id="troop_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">{{ troop_modal_title }}</h4>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/register/troop/" id="troop_modal_form">
+                    {% csrf_token %}
+                    {{ troop_modal_form.as_p }}
+                </form>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#council_modal">
+                Council not listed? Add it
+            </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ troop_modal_title }}</button>
+            </div>
         </div>
-    </div>
-
+    
 </div>
-<div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ modal_title }}</button>
-</div>
-
 <script>
-    function create_post() {
+    function add_troop() {
         console.log("create post is working!")
-        var form_data = $('#modal_form').serialize();
+        var form_data = $('#troop_modal_form').serialize();
 
         $.ajax({
-            url : "{{ endpoint }}", // the endpoint
-            type : "POST", // http method
-            data : form_data, // data sent with the post request
+            url : "/register/troop/",
+            type : "POST",
+            data : form_data,
 
-            // handle a successful response
-            success : function(json) {
-                console.log(json); // log the returned json to the console
-                console.log("success"); // another sanity check
+            success : function() {
+                console.log("success");
             },
 
-            // handle a non-successful response
             error : function(xhr,errmsg,err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                console.log("form submission error")
             }
         });
     };
 
     $('#submit_button').on('click', function() {
-        $('#modal_form').submit();
-    });
-
-    $('#modal_form').on('submit', function(event){
-       event.preventDefault();
-       console.log("form submitted!")
-       create_post();
+        event.preventDefault();
+        console.log("form submitted!")
+        add_troop();
     });
 </script>

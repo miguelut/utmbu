@@ -1,50 +1,44 @@
-<div class="modal-header">
-   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-   <h4 class="modal-title" id="myModalLabel">{{ modal_title }}</h4>
+<div class="modal fade" id="council_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">{{ council_modal_title }}</h4>
+        </div>
+        <div class="modal-body">
+            <form method="POST" action="/register/council/" id="council_modal_form">
+                {% csrf_token %}
+                {{ council_modal_form.as_p }}
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="council_submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ council_modal_title }}</button>
+        </div>
+    </div>
 </div>
-<div class="modal-body">
-    <form method="post" action="" id="council_modal_form">
-        {% csrf_token %}
-        {{ modal_form.as_p }}
-    </form>
-</div>
-<div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button id="council_submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ modal_title }}</button>
-</div>
-
 <script>
-    function create_post() {
+    function add_council() {
         console.log("create post is working!")
         var form_data = $('#council_modal_form').serialize();
 
         $.ajax({
-            url : "{{ endpoint }}", // the endpoint
-            type : "POST", // http method
-            data : form_data, // data sent with the post request
+            url : "/register/council/",
+            type : "POST",
+            data : form_data,
 
-            // handle a successful response
-            success : function(json) {
-                console.log(json); // log the returned json to the console
-                console.log("success"); // another sanity check
+            success : function() {
+                console.log("success");
             },
 
-            // handle a non-successful response
             error : function(xhr,errmsg,err) {
-                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                console.log("form submission error")
             }
         });
     };
 
     $('#council_submit_button').on('click', function() {
-        $('#council_modal_form').submit();
-    });
-
-    $('#council_modal_form').on('submit', function(event){
-       event.preventDefault();
-       console.log("form submitted!")
-       create_post();
+        event.preventDefault();
+        console.log("form submitted!")
+        add_council();
     });
 </script>
