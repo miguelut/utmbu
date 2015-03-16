@@ -18,29 +18,3 @@
         </div>
     </div>
 </div>
-<script>
-    function add_council() {
-        console.log("create post is working!")
-        var form_data = $('#council_modal_form').serialize();
-
-        $.ajax({
-            url : "/register/council/",
-            type : "POST",
-            data : form_data,
-
-            success : function() {
-                console.log("success");
-            },
-
-            error : function(xhr,errmsg,err) {
-                console.log("form submission error")
-            }
-        });
-    };
-
-    $('#council_submit_button').on('click', function() {
-        event.preventDefault();
-        console.log("form submitted!")
-        add_council();
-    });
-</script>

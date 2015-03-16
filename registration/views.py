@@ -86,9 +86,7 @@ def register_troop(request):
         form = TroopForm(request.POST)
         if form.is_valid():
             form.save()
-            latest_troop = Troop.objects.order_by('-pk')[0]
-            #data = serializers.serialize("json", all_troops)
-            #latest_troop = Troop.objects.all().order_by('-pk')[0]
+            latest_troop = Troop.objects.order_by('-pk')[:1]
             data = serializers.serialize("json", latest_troop)
             return HttpResponse(JsonResponse(data, safe=False))
 
@@ -97,7 +95,6 @@ def register_council(request):
         form = CouncilForm(request.POST)
         if form.is_valid():
             form.save()
-            all_councils = Troop.objects.all()
-            latest_council = Council.objects.order_by('-id')[0]
+            latest_council = Council.objects.order_by('-pk')[:1]
             data = serializers.serialize("json", latest_council)
             return HttpResponse(JsonResponse(data, safe=False))
