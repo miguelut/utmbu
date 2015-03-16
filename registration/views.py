@@ -8,7 +8,8 @@ from scoutmaster.models import Scoutmaster
 from django.contrib import messages
 from registration.forms import *
 from mbu_users.models import Venture, Volunteer, TroopContact
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
 
 # Create your views here.
 
@@ -85,22 +86,18 @@ def register_troop(request):
         form = TroopForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse(form)
-    args = {'modal_title': 'Add Troop'}
-    args.update({'endpoint': '/register/troop/'})
-    troop_form = TroopForm()
-    args.update({'modal_form': troop_form})
-    return render(request, 'registration/add_troop_modal.html', args)
+            latest_troop = Troop.objects.order_by('-pk')[0]
+            #data = serializers.serialize("json", all_troops)
+            #latest_troop = Troop.objects.all().order_by('-pk')[0]
+            data = serializers.serialize("json", latest_troop)
+            return HttpResponse(JsonResponse(data, safe=False))
 
 def register_council(request):
     if request.POST:
         form = CouncilForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse(form)
-    args = {'modal_title': 'Add Council'}
-    args.update({'endpoint': '/register/scout/'})
-    council_form = CouncilForm()
-    args.update({'modal_title': "Add Council"})
-    args.update({'modal_form': council_form})
-    return render(request, 'registration/add_council_modal.html', args)
+            all_councils = Troop.objects.all()
+            latest_council = Council.objects.order_by('-id')[0]
+            data = serializers.serialize("json", latest_council)
+            return HttpResponse(JsonResponse(data, safe=False))

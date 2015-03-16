@@ -36,6 +36,9 @@ class MbuUserCreationForm(UserCreationForm):
         fields = ['first_name','last_name','email','username']
 
 class TroopForm(forms.ModelForm):
+    #council = forms.ChoiceField(choices=Council.objects.all())
+    #council = forms.ChoiceField(choices=[(obj.id, obj.name) for obj in Council.objects.all()], widget=forms.Select())
+    # council = forms.ModelChoiceField(queryset=Council.objects.all(), widget=forms.Select(attrs={'class':'ddl'}))
     class Meta:
         model = Troop
         fields = '__all__'

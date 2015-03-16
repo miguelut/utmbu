@@ -4,7 +4,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="troop_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -18,37 +18,45 @@
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#council_modal">
                 Council not listed? Add it
             </button>
+            <button id="test" type="button" class="btn btn-primary">TEST</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button id="submit_button" type="button" class="btn btn-primary" data-dismiss="modal">{{ troop_modal_title }}</button>
             </div>
         </div>
-    
+    </div>
 </div>
 <script>
-    function add_troop() {
-        console.log("create post is working!")
-        var form_data = $('#troop_modal_form').serialize();
+    // function add_troop() {
+    //     console.log("create post is working!")
+    //     var form_data = $('#troop_modal_form').serialize();
 
-        $.ajax({
-            url : "/register/troop/",
-            type : "POST",
-            data : form_data,
+    //     $.ajax({
+    //         url : "/register/troop/",
+    //         type : "POST",
+    //         data : form_data,
 
-            success : function() {
-                console.log("success");
-            },
+    //         success : function(data) {
+    //             console.log("success");
+    //             console.log(data.pk);
+    //         },
 
-            error : function(xhr,errmsg,err) {
-                console.log("form submission error")
-            }
-        });
-    };
+    //         error : function(xhr,errmsg,err) {
+    //             console.log(err);
+    //         }
+    //     });
+    // };
 
-    $('#submit_button').on('click', function() {
-        event.preventDefault();
-        console.log("form submitted!")
-        add_troop();
-    });
+    // $('#submit_button').on('click', function() {
+    //     event.preventDefault();
+    //     console.log("form submitted!")
+    //     add_troop();
+    // });
+
+    // $('#test').on('click', function() {
+    //     var select_widget = $("#id_council");
+    //     console.log(select_widget.size());
+    //     select_widget.append('<option value=' + (select_widget.length + 1) +'>DERP</option>');
+    // });
 </script>
