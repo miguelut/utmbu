@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'registration',
     'troop',
     'dev',
+    'mbu_users',
 )
 
 MIDDLEWARE_CLASSES = (
