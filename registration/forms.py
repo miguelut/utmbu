@@ -42,15 +42,9 @@ class TroopForm(forms.ModelForm):
         fields = '__all__'
 
 class CouncilForm(forms.ModelForm):
-<<<<<<< HEAD
     not_present = forms.BooleanField(label='New Council', widget=forms.CheckboxInput(attrs={'onClick':'alert("Hello!")'}))
     name = forms.CharField(max_length=30, widget=forms.HiddenInput())
 
     class Meta:
         model = Council
         fields = '__all__'
-=======
-    class Meta:
-        model = Council
-        fields = '__all__'
->>>>>>> develop
