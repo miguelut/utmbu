@@ -1,15 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from troop.models import Troop
+from mbu.models import Address
 
 # Create your models here.
-class Address(models.Model):
-    street_address = models.CharField(max_length=200)
-    street_address2 = models.CharField(max_length=200)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=2)
-    zip_code = models.CharField(max_length=10)
-
 class Counselor(models.Model):
     user = models.OneToOneField(User)
     phone_number = models.CharField(max_length=12)
