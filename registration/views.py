@@ -8,6 +8,8 @@ from scoutmaster.models import Scoutmaster
 from django.contrib import messages
 from registration.forms import *
 from mbu_users.models import Venture, Volunteer, TroopContact
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
 
 # Create your views here.
 
@@ -30,6 +32,8 @@ def register_scoutmaster(request):
 def _register(request, FormSet, args):
     user = User()
     form = MbuUserCreationForm()
+    troop_modal_form = TroopForm()
+    council_modal_form = CouncilForm()
     formset = FormSet()
     if request.POST:
         form = MbuUserCreationForm(request.POST)
@@ -47,7 +51,11 @@ def _register(request, FormSet, args):
 
     args.update(csrf(request))
     args.update({'form' : form })
-    args.update({'formset': formset })  
+    args.update({'formset': formset })
+    args.update({'troop_modal_form': troop_modal_form})
+    args.update({'council_modal_form': council_modal_form})
+    args.update({'troop_modal_title': "Add Troop"})
+    args.update({'council_modal_title': "Add Council"})
     return render(request, 'registration/register_user.html', args)
 
 def register(request):
@@ -74,8 +82,19 @@ def register_volunteer(request):
     return _register(request, FormSet, args)
 
 def register_troop(request):
-    args = {'title': 'Register Troop'}
-    troop_form = TroopForm()
-    council_form = CouncilForm()
-    args.update({'troop_form':troop_form, 'council_form':council_form})
-    return render(request, 'registration/register_troop.html', args)
+    if request.POST:
+        form = TroopForm(request.POST)
+        if form.is_valid():
+            form.save()
+            latest_troop = Troop.objects.order_by('-pk')[:1]
+            data = serializers.serialize("json", latest_troop)
+            return HttpResponse(JsonResponse(data, safe=False))
+
+def register_council(request):
+    if request.POST:
+        form = CouncilForm(request.POST)
+        if form.is_valid():
+            form.save()
+            latest_council = Council.objects.order_by('-pk')[:1]
+            data = serializers.serialize("json", latest_council)
+            return HttpResponse(JsonResponse(data, safe=False))

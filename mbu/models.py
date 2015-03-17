@@ -10,3 +10,11 @@ class MeritBadgeUniversity(models.Model):
 
     def __str__(self):
         return self.name + ' ' + str(self.year)
+
+class Address(models.Model):
+    street_address = models.CharField(max_length=200)
+    street_address2 = models.CharField(max_length=200)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=2)
+    zip_code = models.CharField(max_length=10)
+

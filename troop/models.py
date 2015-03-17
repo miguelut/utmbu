@@ -22,4 +22,3 @@ class Troop(models.Model):
     class Meta:
         unique_together = ('number','council')
 
-
