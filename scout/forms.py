@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from course.models import CourseInstance, Session
 from mbu.models import MeritBadgeUniversity
 from django.core.exceptions import ValidationError
+from scout.fields import CourseInstanceChoiceField
 
 class EditClassesForm(forms.Form):
 
@@ -14,7 +15,7 @@ class EditClassesForm(forms.Form):
         for session in sessions:
             queryset = CourseInstance.objects.filter(session=session)
             initial = self.user.enrollments.filter(session=session).first()
-            self.fields['class-for-session-%d' % session.pk] = forms.ModelChoiceField(queryset=queryset, label=session.name, required=False, initial=initial)
+            self.fields['class_for_session_%d' % session.pk] = CourseInstanceChoiceField(user=self.user, session=session)
     
     # This is where we do cross-field validation
     def clean(self):
