@@ -39,6 +39,11 @@ urlpatterns += patterns(
     url(r'^scout/viewclasses/', 'scout.views.view_registered_classes', name = 'scout_view_classes')
 )
 
+urlpatterns += patterns(
+    '',
+    url(r'^scoutmaster/editclasses/$', 'scoutmaster.views.edit_troop_classes', name ='scoutmaster_edit_classes')
+)
+
 #Dev URLs -- REMOVE BEFORE DEPLOYMENT
 urlpatterns += patterns(
     '',
