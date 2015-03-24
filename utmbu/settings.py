@@ -41,6 +41,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'mbu.context_processors.default_links',
+    'mbu.context_processors.add_links',
 )
 
 # Application definition
