@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Enrolled Courses{% endblock title %}
+{% block header_text %}Enrolled Courses{% endblock header_text %}
+
+{% block content %}
+
+<table class="table">
+	<thead>
+        <tr>
+            <td>Course Name</td>
+            <td>Session</td>
+            <td>Start Time</td>
+            <td>End Time</td>
+   		</tr>
+   	</thead>
+   	<tbody class="table-striped">
+        {% for course in enrolled_courses %}
+        <tr>
+            <td>{{ course.course.name }}</td>
+            <td>{{ course.session.name }}</td>
+            <td>{{ course.session.start_time }}</td>
+            <td>{{ course.session.end_time }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

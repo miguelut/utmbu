@@ -9,7 +9,7 @@
         <div id="header">
             <div class="row">
                 <div class="col-md-10">
-                    <h1>Header</h1>
+                    <h1>{% block header_text %}Header{% endblock %}</h1>
                 </div>
                 <div id="user-options" class="col-md-2">
                     {% if user.is_authenticated %}
@@ -23,6 +23,9 @@
                 <nav class="navbar navbar-default" role="navigation">
                     <div class="container-fluid">
                         <ul class="nav navbar-nav">
+                        {% for link in DEFAULT_LINKS %}
+                            <li><a href="{% url link.href %}">{{ link.label }}</a></li>
+                        {% endfor %}
                         {% for link in links %}
                             <li><a href="{% url link.href %}">{{ link.label }}</a></li>
                         {% endfor %}
@@ -32,12 +35,20 @@
             {% endblock navbar %}
         </div>
     {% endblock header %}
-    {% for message in messages %}
-        {{ message }}
-    {% endfor %}
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} class='alert {{message.tags}}' {% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
     {% block content %}{% endblock content %}
 
-</body>
+{% block links %} 
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
-{% block links %} {% endblock links %}
+<script src="{% static "js/jQuery-2.1.3.min.js" %}"></script>
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/app.js" %}"></script>
+{% endblock links %}
+{% block script %}
+{% endblock script %}
+</body>
 </html>
