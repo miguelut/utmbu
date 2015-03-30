@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from scout.models import Scout
-from mbu.models import Counselor, MeritBadgeUniversity
+from mbu.models import MeritBadgeUniversity
+from mbu_users.models import Counselor
 
 # Models owned by the course app
 
