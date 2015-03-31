@@ -5,7 +5,7 @@
 {% block content %}
     <ul>
         {% for scout in scouts %}
-            <li>{{ scout }}</li>
+            <a href="{% url 'scoutmaster_view_classes' scout_id=scout.id %}"><li>{{ scout }}</li></a>
         {% endfor %}
     </ul>
 

@@ -41,7 +41,7 @@ urlpatterns += patterns(
 
 urlpatterns += patterns(
     '',
-    url(r'^scoutmaster/editclasses/$', 'scoutmaster.views.view_troop_enrollees', name ='scoutmaster_view_enrolles'),
+    url(r'^scoutmaster/viewtroop/$', 'scoutmaster.views.view_troop_enrollees', name ='scoutmaster_view_troop'),
     url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'scoutmaster.views.view_troop_classes', name ='scoutmaster_view_classes')
 )
 
