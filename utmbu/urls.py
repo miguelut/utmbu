@@ -25,7 +25,7 @@ urlpatterns += patterns(
     url(r'^register/$', 'registration.views.register', name = 'register'),
     url(r'^register/scout/', 'registration.views.register_scout', name = 'register_scout'),
     url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
-    url(r'^register/parent/', 'registration.views.register_parent', name = 'register_parent')
+    url(r'^register/parent/', 'registration.views.register_parent', name = 'register_parent'),
     url(r'^register/venture/', 'registration.views.register_venture', name = 'register_venture'),
     url(r'^register/troopcontact/', 'registration.views.register_troopcontact', name = 'register_troopcontact'),
     url(r'^register/volunteer/', 'registration.views.register_volunteer', name = 'register_volunteer'),
@@ -50,17 +50,4 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(r'^setup_dummy_data/', 'dev.views.setup_dummy_data', name ='setup_dummy_data')
-)
-
-# Scout URLS
-urlpatterns += patterns(
-    '',
-    url(r'^scout/register/', 'mbu.views.register_scout', name = 'register_scout'),
-    url(r'^scoutmaster/', 'mbu.views.view_scoutmaster_page', name = 'scoutmaster'),
-)
-
-#Course URLs
-urlpatterns += patterns(
-    '',
-    url(r'^course/add', 'course.views.add_course', name = 'add_course')
 )

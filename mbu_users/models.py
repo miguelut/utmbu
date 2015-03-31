@@ -24,3 +24,8 @@ class TroopContact(models.Model):
 
     def __str__(self):
         return "%s %s %s" % (self.user.first_name, self.user.last_name, self.phone_number)
+
+class Parent(models.Model):
+    user = models.OneToOneField(User)
+    phone_number = models.CharField(max_length=12)
+    address = models.ForeignKey(Address)
