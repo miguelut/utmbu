@@ -10,6 +10,7 @@ from course.models import CourseInstance
 def edit_classes(request):
     args = {}
     user = request.user
+    form = EditClassesForm(user=user)
     if request.POST:
         form = EditClassesForm(request.POST, user=user)
         if form.is_valid():
@@ -21,7 +22,7 @@ def edit_classes(request):
             messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
             return redirect('mbu_home')
 
-    args.update({'form': EditClassesForm(user=user)})
+    args.update({'form': form})
     args.update(csrf(request))
     return render(request, 'scout/edit_classes.html', args)
 
