@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Edit Troop Courses{% endblock title %}
+{% block header_text %}Edit Troop Courses{% endblock header_text %}
+
+{% block content %}
+    <ul>
+        {% for course in course_enrollments %}
+            <li>{{ course }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock content %}
