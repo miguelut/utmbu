@@ -5,6 +5,7 @@ from django.forms.extras.widgets import SelectDateWidget
 from django.contrib.auth.forms import UserCreationForm
 from scout.models import Scout
 from scoutmaster.models import Scoutmaster
+from troop.models import Troop, Council
 from mbu_users.models import Venture, Volunteer, TroopContact
 from django.forms import ModelForm
 from troop.models import Troop, Council
@@ -41,6 +42,9 @@ class TroopForm(forms.ModelForm):
         fields = '__all__'
 
 class CouncilForm(forms.ModelForm):
+    not_present = forms.BooleanField(label='New Council', widget=forms.CheckboxInput(attrs={'onClick':'alert("Hello!")'}))
+    name = forms.CharField(max_length=30, widget=forms.HiddenInput())
+
     class Meta:
         model = Council
         fields = '__all__'
