@@ -19,5 +19,5 @@ def view_troop_classes(request, scout_id):
 	args = {}
 	course_enrollments = Scout.objects.get(pk=scout_id).user.enrollments.all()
 	args.update({'course_enrollments': course_enrollments})
-	print course_enrollments
+	print (course_enrollments)
 	return render(request, 'scoutmaster/view_troop_courses.html', args)
