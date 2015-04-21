@@ -27,5 +27,13 @@ class TroopContact(models.Model):
 
 class Parent(models.Model):
     user = models.OneToOneField(User)
-    phone_number = models.CharField(max_length=12)
-    address = models.ForeignKey(Address)
+    phone = models.CharField(max_length=12)
+    troop = models.ForeignKey(Troop)
+
+    def __str__(self):
+        return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
+    
+    class Meta:
+       permissions = (
+           ('can_edit_scout_schedule', "Can edit own scouts' schedules.")
+       )

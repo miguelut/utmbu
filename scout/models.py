@@ -1,14 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from mbu_users.models import Parent
 from troop.models import Troop
 
 # Create your models here.
 
-class Parent(models.Model):
-    user = models.OneToOneField(User)
-    phone = models.CharField(max_length=12)
-    troop = models.ForeignKey(Troop)
-    
 class Scout(models.Model):
     user = models.OneToOneField(User)
     dob = models.DateField()

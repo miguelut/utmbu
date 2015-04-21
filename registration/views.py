@@ -3,11 +3,11 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User, Permission
 from django.contrib.contenttypes.models import ContentType
-from scout.models import Scout, Parent
+from scout.models import Scout
 from scoutmaster.models import Scoutmaster
 from django.contrib import messages
 from registration.forms import *
-from mbu_users.models import Venture, Volunteer, TroopContact
+from mbu_users.models import Venture, Volunteer, TroopContact, Parent
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 
@@ -32,7 +32,7 @@ def register_scoutmaster(request):
 def register_parent(request):
     args = {'title': 'Register Parent'}
     ct = ContentType.objects.get_for_model(Parent)
-    p = Permission.objects.get(content_type=ct, codename='')
+    p = Permission.objects.get(content_type=ct, codename='can_edit_scout_schedule')
     args.update({})
     FormSet = ParentFormSet
     return _register(request, FormSet, args)
