@@ -5,7 +5,7 @@
 {% block content %}
     <ul>
         {% for scout in scouts %}
-            <a href="{% url 'scoutmaster_view_classes' scout_id=scout.id %}"><li>{{ scout }}</li></a>
+            <a href="{% url 'scoutmaster_edit_classes' scout_id=scout.id %}"><li>{{ scout }}</li></a>
         {% endfor %}
     </ul>
 
