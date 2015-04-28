@@ -32,8 +32,8 @@ class Parent(models.Model):
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
-    
+
     class Meta:
-       permissions = (
-           ('can_edit_scout_schedule', "Can edit own scouts' schedules.")
-       )
+        permissions = (
+            ('can_edit_scout_schedule', "Can edit own scouts schedules."),
+        )

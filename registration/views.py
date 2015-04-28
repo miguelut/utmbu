@@ -33,7 +33,7 @@ def register_parent(request):
     args = {'title': 'Register Parent'}
     ct = ContentType.objects.get_for_model(Parent)
     p = Permission.objects.get(content_type=ct, codename='can_edit_scout_schedule')
-    args.update({})
+    args.update({'perms':p})
     FormSet = ParentFormSet
     return _register(request, FormSet, args)
 

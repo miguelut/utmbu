@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from mbu.models import MeritBadgeUniversity
 from course.models import Session, Course, CourseInstance
 from datetime import date, datetime
+from mbu_users.models import Parent
 
 # Create your views here.
 def setup_dummy_data(request):
@@ -39,4 +40,9 @@ def setup_dummy_data(request):
     user2.user_permissions.add(p)
     scout1, create = Scout.objects.get_or_create(user=user1, dob=date(2000,1,1), rank='Star', troop=troop)
     scout2, create = Scout.objects.get_or_create(user=user2, dob=date(2000, 2, 2), rank='Star', troop=troop)
+    user3, create = User.objects.get_or_create(first_name='First3', last_name='Last3', email="test3@test.com", username='test3', password=make_password('test3'))
+    ct = ContentType.objects.get_for_model(Parent)
+    p = Permission.objects.get(content_type=ct, codename='can_edit_scout_schedule')
+    user3.user_permissions.add(p)
+    parent1, create = Parent.objects.get_or_create(user=user3, phone='5555555555', troop=troop)
     return redirect('mbu_home')
