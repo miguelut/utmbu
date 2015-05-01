@@ -5,6 +5,63 @@
     <title>{% block title %}Merit Badge University{% endblock %}</title>
 </head>
 <body>
+    <script>
+        function statusChangeCallback(response) {
+            console.log('statusChangeCallback');
+            console.log(response);
+            if (response.status === 'connected') {
+                testAPI();
+            } else if (response.status === 'not_authorized') {
+                document.getElementById('status').innerHTML = 'Please log into this app.';
+            } else {
+                document.getElementById('status').innerHTML = 'Please log into Facebook.';
+            }
+        }
+
+        function checkLoginState() {
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+        }
+
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId      : '914815875236577',
+                cookie     : true,
+                xfbml      : true,
+                version    : 'v2.3'
+            });
+
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+            });
+
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function testAPI() {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/me', function(response) {
+                console.log('Successful login for: ' + response.name);
+                document.getElementById('status').innerHTML =
+                'Thanks for logging in, ' + response.name + '!';
+            });
+        }
+    </script>
+
+{% block scripts %}{% endblock %}
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+
+<div id="status">
+</div>
     {% block header %}
         <div id="header">
             <div class="row">
@@ -41,7 +98,7 @@
         {% endfor %}
     {% endif %}
     {% block content %}{% endblock content %}
-
+    
 {% block links %} 
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
 <script src="{% static "js/jQuery-2.1.3.min.js" %}"></script>
