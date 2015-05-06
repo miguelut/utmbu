@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.context_processors import csrf
+from django.contrib.auth.decorators import login_required
 from mbu.forms import EditProfileForm
 from mbu.models import MeritBadgeUniversity
 from course.models import Session, CourseInstance, Course
@@ -9,6 +10,7 @@ from django.shortcuts import redirect
 from django import forms
 from django.template import RequestContext
 from scout.models import Scout
+from django.views.decorators.http import require_http_methods
 import logging
 
 logger = logging.getLogger(__name__)
@@ -17,6 +19,7 @@ def logout_user(request):
     logout(request)
     return redirect('mbu_home')
 
+@login_required()
 def view_home_page(request):
     return render(request, 'mbu/home.html')
 

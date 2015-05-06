@@ -91,3 +91,6 @@ migrations/
 
 # Vim swap files
 *.swp
+
+# Sensitive configs
+config.py
