@@ -1,16 +1,15 @@
-from django.shortcuts import render
-from django.core.context_processors import csrf
-from django.contrib.auth.decorators import login_required
-from mbu.forms import EditProfileForm
-from mbu.models import MeritBadgeUniversity
-from course.models import Session, CourseInstance, Course
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.shortcuts import redirect
 from django import forms
+from django.shortcuts import render, redirect
+from django.core.context_processors import csrf
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 from django.template import RequestContext
-from scout.models import Scout
 from django.views.decorators.http import require_http_methods
+from mbu.forms import EditProfileForm
+from mbu.models import *
+from mbu.scout_forms import EditClassesForm
 import logging
 
 logger = logging.getLogger(__name__)
@@ -55,3 +54,48 @@ def view_class_requirements(request, id=-1):
 
 def view_reports(request):
     return render(request, 'mbu/reports.html')
+
+
+# Create your views here.
+@permission_required('mbu.edit_scout_schedule',raise_exception=True)
+def edit_classes(request):
+    args = {}
+    user = request.user
+    form = EditClassesForm(user=user)
+    if request.POST:
+        form = EditClassesForm(request.POST, user=user)
+        if form.is_valid():
+            user.enrollments.clear()
+            for name, course_instance in form.cleaned_data.items():
+                if course_instance is not None:
+                    user.enrollments.add(course_instance)
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
+            return redirect('mbu_home')
+
+    args.update({'form': form})
+    args.update(csrf(request))
+    return render(request, 'mbu/edit_classes.html', args)
+
+def view_registered_classes(request):
+    args = {}
+    user = request.user
+    enrolled_courses = user.enrollments.all()
+    args.update({'enrolled_courses': enrolled_courses})
+    return render(request, 'mbu/view_classes.html', args)
+
+
+def view_troop_enrollees(request):
+    args = {}
+    scoutmaster = Scoutmaster.objects.get(user=request.user)
+    troop = Troop.objects.get(scoutmaster=scoutmaster)
+    scouts = Scout.objects.all().filter(troop=troop)
+    args.update({'scouts': scouts})
+    return render(request, 'scoutmaster/view_troop.html', args)
+
+def view_troop_classes(request, scout_id):
+    args = {}
+    course_enrollments = Scout.objects.get(pk=scout_id).user.enrollments.all()
+    args.update({'course_enrollments': course_enrollments})
+    print (course_enrollments)
+    return render(request, 'scoutmaster/view_troop_courses.html', args)
