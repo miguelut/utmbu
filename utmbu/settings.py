@@ -1,6 +1,8 @@
 from django.contrib.messages import constants as messages
-from config import *
-
+try:
+    from config import *
+except:
+    pass
 """
 Django settings for utmbu project.
 
