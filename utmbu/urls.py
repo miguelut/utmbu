@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 #Authentication Views
 urlpatterns += patterns(
     '',
+    url(r'^signup/$', 'mbu.views.signup', name = 'signup'),
     url(r'^login/$', 'django.contrib.auth.views.login', { 'template_name': 'login.html' },  name = 'login'),
     url(r'^logout/$', 'mbu.views.logout_user', name = 'logout'),
 )

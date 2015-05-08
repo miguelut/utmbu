@@ -4,6 +4,7 @@ from django.core.context_processors import csrf
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
@@ -13,6 +14,17 @@ from mbu.scout_forms import EditClassesForm
 import logging
 
 logger = logging.getLogger(__name__)
+
+def signup(request):
+    form = UserCreationForm()
+    if request.POST:
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('mbu_home')
+    args = {'form' : form}
+    return render(request, 'mbu/signup.html', args)
+    
 
 def logout_user(request):
     logout(request)
