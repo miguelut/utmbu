@@ -5,6 +5,7 @@ from django.contrib.auth import views as auth_views
 #General Views
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$', 'mbu.views.view_home_page', name = 'mbu_home'),
     url(r'^profile/edit/', 'mbu.views.edit_profile', name = 'edit_profile'),
     url(r'^class/list/$', 'mbu.views.view_class_list', name = 'class_list'),
@@ -19,30 +20,17 @@ urlpatterns += patterns(
     url(r'^logout/$', 'mbu.views.logout_user', name = 'logout'),
 )
 
-# Registration URLS
-urlpatterns += patterns(
-    '',
-    url(r'^register/$', 'registration.views.register', name = 'register'),
-    url(r'^register/scout/', 'registration.views.register_scout', name = 'register_scout'),
-    url(r'^register/scoutmaster/', 'registration.views.register_scoutmaster', name = 'register_scoutmaster'),
-    url(r'^register/venture/', 'registration.views.register_venture', name = 'register_venture'),
-    url(r'^register/troopcontact/', 'registration.views.register_troopcontact', name = 'register_troopcontact'),
-    url(r'^register/volunteer/', 'registration.views.register_volunteer', name = 'register_volunteer'),
-    url(r'^register/troop/$', 'registration.views.register_troop', name = 'register_troop'),
-    url(r'^register/council/$', 'registration.views.register_council', name = 'register_council')
-)
-
 #Scout URLs
 urlpatterns += patterns(
     '',
-    url(r'^scout/editclasses/', 'scout.views.edit_classes', name = 'scout_edit_classes'),
-    url(r'^scout/viewclasses/', 'scout.views.view_registered_classes', name = 'scout_view_classes')
+    url(r'^scout/editclasses/', 'mbu.views.edit_classes', name = 'scout_edit_classes'),
+    url(r'^scout/viewclasses/', 'mbu.views.view_registered_classes', name = 'scout_view_classes')
 )
 
 urlpatterns += patterns(
     '',
-    url(r'^scoutmaster/viewtroop/$', 'scoutmaster.views.view_troop_enrollees', name ='scoutmaster_view_troop'),
-    url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'scoutmaster.views.view_troop_classes', name ='scoutmaster_view_classes')
+    url(r'^scoutmaster/viewtroop/$', 'mbu.views.view_troop_enrollees', name ='scoutmaster_view_troop'),
+    url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'mbu.views.view_troop_classes', name ='scoutmaster_view_classes')
 )
 
 #Dev URLs -- REMOVE BEFORE DEPLOYMENT

@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
-from course.models import CourseInstance, Session
-from mbu.models import MeritBadgeUniversity
 from django.core.exceptions import ValidationError
-from scout.fields import CourseInstanceChoiceField
+from mbu.models import MeritBadgeUniversity, CourseInstance, Session
+from mbu.scout_fields import CourseInstanceChoiceField
 
 class EditClassesForm(forms.Form):
 

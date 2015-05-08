@@ -1,12 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.hashers import make_password
-from troop.models import Troop, Council
-from scout.models import Scout
-from scoutmaster.models import Scoutmaster
 from django.contrib.contenttypes.models import ContentType
-from mbu.models import MeritBadgeUniversity
-from course.models import Session, Course, CourseInstance
+from mbu.models import *
 from datetime import date, datetime
 
 # Create your views here.

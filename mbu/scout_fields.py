@@ -1,5 +1,5 @@
 from django.forms import ModelChoiceField
-from course.models import CourseInstance
+from mbu.models import CourseInstance
 from django.core.exceptions import ValidationError
 
 class CourseInstanceChoiceField(ModelChoiceField):
