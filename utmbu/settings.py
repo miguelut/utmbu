@@ -1,5 +1,8 @@
 from django.contrib.messages import constants as messages
-
+try:
+    from config import *
+except:
+    pass
 """
 Django settings for utmbu project.
 
@@ -40,6 +43,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
     'mbu.context_processors.default_links',
     'mbu.context_processors.add_links',
 )
@@ -53,14 +58,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
+    'widget_tweaks',
     'mbu',
-    'course',
-    'scout',
-    'scoutmaster',
-    'registration',
-    'troop',
     'dev',
-    'mbu_users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -71,6 +72,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GooglePlusAuth',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 ROOT_URLCONF = 'utmbu.urls'

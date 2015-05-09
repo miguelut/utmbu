@@ -92,5 +92,8 @@ migrations/
 # Vim swap files
 *.swp
 
+# Sensitive configs
+config.py
+
 # PyCharm files
 .idea
