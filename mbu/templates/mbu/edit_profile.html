@@ -1,10 +1,10 @@
 {% extends 'mbu/home.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-	<form action="{% url 'edit_profile' %}" method="POST">
+	<form action="{% url 'edit_profile' %}" method="POST" id="edit_profile_form">
 		{% csrf_token %}
         {% crispy form %}
         {% crispy formset %}
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <input type="submit" class="btn btn-primary" value="Submit" form="edit_profile_form"/>
 	</form>
 {% endblock content %}

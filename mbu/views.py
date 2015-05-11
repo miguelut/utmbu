@@ -42,15 +42,15 @@ def edit_scout_profile(request):
 
 
 def _edit_profile(request, formset, args):
-    form = UserProfileForm(instance=request.user)
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            user = form.save(commit=False)
-            formset = formset(request.POST, instance=user)
-            if formset.is_valid():
-                user.save()
-                formset.save()
+        formset = formset(request.POST, instance=request.user)
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+    else:
+        form = UserProfileForm(instance=request.user)
+        formset = formset(instance=request.user)
     args.update({'form': form})
     args.update({'formset': formset})
     

@@ -23,7 +23,7 @@ class EditProfileTests(TestCase):
         troop.council = council
         troop.save()
 
-    def test_edit_profile_success(self):
+    def test_edit_scout_profile_success(self):
         expected_troop = Troop.objects.get(pk=1)
         expected_form = {
             'first_name': 'Helio',
