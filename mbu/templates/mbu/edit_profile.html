@@ -1,19 +1,10 @@
-{% extends 'home.html' %} 
+{% extends 'mbu/home.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-	<form action="" method="POST">
+	<form action="{% url 'edit_profile' %}" method="POST">
 		{% csrf_token %}
-		<div>
-			<label>{{ form.first_name.label }}</label>
-			{{ form.first_name }}
-		</div>
-		<div>
-			<label>{{ form.last_name.label }}</label>
-			{{ form.last_name }}
-		</div>
-		<div>
-			<label>{{ form.email.label }}</label>
-			{{ form.email }}
-		</div>
-		<input type="submit" value="Submit"/>
+        {% crispy form %}
+        {% crispy formset %}
+        <button type="submit" class="btn btn-primary">Submit</button>
 	</form>
 {% endblock content %}

@@ -1,19 +1,18 @@
-from django import forms
+import logging
+
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.template import RequestContext
-from django.views.decorators.http import require_http_methods
-from mbu.forms import EditProfileForm
+
+from mbu.forms import ScoutFormSet, UserProfileForm
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
-import logging
 
 logger = logging.getLogger(__name__)
+
 
 def signup(request):
     form = UserCreationForm()
@@ -22,7 +21,7 @@ def signup(request):
         if form.is_valid():
             form.save()
             return redirect('mbu_home')
-    args = {'form' : form}
+    args = {'form': form}
     return render(request, 'mbu/signup.html', args)
     
 
@@ -30,22 +29,29 @@ def logout_user(request):
     logout(request)
     return redirect('mbu_home')
 
+
 @login_required()
 def view_home_page(request):
     return render(request, 'mbu/home.html')
 
+
 def edit_profile(request):
     args = {}
+    form = UserProfileForm(instance=request.user)
+    formset = ScoutFormSet(instance=request.user)
     if request.method == 'POST':
-        form = EditProfileForm(request.POST)
+        form = UserProfileForm(request.POST, instance=request.user)
         if form.is_valid():
-            # Process form if valid
-            pass
-    else:
-        form = EditProfileForm()
-        args.update({'form': form})
+            user = form.save(commit=False)
+            formset = ScoutFormSet(request.POST, instance=user)
+            if formset.is_valid():
+                user.save()
+                formset.save()
+    args.update({'form': form})
+    args.update({'formset': formset})
     
     return render(request, 'mbu/edit_profile.html', args)
+
 
 def view_class_list(request):
     args = {}
@@ -56,13 +62,15 @@ def view_class_list(request):
     args.update({ 'classlist': course_instances })
     return render(request, 'mbu/classlist.html', args)
 
+
 def view_class_requirements(request, id=-1):
-	args = {}
-	args.update(csrf(request))
-	#if (id < 0):
-		#handle error
-	args.update({'id': id})
-	return render(request, 'mbu/classrequirements.html', args)
+    args = {}
+    args.update(csrf(request))
+    #if (id < 0):
+        #handle error
+    args.update({'id': id})
+    return render(request, 'mbu/classrequirements.html', args)
+
 
 def view_reports(request):
     return render(request, 'mbu/reports.html')
@@ -89,6 +97,7 @@ def edit_classes(request):
     args.update(csrf(request))
     return render(request, 'mbu/edit_classes.html', args)
 
+
 def view_registered_classes(request):
     args = {}
     user = request.user
@@ -104,6 +113,7 @@ def view_troop_enrollees(request):
     scouts = Scout.objects.all().filter(troop=troop)
     args.update({'scouts': scouts})
     return render(request, 'scoutmaster/view_troop.html', args)
+
 
 def view_troop_classes(request, scout_id):
     args = {}
