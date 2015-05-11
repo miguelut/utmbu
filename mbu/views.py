@@ -35,15 +35,19 @@ def view_home_page(request):
     return render(request, 'mbu/home.html')
 
 
-def edit_profile(request):
+def edit_scout_profile(request):
     args = {}
+    formset = ScoutFormSet
+    return _edit_profile(request, formset, args)
+
+
+def _edit_profile(request, formset, args):
     form = UserProfileForm(instance=request.user)
-    formset = ScoutFormSet(instance=request.user)
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             user = form.save(commit=False)
-            formset = ScoutFormSet(request.POST, instance=user)
+            formset = formset(request.POST, instance=user)
             if formset.is_valid():
                 user.save()
                 formset.save()

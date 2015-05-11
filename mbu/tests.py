@@ -38,7 +38,7 @@ class EditProfileTests(TestCase):
             'scout-MIN_NUM_FORMS': '0',
             'scout-MAX_NUM_FORMS': '1'
         }
-        response = self.client.post('/scout/editprofile/', expected_form)
+        response = self.client.post('/scout/profile/edit/', expected_form)
 
         updated_user = User.objects.get(username='Gracie')
         updated_scout = Scout.objects.all()[0]
