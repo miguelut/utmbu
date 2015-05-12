@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 
-from mbu.forms import ScoutFormSet, UserProfileForm
+from mbu.forms import UserProfileForm, ScoutProfileForm
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
 
@@ -37,22 +37,27 @@ def view_home_page(request):
 
 def edit_scout_profile(request):
     args = {}
-    formset = ScoutFormSet
-    return _edit_profile(request, formset, args)
+    scout_form = ScoutProfileForm
+    return _edit_profile(request, scout_form, args)
 
 
-def _edit_profile(request, formset, args):
+def _edit_profile(request, ProfileForm, args):
+    scout = Scout(user=request.user)
+    try:
+        scout = Scout.objects.get(user=request.user)
+    except Scout.DoesNotExist:
+        pass
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
-        formset = formset(request.POST, instance=request.user)
-        if form.is_valid() and formset.is_valid():
+        profile_form = ProfileForm(request.POST, instance=scout)
+        if form.is_valid() and profile_form.is_valid():
             form.save()
-            formset.save()
+            profile_form.save()
     else:
         form = UserProfileForm(instance=request.user)
-        formset = formset(instance=request.user)
+        profile_form = ProfileForm(instance=scout)
     args.update({'form': form})
-    args.update({'formset': formset})
+    args.update({'formset': profile_form})
     
     return render(request, 'mbu/edit_profile.html', args)
 
