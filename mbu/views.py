@@ -57,7 +57,7 @@ def _edit_profile(request, ProfileForm, args):
         form = UserProfileForm(instance=request.user)
         profile_form = ProfileForm(instance=scout)
     args.update({'form': form})
-    args.update({'formset': profile_form})
+    args.update({'profile_form': profile_form})
     
     return render(request, 'mbu/edit_profile.html', args)
 
