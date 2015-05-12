@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 from mbu.models import Troop
-from mbu.forms import ScoutProfileForm
+from mbu.forms import ScoutProfileForm, ScoutmasterProfileForm
 
 
 class HomePageTests(TestCase):
@@ -117,3 +117,46 @@ class EditScoutmasterProfileTests(TestCase):
         self.assertEqual('gracie@gmail.com', updated_user.email)
         self.assertEqual(expected_troop, updated_scoutmaster.troop)
         self.assertEqual('2813308004', updated_scoutmaster.phone)
+
+    def test_edit_scoutmaster_profile_error_when_missing_required_fields(self):
+        expected_form = {}
+
+        response = self.client.post('/scoutmaster/profile/edit/', expected_form)
+
+        self.assertFormError(response, 'profile_form', 'troop', 'This field is required.')
+        self.assertFormError(response, 'profile_form', 'phone', 'This field is required.')
+
+    def test_edit_scoutmaster_profile_form_should_prepopulate_fields(self):
+        # Given a profile
+        expected_troop = Troop.objects.get(pk=1)
+        expected_form = {
+            'first_name': 'Helio',
+            'last_name': 'Gracie',
+            'troop': expected_troop.id,
+            'phone': '2813308004'
+        }
+        self.client.post('/scoutmaster/profile/edit/', expected_form)
+
+        response = self.client.get('/scoutmaster/profile/edit/')
+
+        self.assertEqual(response.context['form'].initial['first_name'], "Helio")
+        self.assertEqual(response.context['form'].initial['last_name'], "Gracie")
+        self.assertEqual(response.context['form'].initial['email'], "")
+        self.assertEqual(response.context['profile_form'].initial['troop'], 1)
+        self.assertEqual(response.context['profile_form'].initial['phone'], '2813308004')
+
+    def test_scoutmaster_form_should_not_be_valid(self):
+        expected_form = {}
+        scoutmaster_form = ScoutmasterProfileForm(expected_form)
+
+        self.assertFalse(scoutmaster_form.is_valid())
+
+    def test_scoutmaster_form_should_be_valid(self):
+        expected_troop = Troop.objects.get(pk=1)
+        expected_form = {
+            'troop': expected_troop.pk,
+            'phone': '2813308004'
+        }
+        scoutmaster_form = ScoutmasterProfileForm(expected_form)
+
+        self.assertTrue(scoutmaster_form.is_valid())
