@@ -10,7 +10,7 @@ class HomePageTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-class EditProfileTests(TestCase):
+class EditScoutProfileTests(TestCase):
     fixtures = ['test_users', 'test_troops_councils']
 
     def setUp(self):
@@ -75,7 +75,7 @@ class EditProfileTests(TestCase):
 
     def test_scout_form_should_not_be_valid(self):
         expected_form = {}
-        scout_form = ScoutProfileForm(expected_form, instance=self.user)
+        scout_form = ScoutProfileForm(expected_form)
 
         self.assertFalse(scout_form.is_valid())
 
@@ -86,6 +86,6 @@ class EditProfileTests(TestCase):
             'rank': 'RED BELT',
             'troop': expected_troop.pk
         }
-        scout_form = ScoutProfileForm(expected_form, instance=self.user)
+        scout_form = ScoutProfileForm(expected_form)
 
         self.assertTrue(scout_form.is_valid())
