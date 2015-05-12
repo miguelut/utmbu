@@ -1,0 +1,14 @@
+[
+  {
+    "model": "auth.User",
+    "pk": 1,
+    "fields": {
+      "username": "Gracie",
+      "password": "pbkdf2_sha256$15000$9BclMz3AE8Wy$Wcq+/fPNhxyD92SUq4wLLPeY4Tz5lJqrNjUALtdphB8=",
+      "first_name": "Carlos",
+      "last_name": "Gracie",
+      "email": "cg@gmail.com"
+    },
+    "_comment": "This user's hashed password is 'Gracie'"
+  }
+]

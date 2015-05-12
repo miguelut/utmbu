@@ -1,0 +1,18 @@
+[
+  {
+    "model": "mbu.Council",
+    "pk": 1,
+    "fields": {
+      "name": "Gracie Academy"
+    }
+  },
+
+  {
+    "model": "mbu.Troop",
+    "pk": 1,
+    "fields": {
+      "number": "123",
+      "council": 1
+    }
+  }
+]

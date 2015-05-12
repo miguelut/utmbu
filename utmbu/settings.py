@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social.apps.django_app.default',
+    'crispy_forms',
     'widget_tweaks',
     'mbu',
     'dev',
@@ -137,3 +138,5 @@ DEFAULT_LINKS = [
     {'href':'reports', 'label':'Reports'},
     {'href':'class_list', 'label':'Class List'}
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'

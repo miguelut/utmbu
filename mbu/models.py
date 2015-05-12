@@ -21,6 +21,7 @@ class Council(models.Model):
     class Meta:
         unique_together = ('name',)
 
+
 class Troop(models.Model):
     number = models.CharField(max_length=10)
     council = models.ForeignKey(Council)
@@ -29,7 +30,7 @@ class Troop(models.Model):
         return "%s - %s" % (self.number, self.council)
 
     class Meta:
-        unique_together = ('number','council')
+        unique_together = ('number', 'council')
 
 
 class Scout(models.Model):
@@ -43,8 +44,9 @@ class Scout(models.Model):
 
     class Meta:
         permissions = (
-            ('edit_scout_schedule','Can edit schedule'),
+            ('edit_scout_schedule', 'Can edit schedule'),
         )
+
 
 class Scoutmaster(models.Model):
     user = models.OneToOneField(User)
@@ -56,8 +58,9 @@ class Scoutmaster(models.Model):
 
     class Meta:
         permissions = (
-            ('can_modify_troop_enrollments','Can modify schedules of scouts in own troop.'),
+            ('can_modify_troop_enrollments', 'Can modify schedules of scouts in own troop.'),
         )
+
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -65,6 +68,7 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Session(models.Model):
     name = models.CharField(max_length=255)
@@ -74,6 +78,7 @@ class Session(models.Model):
 
     def __str__(self):
         return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))
+
 
 class CourseInstance(models.Model):
     course = models.ForeignKey(Course)
@@ -86,6 +91,7 @@ class CourseInstance(models.Model):
 
     def __str__(self):
         return self.course.name + str(self.session)
+
 
 class WaitingList(models.Model):
     user = models.ForeignKey(User)

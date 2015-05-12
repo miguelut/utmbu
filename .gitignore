@@ -94,3 +94,6 @@ migrations/
 
 # Sensitive configs
 config.py
+
+# PyCharm files
+.idea
