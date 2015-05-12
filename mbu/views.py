@@ -9,8 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.views.decorators.http import require_http_methods
-from mbu.forms import EditProfileForm, MbuUserCreationForm
-from mbu.forms import UserProfileForm, ScoutProfileForm
+from mbu.forms import UserProfileForm, ScoutProfileForm, MbuUserCreationForm
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
 
