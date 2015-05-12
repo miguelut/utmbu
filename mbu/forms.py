@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from mbu.models import Scout
 from crispy_forms.helper import FormHelper
+from django.forms.extras.widgets import SelectDateWidget
 
 
 class UserProfileForm(ModelForm):
@@ -24,3 +25,4 @@ class ScoutProfileForm(ModelForm):
     class Meta:
         model = Scout
         fields = ['dob', 'rank', 'troop']
+        widgets = {'dob': SelectDateWidget(years=range(2015, 1950, -1))}
