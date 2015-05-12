@@ -89,3 +89,31 @@ class EditScoutProfileTests(TestCase):
         scout_form = ScoutProfileForm(expected_form)
 
         self.assertTrue(scout_form.is_valid())
+
+
+class EditScoutmasterProfileTests(TestCase):
+    fixtures = ['test_users', 'test_troops_councils']
+
+    def setUp(self):
+        self.user = self.client.login(username='Gracie', password='Gracie')
+
+    def test_edit_scoutmaster_profile_success(self):
+        expected_troop = Troop.objects.get(pk=1)
+        expected_form = {
+            'first_name': 'Helio',
+            'last_name': 'Gracie',
+            'email': 'gracie@gmail.com',
+            'troop': expected_troop.id,
+            'phone': '2813308004'
+        }
+
+        response = self.client.post('/scoutmaster/profile/edit/', expected_form)
+
+        updated_user = User.objects.get(username='Gracie')
+        updated_scoutmaster = updated_user.scoutmaster
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('Helio', updated_user.first_name)
+        self.assertEqual('Gracie', updated_user.last_name)
+        self.assertEqual('gracie@gmail.com', updated_user.email)
+        self.assertEqual(expected_troop, updated_scoutmaster.troop)
+        self.assertEqual('2813308004', updated_scoutmaster.phone)
