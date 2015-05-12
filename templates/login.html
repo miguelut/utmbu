@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 {% block content %}
 <div class="well col-xs-4 col-xs-offset-4">
-    <form role="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    <form role="form" method="post" action="{% url 'mbu.views.login' %}">
         <h1>Log In</h1>
         {% csrf_token %}
 

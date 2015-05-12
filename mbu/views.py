@@ -3,11 +3,13 @@ import logging
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.forms import UserCreationForm
-
-from mbu.forms import UserProfileForm, ScoutProfileForm, ScoutmasterProfileForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.template import RequestContext
+from django.views.decorators.http import require_http_methods
+from mbu.forms import *
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
 
@@ -15,15 +17,30 @@ logger = logging.getLogger(__name__)
 
 
 def signup(request):
-    form = UserCreationForm()
+    form = MbuUserCreationForm()
     if request.POST:
-        form = UserCreationForm(request.POST)
+        form = MbuUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
-    
+
+def login(request):
+    args = {}
+    form = AuthenticationForm()
+    next = request.POST.get('next',request.GET.get('next','/'))
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            return redirect(next)
+        messages.add_message(request, messages.ERROR, 'Invalid username or password')
+    args.update({'form':form})
+    args.update({'next':next})
+    return render(request, 'login.html', args)
 
 def logout_user(request):
     logout(request)
@@ -97,7 +114,6 @@ def view_class_requirements(request, id=-1):
 def view_reports(request):
     return render(request, 'mbu/reports.html')
 
-
 # Create your views here.
 @permission_required('mbu.edit_scout_schedule',raise_exception=True)
 def edit_classes(request):
@@ -126,7 +142,6 @@ def view_registered_classes(request):
     enrolled_courses = user.enrollments.all()
     args.update({'enrolled_courses': enrolled_courses})
     return render(request, 'mbu/view_classes.html', args)
-
 
 def view_troop_enrollees(request):
     args = {}
