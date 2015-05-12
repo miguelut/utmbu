@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from mbu.models import Troop, Council
+from mbu.models import Troop
 from mbu.forms import ScoutProfileForm
 
 
@@ -10,19 +10,11 @@ class HomePageTests(TestCase):
         self.assertEqual(response.status_code, 302)
 
 
-class EditProfileTests(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username='Gracie', password='Gracie')
-        self.set_up_troops_and_councils()
-        self.logged_in = self.client.login(username='Gracie', password='Gracie')
+class EditScoutProfileTests(TestCase):
+    fixtures = ['test_users', 'test_troops_councils']
 
-    def set_up_troops_and_councils(self):
-        council = Council(name='Gracie Academy')
-        council.save()
-        troop = Troop()
-        troop.number = '123'
-        troop.council = council
-        troop.save()
+    def setUp(self):
+        self.user = self.client.login(username='Gracie', password='Gracie')
 
     def test_edit_scout_profile_success(self):
         expected_troop = Troop.objects.get(pk=1)
@@ -34,6 +26,7 @@ class EditProfileTests(TestCase):
             'rank': 'RED BELT',
             'troop': expected_troop.id
         }
+
         response = self.client.post('/scout/profile/edit/', expected_form)
 
         updated_user = User.objects.get(username='Gracie')
@@ -46,9 +39,43 @@ class EditProfileTests(TestCase):
         self.assertEqual('RED BELT', updated_scout.rank)
         self.assertEqual(expected_troop, updated_scout.troop)
 
+    def test_edit_scout_profile_error_when_missing_required_fields(self):
+        expected_form = {
+            'first_name': 'Helio',
+            'last_name': 'Gracie',
+            'email': 'gracie@gmail.com'
+        }
+
+        response = self.client.post('/scout/profile/edit/', expected_form)
+
+        self.assertFormError(response, 'profile_form', 'dob', 'This field is required.')
+        self.assertFormError(response, 'profile_form', 'rank', 'This field is required.')
+        self.assertFormError(response, 'profile_form', 'troop', 'This field is required.')
+
+    def test_edit_scout_profile_form_should_prepopulate_fields(self):
+        # Given a profile
+        expected_troop = Troop.objects.get(pk=1)
+        expected_form = {
+            'first_name': 'Helio',
+            'last_name': 'Gracie',
+            'dob': '1913-10-01',
+            'rank': 'RED BELT',
+            'troop': expected_troop.id
+        }
+        self.client.post('/scout/profile/edit/', expected_form)
+
+        response = self.client.get('/scout/profile/edit/')
+
+        self.assertEqual(response.context['form'].initial['first_name'], "Helio")
+        self.assertEqual(response.context['form'].initial['last_name'], "Gracie")
+        self.assertEqual(response.context['form'].initial['email'], "")
+        self.assertEqual(response.context['profile_form'].initial['dob'].strftime('%Y-%m-%d'), '1913-10-01')
+        self.assertEqual(response.context['profile_form'].initial['rank'], "RED BELT")
+        self.assertEqual(response.context['profile_form'].initial['troop'], 1)
+
     def test_scout_form_should_not_be_valid(self):
         expected_form = {}
-        scout_form = ScoutProfileForm(expected_form, instance=self.user)
+        scout_form = ScoutProfileForm(expected_form)
 
         self.assertFalse(scout_form.is_valid())
 
@@ -59,6 +86,6 @@ class EditProfileTests(TestCase):
             'rank': 'RED BELT',
             'troop': expected_troop.pk
         }
-        scout_form = ScoutProfileForm(expected_form, instance=self.user)
+        scout_form = ScoutProfileForm(expected_form)
 
         self.assertTrue(scout_form.is_valid())

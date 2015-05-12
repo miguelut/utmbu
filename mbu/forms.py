@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.conf.global_settings import EMAIL_BACKEND
 from mbu.models import Scout
 from crispy_forms.helper import FormHelper
+from django.forms.extras.widgets import SelectDateWidget
 
 class MbuUserCreationForm(UserCreationForm):
 	"""
@@ -48,3 +49,4 @@ class ScoutProfileForm(ModelForm):
     class Meta:
         model = Scout
         fields = ['dob', 'rank', 'troop']
+        widgets = {'dob': SelectDateWidget(years=range(2015, 1950, -1))}
