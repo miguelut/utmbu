@@ -7,7 +7,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 
-from mbu.forms import UserProfileForm, ScoutProfileForm
+from mbu.forms import UserProfileForm, ScoutProfileForm, ScoutmasterProfileForm
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
 
@@ -38,24 +38,37 @@ def view_home_page(request):
 def edit_scout_profile(request):
     args = {}
     scout_form = ScoutProfileForm
-    return _edit_profile(request, scout_form, args)
-
-
-def _edit_profile(request, ProfileForm, args):
     scout = Scout(user=request.user)
     try:
         scout = Scout.objects.get(user=request.user)
     except Scout.DoesNotExist:
         pass
+
+    return _edit_profile(request, scout_form, scout, args)
+
+
+def edit_scoutmaster_profile(request):
+    args = {}
+    scoutmaster_form = ScoutmasterProfileForm
+    scoutmaster = Scoutmaster(user=request.user)
+    try:
+        scoutmaster = Scoutmaster.objects.get(user=request.user)
+    except Scoutmaster.DoesNotExist:
+        pass
+
+    return _edit_profile(request, scoutmaster_form, scoutmaster, args)
+
+
+def _edit_profile(request, ProfileForm, user, args):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=scout)
+        profile_form = ProfileForm(request.POST, instance=user)
         if form.is_valid() and profile_form.is_valid():
             form.save()
             profile_form.save()
     else:
         form = UserProfileForm(instance=request.user)
-        profile_form = ProfileForm(instance=scout)
+        profile_form = ProfileForm(instance=user)
     args.update({'form': form})
     args.update({'profile_form': profile_form})
     

@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.models import User
-from mbu.models import Scout
+from mbu.models import Scout, Scoutmaster
 from crispy_forms.helper import FormHelper
 from django.forms.extras.widgets import SelectDateWidget
 
@@ -24,5 +24,16 @@ class ScoutProfileForm(ModelForm):
 
     class Meta:
         model = Scout
-        fields = ['dob', 'rank', 'troop']
+        exclude = ['user']
         widgets = {'dob': SelectDateWidget(years=range(2015, 1950, -1))}
+
+
+class ScoutmasterProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ScoutmasterProfileForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+    class Meta:
+        model = Scoutmaster
+        exclude = ['user']
