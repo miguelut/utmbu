@@ -29,8 +29,6 @@ def login(request):
     args = {}
     form = AuthenticationForm()
     next = request.POST.get('next',request.GET.get('next','/'))
-    print("Booya!")
-    print(next)
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
