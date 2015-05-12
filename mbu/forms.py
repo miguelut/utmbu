@@ -1,13 +1,11 @@
 from django import forms
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.conf.global_settings import EMAIL_BACKEND
+from mbu.models import Scout
+from crispy_forms.helper import FormHelper
 
-class EditProfileForm(forms.Form):
-	first_name = forms.CharField(label='First Name')
-	last_name = forms.CharField(label='Last Name')
-	email = forms.CharField(label="Email")
-	
 class MbuUserCreationForm(UserCreationForm):
 	"""
 	A form that creates a user with username, first_name, last_name, 
@@ -29,3 +27,24 @@ class MbuUserCreationForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+class UserProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+
+class ScoutProfileForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ScoutProfileForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+    class Meta:
+        model = Scout
+        fields = ['dob', 'rank', 'troop']
