@@ -46,6 +46,10 @@ def logout_user(request):
     return redirect('mbu_home')
 
 
+def choose_user_type(request):
+    return render(request, 'mbu/choose_user_type.html')
+
+
 @login_required()
 def view_home_page(request):
     if _is_user_scout(request.user):
