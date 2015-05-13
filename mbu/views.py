@@ -6,9 +6,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
-from django.template import RequestContext
-from django.views.decorators.http import require_http_methods
 from mbu.forms import *
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
@@ -26,6 +23,7 @@ def signup(request):
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
 
+
 def login(request):
     args = {}
     form = AuthenticationForm()
@@ -42,6 +40,7 @@ def login(request):
     args.update({'next':next})
     return render(request, 'login.html', args)
 
+
 def logout_user(request):
     logout(request)
     return redirect('mbu_home')
@@ -49,7 +48,22 @@ def logout_user(request):
 
 @login_required()
 def view_home_page(request):
-    return render(request, 'mbu/home.html')
+    if _is_user_scout(request.user):
+        return render(request, 'mbu/scout_home.html')
+    if _is_user_scoutmaster(request.user):
+        return render(request, 'mbu/scoutmaster_home.html')
+
+
+def _is_user_scout(user):
+    if Scout.objects.filter(user=user).count() == 1:
+        return True
+    return False
+
+
+def _is_user_scoutmaster(user):
+    if Scoutmaster.objects.filter(user=user).count() == 1:
+        return True
+    return False
 
 
 def edit_scout_profile(request):
@@ -114,8 +128,8 @@ def view_class_requirements(request, id=-1):
 def view_reports(request):
     return render(request, 'mbu/reports.html')
 
-# Create your views here.
-@permission_required('mbu.edit_scout_schedule',raise_exception=True)
+
+@permission_required('mbu.edit_scout_schedule', raise_exception=True)
 def edit_classes(request):
     args = {}
     user = request.user
@@ -142,6 +156,7 @@ def view_registered_classes(request):
     enrolled_courses = user.enrollments.all()
     args.update({'enrolled_courses': enrolled_courses})
     return render(request, 'mbu/view_classes.html', args)
+
 
 def view_troop_enrollees(request):
     args = {}
