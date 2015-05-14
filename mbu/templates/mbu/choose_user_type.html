@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+    <title>{% block title %}Merit Badge University{% endblock %}</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row user-type-page">
+            <div class="col-lg-4 fill-height">
+                <button class="btn-primary float-right pick-user-type-button">Scout</button>
+            </div>
+            <div class="col-lg-4 center-text fill-height">
+                <h1>I AM A...</h1>
+            </div>
+            <div class="col-lg-4 fill-height">
+                <button class="btn-primary pick-user-type-button">Scoutmaster</button>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/custom.css" %}"/>
+    <script src="{% static "js/jQuery-2.1.3.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/app.js" %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

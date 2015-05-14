@@ -7,5 +7,32 @@
 }
 
 .center {
-    justify: center
+    justify: center;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.fill-height {
+    height: 100vh;
+}
+
+.float-right {
+    float: right;
+}
+
+
+/* Select user type screen */
+
+.pick-user-type-button {
+    width: 170px;
+    height: 40px;
+    position: relative;
+    top: 260px;
+}
+
+.user-type-page {
+    position: relative;
+    top: 100px;
 }
