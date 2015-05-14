@@ -35,9 +35,9 @@ class Troop(models.Model):
 
 class Scout(models.Model):
     user = models.OneToOneField(User)
-    dob = models.DateField()
-    rank = models.CharField(max_length=15)
-    troop = models.ForeignKey(Troop)
+    dob = models.DateField(blank=True, null=True)
+    rank = models.CharField(max_length=15, blank=True)
+    troop = models.ForeignKey(Troop, blank=True, null=True)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
@@ -45,13 +45,14 @@ class Scout(models.Model):
     class Meta:
         permissions = (
             ('edit_scout_schedule', 'Can edit schedule'),
+            ('edit_scout_profile', 'Can edit scout profile')
         )
 
 
 class Scoutmaster(models.Model):
     user = models.OneToOneField(User)
-    troop = models.ForeignKey(Troop)
-    phone = models.CharField(max_length=12)
+    troop = models.ForeignKey(Troop, blank=True, null=True)
+    phone = models.CharField(max_length=12, blank=True)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
@@ -59,6 +60,7 @@ class Scoutmaster(models.Model):
     class Meta:
         permissions = (
             ('can_modify_troop_enrollments', 'Can modify schedules of scouts in own troop.'),
+            ('edit_scoutmaster_profile', 'Can edit scoutmaster profile')
         )
 
 

@@ -8,13 +8,13 @@
     <div class="container-fluid">
         <div class="row user-type-page">
             <div class="col-lg-4 fill-height">
-                <button class="btn-primary float-right pick-user-type-button">Scout</button>
+                <a href="{% url 'register_scout' %}"><button class="btn-primary float-right pick-user-type-button">Scout</button></a>
             </div>
             <div class="col-lg-4 center-text fill-height">
                 <h1>I AM A...</h1>
             </div>
             <div class="col-lg-4 fill-height">
-                <button class="btn-primary pick-user-type-button">Scoutmaster</button>
+                <a href="{% url 'register_scoutmaster' %}"><button class="btn-primary pick-user-type-button">Scoutmaster</button></a>
             </div>
         </div>
     </div>

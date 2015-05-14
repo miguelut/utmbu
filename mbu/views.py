@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from mbu.forms import *
 from mbu.models import *
@@ -70,6 +70,21 @@ def _is_user_scoutmaster(user):
     return False
 
 
+def register_user_as_scout(request):
+    if not _is_user_scout(request.user) and not _is_user_scoutmaster(request.user):
+        Scout(user=request.user).save()
+        return redirect('edit_scout_profile')
+    return redirect('mbu_home')
+
+
+def register_user_as_scoutmaster(request):
+    if not _is_user_scoutmaster(request.user) and not _is_user_scout(request.user):
+        Scoutmaster(user=request.user).save()
+        return redirect('edit_scoutmaster_profile')
+    return redirect('mbu_home')
+
+
+@user_passes_test(_is_user_scout, login_url='/login/')
 def edit_scout_profile(request):
     args = {}
     scout_form = ScoutProfileForm
@@ -82,6 +97,7 @@ def edit_scout_profile(request):
     return _edit_profile(request, scout_form, scout, args)
 
 
+@user_passes_test(_is_user_scoutmaster, login_url='/login/')
 def edit_scoutmaster_profile(request):
     args = {}
     scoutmaster_form = ScoutmasterProfileForm
