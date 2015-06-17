@@ -47,6 +47,10 @@ def logout_user(request):
 
 
 def choose_user_type(request):
+    if _is_user_scout(request.user):
+        return render(request, 'mbu/scout_home.html')
+    elif _is_user_scoutmaster(request.user):
+        return render(request, 'mbu/scoutmaster_home.html')
     return render(request, 'mbu/choose_user_type.html')
 
 
@@ -54,8 +58,10 @@ def choose_user_type(request):
 def view_home_page(request):
     if _is_user_scout(request.user):
         return render(request, 'mbu/scout_home.html')
-    if _is_user_scoutmaster(request.user):
+    elif _is_user_scoutmaster(request.user):
         return render(request, 'mbu/scoutmaster_home.html')
+
+    return redirect('choose_user_type')
 
 
 def _is_user_scout(user):
