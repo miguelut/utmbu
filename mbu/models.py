@@ -35,8 +35,6 @@ class Troop(models.Model):
 
 class Scout(models.Model):
     user = models.OneToOneField(User)
-    dob = models.DateField(blank=True, null=True)
-    rank = models.CharField(max_length=15, blank=True)
     troop = models.ForeignKey(Troop, blank=True, null=True)
 
     def __str__(self):
@@ -52,7 +50,6 @@ class Scout(models.Model):
 class Scoutmaster(models.Model):
     user = models.OneToOneField(User)
     troop = models.ForeignKey(Troop, blank=True, null=True)
-    phone = models.CharField(max_length=12, blank=True)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
