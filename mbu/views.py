@@ -3,10 +3,11 @@ import logging
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login, logout
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from django.contrib.auth.forms import AuthenticationForm
-from mbu.forms import *
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.forms import UserCreationForm
+
+from mbu.forms import UserProfileForm, ScoutProfileForm
 from mbu.models import *
 from mbu.scout_forms import EditClassesForm
 
@@ -14,114 +15,49 @@ logger = logging.getLogger(__name__)
 
 
 def signup(request):
-    form = MbuUserCreationForm()
+    form = UserCreationForm()
     if request.POST:
-        form = MbuUserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
-
-
-def login(request):
-    args = {}
-    form = AuthenticationForm()
-    next = request.POST.get('next',request.GET.get('next','/'))
-    if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            auth_login(request, user)
-            return redirect(next)
-        messages.add_message(request, messages.ERROR, 'Invalid username or password')
-    args.update({'form':form})
-    args.update({'next':next})
-    return render(request, 'login.html', args)
-
+    
 
 def logout_user(request):
     logout(request)
     return redirect('mbu_home')
 
 
-def choose_user_type(request):
-    return render(request, 'mbu/choose_user_type.html')
-
-
 @login_required()
 def view_home_page(request):
-    if _is_user_scout(request.user):
-        return render(request, 'mbu/scout_home.html')
-    if _is_user_scoutmaster(request.user):
-        return render(request, 'mbu/scoutmaster_home.html')
+    return render(request, 'mbu/home.html')
 
 
-def _is_user_scout(user):
-    if Scout.objects.filter(user=user).count() == 1:
-        return True
-    return False
-
-
-def _is_user_scoutmaster(user):
-    if Scoutmaster.objects.filter(user=user).count() == 1:
-        return True
-    return False
-
-
-def register_user_as_scout(request):
-    if not _is_user_scout(request.user) and not _is_user_scoutmaster(request.user):
-        Scout(user=request.user).save()
-        return redirect('edit_scout_profile')
-    return redirect('mbu_home')
-
-
-def register_user_as_scoutmaster(request):
-    if not _is_user_scoutmaster(request.user) and not _is_user_scout(request.user):
-        Scoutmaster(user=request.user).save()
-        return redirect('edit_scoutmaster_profile')
-    return redirect('mbu_home')
-
-
-@user_passes_test(_is_user_scout, login_url='/login/')
 def edit_scout_profile(request):
     args = {}
     scout_form = ScoutProfileForm
+    return _edit_profile(request, scout_form, args)
+
+
+def _edit_profile(request, ProfileForm, args):
     scout = Scout(user=request.user)
     try:
         scout = Scout.objects.get(user=request.user)
     except Scout.DoesNotExist:
         pass
-
-    return _edit_profile(request, scout_form, scout, args)
-
-
-@user_passes_test(_is_user_scoutmaster, login_url='/login/')
-def edit_scoutmaster_profile(request):
-    args = {}
-    scoutmaster_form = ScoutmasterProfileForm
-    scoutmaster = Scoutmaster(user=request.user)
-    try:
-        scoutmaster = Scoutmaster.objects.get(user=request.user)
-    except Scoutmaster.DoesNotExist:
-        pass
-
-    return _edit_profile(request, scoutmaster_form, scoutmaster, args)
-
-
-def _edit_profile(request, ProfileForm, user, args):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=user)
+        profile_form = ProfileForm(request.POST, instance=scout)
         if form.is_valid() and profile_form.is_valid():
             form.save()
             profile_form.save()
     else:
         form = UserProfileForm(instance=request.user)
-        profile_form = ProfileForm(instance=user)
+        profile_form = ProfileForm(instance=scout)
     args.update({'form': form})
-    args.update({'profile_form': profile_form})
+    args.update({'formset': profile_form})
     
     return render(request, 'mbu/edit_profile.html', args)
 
@@ -149,7 +85,8 @@ def view_reports(request):
     return render(request, 'mbu/reports.html')
 
 
-@permission_required('mbu.edit_scout_schedule', raise_exception=True)
+# Create your views here.
+@permission_required('mbu.edit_scout_schedule',raise_exception=True)
 def edit_classes(request):
     args = {}
     user = request.user
@@ -193,3 +130,4 @@ def view_troop_classes(request, scout_id):
     args.update({'course_enrollments': course_enrollments})
     print (course_enrollments)
     return render(request, 'scoutmaster/view_troop_courses.html', args)
+
