@@ -72,7 +72,7 @@ class Course(models.Model):
         return self.name
 
 
-class Session(models.Model):
+class TimeBlock(models.Model):
     name = models.CharField(max_length=255)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
@@ -84,7 +84,7 @@ class Session(models.Model):
 
 class CourseInstance(models.Model):
     course = models.ForeignKey(Course)
-    session = models.ForeignKey(Session)
+    session = models.ForeignKey(TimeBlock)
     counselor = models.CharField(max_length=100)
     enrollees = models.ManyToManyField(User, related_name='enrollments', blank=True)
     teaching_assistants = models.ManyToManyField(User, related_name='assistant_courses', blank=True)
@@ -93,9 +93,3 @@ class CourseInstance(models.Model):
 
     def __str__(self):
         return self.course.name + str(self.session)
-
-
-class WaitingList(models.Model):
-    user = models.ForeignKey(User)
-    course = models.ForeignKey(CourseInstance)
-    position_in_line = models.IntegerField()

@@ -130,7 +130,7 @@ def view_class_list(request):
     args = {}
     args.update(csrf(request))
     mbu = MeritBadgeUniversity.objects.get(current=True)
-    sessions = Session.objects.filter(mbu=mbu).values('pk')
+    sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
     course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
     args.update({ 'classlist': course_instances })
     return render(request, 'mbu/classlist.html', args)
