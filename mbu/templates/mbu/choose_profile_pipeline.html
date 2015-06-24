@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<form action='/complete/{{ backend_name }}' method='POST'>
+        <select name='profile_type'>
+            <option value='Scout'>Scout</option>
+            <option value='Scoutmaster'>Scoutmaster</option>
+        </select>
+        <input type='submit'/>
+    </form>
+{% endblock content %}

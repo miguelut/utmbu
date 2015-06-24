@@ -81,6 +81,19 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+SOCIAL_AUTH_PIPELINE = (
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details',
+    'mbu.pipeline.user_type.pick_profile'
+)
+
 ROOT_URLCONF = 'utmbu.urls'
 
 WSGI_APPLICATION = 'utmbu.wsgi.application'
@@ -140,3 +153,9 @@ DEFAULT_LINKS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '914815875236577'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd195882a4187fd90ac06f450f3d05221'
+SOCIAL_AUTH_FACBEOOK_SCOPE = 'email'
+SOCIAL_AUTH_GOOGLE_PLUS_KEY = '792511177887-a4c3bmo8b4h2nqenj1jc6t0ikmfs9nf2.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_PLUS_SECRET = 'dY6poV-JymLr-fEmCxsQut1u'
