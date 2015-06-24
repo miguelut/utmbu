@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from mbu.models import MeritBadgeUniversity, CourseInstance, Session
+from mbu.models import MeritBadgeUniversity, CourseInstance, TimeBlock
 from mbu.scout_fields import CourseInstanceChoiceField
 
 class EditClassesForm(forms.Form):
@@ -44,7 +44,7 @@ class EditClassesForm(forms.Form):
 
     def _get_sessions(self):
         mbu = MeritBadgeUniversity.objects.filter(current=True)
-        sessions = Session.objects.filter(mbu=mbu)
+        sessions = TimeBlock.objects.filter(mbu=mbu)
         return sessions
 
     def _sessions_overlap(self, session1, session2):
