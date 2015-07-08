@@ -4,12 +4,6 @@ from mbu.models import Troop, Scout, Scoutmaster
 from mbu.forms import ScoutProfileForm, ScoutmasterProfileForm
 
 
-class HomePageTests(TestCase):
-    def test_home_page_redirect_on_logged_out(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 302)
-
-
 class EditScoutProfileTests(TestCase):
     fixtures = ['test_users', 'test_troops_councils']
 
