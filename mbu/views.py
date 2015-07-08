@@ -18,7 +18,8 @@ def signup(request):
     if request.POST:
         form = MbuUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            created_user = form.save()
+            Scout(user=created_user).save()
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
@@ -27,7 +28,7 @@ def signup(request):
 def login(request):
     args = {}
     form = AuthenticationForm()
-    next = request.POST.get('next',request.GET.get('next','/'))
+    next = request.POST.get('next', request.GET.get('next','/'))
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
@@ -54,24 +55,23 @@ def choose_user_type(request):
     return render(request, 'mbu/choose_user_type.html')
 
 
-@login_required()
 def view_home_page(request):
     if _is_user_scout(request.user):
         return render(request, 'mbu/scout_home.html')
     elif _is_user_scoutmaster(request.user):
         return render(request, 'mbu/scoutmaster_home.html')
 
-    return redirect('choose_user_type')
+    return render(request, 'mbu/home.html')
 
 
 def _is_user_scout(user):
-    if Scout.objects.filter(user=user).count() == 1:
+    if Scout.objects.filter(pk=user.id).count() == 1:
         return True
     return False
 
 
 def _is_user_scoutmaster(user):
-    if Scoutmaster.objects.filter(user=user).count() == 1:
+    if Scoutmaster.objects.filter(pk=user.id).count() == 1:
         return True
     return False
 
