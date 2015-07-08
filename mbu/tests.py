@@ -24,8 +24,6 @@ class EditScoutProfileTests(TestCase):
             'first_name': 'Helio',
             'last_name': 'Gracie',
             'email': 'gracie@gmail.com',
-            'dob': '1913-10-01',
-            'rank': 'RED BELT',
             'troop': expected_troop.id
         }
 
@@ -37,8 +35,6 @@ class EditScoutProfileTests(TestCase):
         self.assertEqual('Helio', updated_user.first_name)
         self.assertEqual('Gracie', updated_user.last_name)
         self.assertEqual('gracie@gmail.com', updated_user.email)
-        self.assertEqual('1913-10-01', updated_scout.dob.strftime('%Y-%m-%d'))
-        self.assertEqual('RED BELT', updated_scout.rank)
         self.assertEqual(expected_troop, updated_scout.troop)
 
     def test_edit_scout_profile_form_should_prepopulate_fields(self):
@@ -48,8 +44,6 @@ class EditScoutProfileTests(TestCase):
         expected_form = {
             'first_name': 'Helio',
             'last_name': 'Gracie',
-            'dob': '1913-10-01',
-            'rank': 'RED BELT',
             'troop': expected_troop.id
         }
         self.client.post('/scout/profile/edit/', expected_form)
@@ -59,8 +53,6 @@ class EditScoutProfileTests(TestCase):
         self.assertEqual(response.context['form'].initial['first_name'], "Helio")
         self.assertEqual(response.context['form'].initial['last_name'], "Gracie")
         self.assertEqual(response.context['form'].initial['email'], "")
-        self.assertEqual(response.context['profile_form'].initial['dob'].strftime('%Y-%m-%d'), '1913-10-01')
-        self.assertEqual(response.context['profile_form'].initial['rank'], "RED BELT")
         self.assertEqual(response.context['profile_form'].initial['troop'], 1)
 
     def test_redirect_if_not_scout(self):
@@ -78,8 +70,6 @@ class EditScoutProfileTests(TestCase):
     def test_scout_form_should_be_valid(self):
         expected_troop = Troop.objects.get(pk=1)
         expected_form = {
-            'dob': '2014-01-01',
-            'rank': 'RED BELT',
             'troop': expected_troop.pk
         }
         scout_form = ScoutProfileForm(expected_form)
@@ -101,8 +91,7 @@ class EditScoutmasterProfileTests(TestCase):
             'first_name': 'Helio',
             'last_name': 'Gracie',
             'email': 'gracie@gmail.com',
-            'troop': expected_troop.id,
-            'phone': '2813308004'
+            'troop': expected_troop.id
         }
 
         response = self.client.post('/scoutmaster/profile/edit/', expected_form)
@@ -114,7 +103,6 @@ class EditScoutmasterProfileTests(TestCase):
         self.assertEqual('Gracie', updated_user.last_name)
         self.assertEqual('gracie@gmail.com', updated_user.email)
         self.assertEqual(expected_troop, updated_scoutmaster.troop)
-        self.assertEqual('2813308004', updated_scoutmaster.phone)
 
     def test_edit_scoutmaster_profile_form_should_prepopulate_fields(self):
         Scoutmaster(user=self.user).save()
@@ -123,8 +111,7 @@ class EditScoutmasterProfileTests(TestCase):
         expected_form = {
             'first_name': 'Helio',
             'last_name': 'Gracie',
-            'troop': expected_troop.id,
-            'phone': '2813308004'
+            'troop': expected_troop.id
         }
         self.client.post('/scoutmaster/profile/edit/', expected_form)
 
@@ -134,7 +121,6 @@ class EditScoutmasterProfileTests(TestCase):
         self.assertEqual(response.context['form'].initial['last_name'], "Gracie")
         self.assertEqual(response.context['form'].initial['email'], "")
         self.assertEqual(response.context['profile_form'].initial['troop'], 1)
-        self.assertEqual(response.context['profile_form'].initial['phone'], '2813308004')
 
     def test_redirect_if_not_scoutmaster(self):
         response = self.client.get('/scoutmaster/profile/edit/')
@@ -151,8 +137,7 @@ class EditScoutmasterProfileTests(TestCase):
     def test_scoutmaster_form_should_be_valid(self):
         expected_troop = Troop.objects.get(pk=1)
         expected_form = {
-            'troop': expected_troop.pk,
-            'phone': '2813308004'
+            'troop': expected_troop.pk
         }
         scoutmaster_form = ScoutmasterProfileForm(expected_form)
 
