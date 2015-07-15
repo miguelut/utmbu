@@ -112,6 +112,7 @@ def _edit_profile(request, ProfileForm, user, args):
         if form.is_valid() and profile_form.is_valid():
             form.save()
             profile_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Your profile has been saved.')
     else:
         form = UserProfileForm(instance=request.user)
         profile_form = ProfileForm(instance=user)

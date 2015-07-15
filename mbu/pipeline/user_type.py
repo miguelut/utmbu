@@ -1,11 +1,15 @@
-from social.pipeline.partial import partial
-from django.shortcuts import render_to_response
+from mbu.models import Scout
 
-@partial
-def pick_profile(backend, details, response, is_new=False, *args, **kwargs):
+def user_get_names(backend, details, response, is_new=False, *args, **kwargs):
     data = backend.strategy.request_data();
-    if data.get('profile_type') is None:
-        args = { 'backend_name' : backend.name }
-        return render_to_response('mbu/choose_profile_pipeline.html', args)
-    else:
-        return
+    user = details
+    if (backend == 'facebook'):
+        user.first_name = response.get('first_name')
+        user.last_name = response.get('last_name')
+    user.save()
+
+def user_make_scout(backend, details, response, is_new=False, *args, **kwargs):
+    user = kwargs.get('user')
+    scout = Scout.objects.get(user=user)
+    if(scout is None):
+        Scout(user=user).save()
