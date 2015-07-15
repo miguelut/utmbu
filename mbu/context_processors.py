@@ -1,4 +1,5 @@
 from django.conf import settings
+from mbu.util import _is_user_scoutmaster, _is_user_scout
 
 def default_links(request):
     """Adds the variable DEFAULT_LINKS to the request context."""
@@ -12,6 +13,18 @@ def add_links(request):
         return {}
 
 def _get_links(user):
-    return { 'links' : [
-        {'href': 'mbu_home', 'label':'Surrogate Home'}
+    args = { 'links' : [
+            {'href': 'mbu_home',
+             'label':'Home'}
         ]}
+    if(_is_user_scout(user)):
+        args.get('links').append({
+            'href': 'scout_edit_classes',
+            'label':'Add/Edit Classes'
+        })
+    elif(_is_user_scoutmaster(user)):
+        args.get('links').append({
+            'href': 'sm_view_classes',
+            'label': 'View Scout Classes'
+        })
+    return args

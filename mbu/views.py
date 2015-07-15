@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 from django.contrib.auth.forms import AuthenticationForm
 from mbu.forms import *
 from mbu.models import *
+from mbu.util import _is_user_scout, _is_user_scoutmaster
 from mbu.scout_forms import EditClassesForm
 
 logger = logging.getLogger(__name__)
@@ -62,18 +63,6 @@ def view_home_page(request):
         return render(request, 'mbu/scoutmaster_home.html')
 
     return render(request, 'mbu/home.html')
-
-
-def _is_user_scout(user):
-    if Scout.objects.filter(pk=user.id).count() == 1:
-        return True
-    return False
-
-
-def _is_user_scoutmaster(user):
-    if Scoutmaster.objects.filter(pk=user.id).count() == 1:
-        return True
-    return False
 
 
 def register_user_as_scout(request):
@@ -156,7 +145,7 @@ def view_reports(request):
 
 
 @permission_required('mbu.edit_scout_schedule', raise_exception=True)
-def edit_classes(request):
+def scout_edit_classes(request):
     args = {}
     user = request.user
     form = EditClassesForm(user=user)
@@ -193,7 +182,7 @@ def view_troop_enrollees(request):
     return render(request, 'scoutmaster/view_troop.html', args)
 
 
-def view_troop_classes(request, scout_id):
+def sm_view_class(request, scout_id):
     args = {}
     course_enrollments = Scout.objects.get(pk=scout_id).user.enrollments.all()
     args.update({'course_enrollments': course_enrollments})
