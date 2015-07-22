@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Permission, ContentType
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster
@@ -19,8 +20,12 @@ def signup(request):
     if request.POST:
         form = MbuUserCreationForm(request.POST)
         if form.is_valid():
-            created_user = form.save()
-            Scout(user=created_user).save()
+            user = form.save()
+            Scout(user=user).save()
+            ct = ContentType.objects.get(app_label='mbu', model='scout')
+            perm = Permission.objects.get(codename='edit_scout_schedule', content_type=ct)
+            user.user_permissions.add(perm)
+            user.save()
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
@@ -153,7 +158,7 @@ def view_reports(request):
     return render(request, 'mbu/reports.html')
 
 
-# @permission_required('mbu.edit_scout_schedule', raise_exception=True)
+@permission_required('mbu.edit_scout_schedule', raise_exception=True)
 def scout_edit_classes(request):
     args = {}
     user = request.user
