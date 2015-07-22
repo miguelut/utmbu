@@ -58,11 +58,15 @@ def choose_user_type(request):
 
 def view_home_page(request):
     if _is_user_scout(request.user):
-        return render(request, 'mbu/scout_home.html')
+        return _render_scout_homepage(request)
     elif _is_user_scoutmaster(request.user):
         return render(request, 'mbu/scoutmaster_home.html')
-
     return render(request, 'mbu/home.html')
+
+
+def _render_scout_homepage(request):
+    args = {'enrollments': request.user.enrollments.all()}
+    return render(request, 'mbu/scout_home.html', args)
 
 
 def register_user_as_scout(request):
@@ -125,10 +129,14 @@ def _edit_profile(request, ProfileForm, user, args):
 def view_class_list(request):
     args = {}
     args.update(csrf(request))
-    mbu = MeritBadgeUniversity.objects.get(current=True)
-    sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
-    course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
-    args.update({ 'classlist': course_instances })
+    try:
+        mbu = MeritBadgeUniversity.objects.get(current=True)
+    except MeritBadgeUniversity.DoesNotExist:
+        mbu = None
+    if mbu is not None:
+        sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
+        course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
+        args.update({'classlist': course_instances })
     return render(request, 'mbu/classlist.html', args)
 
 
@@ -145,7 +153,7 @@ def view_reports(request):
     return render(request, 'mbu/reports.html')
 
 
-@permission_required('mbu.edit_scout_schedule', raise_exception=True)
+# @permission_required('mbu.edit_scout_schedule', raise_exception=True)
 def scout_edit_classes(request):
     args = {}
     user = request.user

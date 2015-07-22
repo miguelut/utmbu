@@ -13,10 +13,7 @@ def add_links(request):
         return {}
 
 def _get_links(user):
-    args = { 'links' : [
-            {'href': 'mbu_home',
-             'label':'Home'}
-        ]}
+    args = { 'links': []}
     if(_is_user_scout(user)):
         args.get('links').append({
             'href': 'scout_edit_classes',
