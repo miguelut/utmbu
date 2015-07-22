@@ -125,10 +125,14 @@ def _edit_profile(request, ProfileForm, user, args):
 def view_class_list(request):
     args = {}
     args.update(csrf(request))
-    mbu = MeritBadgeUniversity.objects.get(current=True)
-    sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
-    course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
-    args.update({ 'classlist': course_instances })
+    try:
+        mbu = MeritBadgeUniversity.objects.get(current=True)
+    except MeritBadgeUniversity.DoesNotExist:
+        mbu = None
+    if mbu is not None:
+        sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
+        course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
+        args.update({'classlist': course_instances })
     return render(request, 'mbu/classlist.html', args)
 
 
