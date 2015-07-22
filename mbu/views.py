@@ -58,11 +58,15 @@ def choose_user_type(request):
 
 def view_home_page(request):
     if _is_user_scout(request.user):
-        return render(request, 'mbu/scout_home.html')
+        return _render_scout_homepage(request)
     elif _is_user_scoutmaster(request.user):
         return render(request, 'mbu/scoutmaster_home.html')
-
     return render(request, 'mbu/home.html')
+
+
+def _render_scout_homepage(request):
+    args = {'enrollments': request.user.enrollments.all()}
+    return render(request, 'mbu/scout_home.html', args)
 
 
 def register_user_as_scout(request):
@@ -149,7 +153,7 @@ def view_reports(request):
     return render(request, 'mbu/reports.html')
 
 
-@permission_required('mbu.edit_scout_schedule', raise_exception=True)
+# @permission_required('mbu.edit_scout_schedule', raise_exception=True)
 def scout_edit_classes(request):
     args = {}
     user = request.user
