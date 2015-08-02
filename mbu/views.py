@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
 from mbu.forms import *
 from mbu.models import *
-from mbu.util import _is_user_scout, _is_user_scoutmaster
+from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from mbu.scout_forms import EditClassesForm
 
 logger = logging.getLogger(__name__)
@@ -51,14 +51,6 @@ def login(request):
 def logout_user(request):
     logout(request)
     return redirect('mbu_home')
-
-
-def choose_user_type(request):
-    if _is_user_scout(request.user):
-        return render(request, 'mbu/scout_home.html')
-    elif _is_user_scoutmaster(request.user):
-        return render(request, 'mbu/scoutmaster_home.html')
-    return render(request, 'mbu/choose_user_type.html')
 
 
 def view_home_page(request):
@@ -202,3 +194,8 @@ def sm_view_class(request, scout_id):
     args.update({'course_enrollments': course_enrollments})
     print (course_enrollments)
     return render(request, 'scoutmaster/view_troop_courses.html', args)
+
+def populate_courses(request):
+    _populate_courses()
+    messages.add_message(request, messages.SUCCESS, 'Courses updated.')
+    return redirect('mbu_home')
