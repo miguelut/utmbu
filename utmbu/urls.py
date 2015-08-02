@@ -27,7 +27,7 @@ urlpatterns += patterns(
     '',
     url(r'^scout/editclasses/$', 'mbu.views.scout_edit_classes', name='scout_edit_classes'),
     url(r'^scout/viewclasses/$', 'mbu.views.view_registered_classes', name='scout_view_classes'),
-    url(r'^scout/profile/edit/$', 'mbu.views.edit_scout_profile', name='edit_scout_profile')
+    url(r'^scout/profile/edit/$', 'mbu.views.edit_scout_profile', name='scout_edit_profile')
 )
 
 #Scoutmaster URLs

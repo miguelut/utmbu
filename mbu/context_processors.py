@@ -19,6 +19,10 @@ def _get_links(user):
             'href': 'scout_edit_classes',
             'label':'Add/Edit Classes'
         })
+        args.get('links').append({
+            'href': 'scout_edit_profile',
+            'label': 'Edit Profile'
+        })
     elif(_is_user_scoutmaster(user)):
         args.get('links').append({
             'href': 'sm_view_classes',
