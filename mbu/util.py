@@ -30,11 +30,3 @@ def _populate_courses():
         members = result['query']['categorymembers']
         for member in members:
             Course.objects.get_or_create(name=member['title'])
-
-
-def _get_hash_str():
-    return hashlib.sha256().hexdigest()
-
-
-def _send_sm_request_email(email=None, key=None):
-    send_mail('MBU Test Subject', 'This is a test. %s' % key, 'UTMBU Registration <mbu@vexule.com>', [email])

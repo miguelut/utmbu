@@ -1,6 +1,6 @@
 from django.db import models
-from mbu.util import _get_hash_str, _send_sm_request_email
 from django.contrib.auth.models import User
+from mbu.model_utils import _send_sm_request_email, _get_hash_str
 
 # This class will represent the yearly MBU so we can
 # retain information across multiple years
