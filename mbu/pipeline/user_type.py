@@ -2,7 +2,6 @@ from mbu.models import Scout
 from django.contrib.auth.models import Permission, ContentType
 
 def user_get_names(backend, details, response, is_new=False, *args, **kwargs):
-    data = backend.strategy.request_data();
     user = details
     if (backend == 'facebook'):
         user.first_name = response.get('first_name')

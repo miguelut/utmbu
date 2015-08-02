@@ -28,4 +28,8 @@ def _get_links(user):
             'href': 'sm_view_classes',
             'label': 'View Scout Classes'
         })
+        args.get('links').append({
+            'href': 'sm_edit_profile',
+            'label': 'Edit Profile'
+        })
     return args

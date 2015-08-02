@@ -1,10 +1,9 @@
 import logging
-
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
 from mbu.forms import *
@@ -29,6 +28,10 @@ def signup(request):
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
+
+
+def signup_sm(request):
+    pass
 
 
 def login(request):
@@ -194,6 +197,7 @@ def sm_view_class(request, scout_id):
     args.update({'course_enrollments': course_enrollments})
     print (course_enrollments)
     return render(request, 'scoutmaster/view_troop_courses.html', args)
+
 
 def populate_courses(request):
     _populate_courses()
