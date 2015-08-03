@@ -1,26 +1,37 @@
 import logging
-
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Permission, ContentType
 from mbu.forms import *
 from mbu.models import *
-from mbu.util import _is_user_scout, _is_user_scoutmaster
+from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from mbu.scout_forms import EditClassesForm
 
 logger = logging.getLogger(__name__)
 
 
 def signup(request):
+    """This is the default signup method.
+    This method will register a user and a corresponding Scout."""
     form = MbuUserCreationForm()
     if request.POST:
         form = MbuUserCreationForm(request.POST)
         if form.is_valid():
-            created_user = form.save()
-            Scout(user=created_user).save()
+            user = form.save()
+            Scout(user=user).save()
+            ct = ContentType.objects.get(app_label='mbu', model='scout')
+            perms = [
+                Permission.objects.get(codename='edit_scout_schedule', content_type=ct),
+                Permission.objects.get(codename='edit_scout_profile', content_type=ct)
+            ]
+            for perm in perms:
+                user.user_permissions.add(perm)
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
@@ -46,14 +57,6 @@ def login(request):
 def logout_user(request):
     logout(request)
     return redirect('mbu_home')
-
-
-def choose_user_type(request):
-    if _is_user_scout(request.user):
-        return render(request, 'mbu/scout_home.html')
-    elif _is_user_scoutmaster(request.user):
-        return render(request, 'mbu/scoutmaster_home.html')
-    return render(request, 'mbu/choose_user_type.html')
 
 
 def view_home_page(request):
@@ -153,7 +156,7 @@ def view_reports(request):
     return render(request, 'mbu/reports.html')
 
 
-# @permission_required('mbu.edit_scout_schedule', raise_exception=True)
+@permission_required('mbu.edit_scout_schedule', raise_exception=True)
 def scout_edit_classes(request):
     args = {}
     user = request.user
@@ -191,9 +194,45 @@ def view_troop_enrollees(request):
     return render(request, 'scoutmaster/view_troop.html', args)
 
 
+def sm_signup(request):
+    pass
+
+
+def sm_complete_signup(request, key=None):
+    form = MbuUserCreationForm()
+    if request.POST:
+        form = MbuUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Scoutmaster(user=user).save()
+            ct = ContentType.objects.get(app_label='mbu', model='scoutmaster')
+            perms = [
+                Permission.objects.get(codename='can_modify_troop_enrollments', content_type=ct),
+                Permission.objects.get(codename='edit_scoutmaster_profile', content_type=ct)
+            ]
+            for perm in perms:
+                user.user_permissions.add(perm)
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
+            return redirect('mbu_home')
+    email = ScoutmasterRequest.objects.get(key=key).email
+    form.fields['email'].initial = email
+    form.fields['email'].widget.attrs['readonly'] = True
+    args = {'form': form}
+    args.update({'route': 'mbu.views.sm_complete_signup'})
+    args.update({'key': key})
+    return render(request, 'mbu/sm_signup.html', args)
+
+
 def sm_view_class(request, scout_id):
     args = {}
     course_enrollments = Scout.objects.get(pk=scout_id).user.enrollments.all()
     args.update({'course_enrollments': course_enrollments})
     print (course_enrollments)
     return render(request, 'scoutmaster/view_troop_courses.html', args)
+
+
+def populate_courses(request):
+    _populate_courses()
+    messages.add_message(request, messages.SUCCESS, 'Courses updated.')
+    return redirect('mbu_home')

@@ -160,3 +160,11 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'd195882a4187fd90ac06f450f3d05221'
 SOCIAL_AUTH_FACBEOOK_SCOPE = 'email'
 SOCIAL_AUTH_GOOGLE_PLUS_KEY = '792511177887-a4c3bmo8b4h2nqenj1jc6t0ikmfs9nf2.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_PLUS_SECRET = 'dY6poV-JymLr-fEmCxsQut1u'
+
+EMAIL_HOST = 'mail.vexule.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'mbu'
+EMAIL_HOST_PASSWORD = 'etzilch'
+
+SITE_URL = 'http://localhost:8000'
+MBU_LOCATION = 'The University of Texas at Austin'

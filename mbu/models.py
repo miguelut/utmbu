@@ -1,8 +1,10 @@
+from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
+from mbu.model_utils import _send_sm_request_email, _get_hash_str
 
-#This class will represent the yearly MBU so we can 
-#retain inforamation across multiple years
+# This class will represent the yearly MBU so we can
+# retain information across multiple years
 class MeritBadgeUniversity(models.Model):
     name = models.CharField(max_length=200)
     year = models.DateField()
@@ -59,6 +61,21 @@ class Scoutmaster(models.Model):
             ('can_modify_troop_enrollments', 'Can modify schedules of scouts in own troop.'),
             ('edit_scoutmaster_profile', 'Can edit scoutmaster profile')
         )
+
+
+class ScoutmasterRequest(models.Model):
+    email = models.EmailField(unique=True)
+    troop = models.ForeignKey(Troop)
+    key = models.CharField(max_length=64, unique=True)
+
+    def save(self, *args, **kwargs):
+        self.key = _get_hash_str(self.email)
+        super(ScoutmasterRequest, self).save(args, kwargs)
+        _send_sm_request_email(email=self.email, key=self.key, troop=self.troop)
+
+
+class ScoutmasterRequestAdmin(admin.ModelAdmin):
+    exclude = ['key']
 
 
 class Course(models.Model):
