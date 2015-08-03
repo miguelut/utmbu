@@ -25,7 +25,7 @@ def _get_links(user):
         })
     elif(_is_user_scoutmaster(user)):
         args.get('links').append({
-            'href': 'sm_view_classes',
+            'href': 'sm_view_troop',
             'label': 'View Scout Classes'
         })
         args.get('links').append({

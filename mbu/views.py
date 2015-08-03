@@ -15,6 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 def signup(request):
+    """This is the default signup method.
+    This method will register a user and a corresponding Scout."""
     form = MbuUserCreationForm()
     if request.POST:
         form = MbuUserCreationForm(request.POST)
@@ -22,16 +24,17 @@ def signup(request):
             user = form.save()
             Scout(user=user).save()
             ct = ContentType.objects.get(app_label='mbu', model='scout')
-            perm = Permission.objects.get(codename='edit_scout_schedule', content_type=ct)
-            user.user_permissions.add(perm)
+            perms = [
+                Permission.objects.get(codename='edit_scout_schedule', content_type=ct),
+                Permission.objects.get(codename='edit_scout_profile', content_type=ct)
+            ]
+            for perm in perms:
+                user.user_permissions.add(perm)
             user.save()
+            messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
             return redirect('mbu_home')
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
-
-
-def signup_sm(request):
-    pass
 
 
 def login(request):
@@ -189,6 +192,36 @@ def view_troop_enrollees(request):
     scouts = Scout.objects.all().filter(troop=troop)
     args.update({'scouts': scouts})
     return render(request, 'scoutmaster/view_troop.html', args)
+
+
+def sm_signup(request):
+    pass
+
+
+def sm_complete_signup(request, key=None):
+    form = MbuUserCreationForm()
+    if request.POST:
+        form = MbuUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Scoutmaster(user=user).save()
+            ct = ContentType.objects.get(app_label='mbu', model='scoutmaster')
+            perms = [
+                Permission.objects.get(codename='can_modify_troop_enrollments', content_type=ct),
+                Permission.objects.get(codename='edit_scoutmaster_profile', content_type=ct)
+            ]
+            for perm in perms:
+                user.user_permissions.add(perm)
+            user.save()
+            messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
+            return redirect('mbu_home')
+    email = ScoutmasterRequest.objects.get(key=key).email
+    form.fields['email'].initial = email
+    form.fields['email'].widget.attrs['readonly'] = True
+    args = {'form': form}
+    args.update({'route': 'mbu.views.sm_complete_signup'})
+    args.update({'key': key})
+    return render(request, 'mbu/sm_signup.html', args)
 
 
 def sm_view_class(request, scout_id):

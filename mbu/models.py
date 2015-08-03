@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
 from mbu.model_utils import _send_sm_request_email, _get_hash_str
@@ -65,11 +66,16 @@ class Scoutmaster(models.Model):
 class ScoutmasterRequest(models.Model):
     email = models.EmailField(unique=True)
     troop = models.ForeignKey(Troop)
-    key = models.CharField(max_length=64, default=_get_hash_str, unique=True)
+    key = models.CharField(max_length=64, unique=True)
 
     def save(self, *args, **kwargs):
+        self.key = _get_hash_str(self.email)
         super(ScoutmasterRequest, self).save(args, kwargs)
-        _send_sm_request_email(email=self.email, key=self.key)
+        _send_sm_request_email(email=self.email, key=self.key, troop=self.troop)
+
+
+class ScoutmasterRequestAdmin(admin.ModelAdmin):
+    exclude = ['key']
 
 
 class Course(models.Model):

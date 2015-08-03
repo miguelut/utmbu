@@ -165,3 +165,6 @@ EMAIL_HOST = 'mail.vexule.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'mbu'
 EMAIL_HOST_PASSWORD = 'etzilch'
+
+SITE_URL = 'http://localhost:8000'
+MBU_LOCATION = 'The University of Texas at Austin'

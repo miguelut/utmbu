@@ -2,7 +2,7 @@
 {% load widget_tweaks %}
 {% block content %}
 <div class="well col-xs-4 col-xs-offset-4">
-    <form method="post" action="{% url 'mbu.views.signup' %}">
+    <form method="post" {% block form_action %}action="{% url 'mbu.views.signup' %}"{% endblock %}>
         <h1>Sign Up</h1>
         {% csrf_token %}
 
