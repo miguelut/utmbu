@@ -145,12 +145,6 @@ class RegisterUserTypeTests(TestCase):
         self.client.login(username='Gracie', password='Gracie')
         self.user = User.objects.get(username='Gracie')
 
-    def test_should_register_user_as_scout_if_not_already_a_scoutmaster(self):
-        response = self.client.get('/register/scout/')
-
-        self.assertIsNotNone(Scout.objects.get(user=self.user))
-        self.assertRedirects(response, 'scout/profile/edit/')
-
     def test_should_not_register_user_as_scout_if_already_a_scoutmaster(self):
         Scoutmaster(user=self.user).save()
 
@@ -158,12 +152,6 @@ class RegisterUserTypeTests(TestCase):
         self.assertRedirects(response, '/')
 
         self.assertEqual(0, Scout.objects.filter(user=self.user).count())
-
-    def test_should_register_user_as_scoutmaster_if_not_already_a_scout(self):
-        response = self.client.get('/register/scoutmaster/')
-
-        self.assertIsNotNone(Scoutmaster.objects.get(user=self.user))
-        self.assertRedirects(response, 'scoutmaster/profile/edit/')
 
     def test_should_not_register_user_as_scoutmaster_if_already_a_scout(self):
         Scout(user=self.user).save()
