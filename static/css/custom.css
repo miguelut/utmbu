@@ -1,28 +1,22 @@
-.login-facebook, 
-.login-google {
-    height: 36px;
-    border-radius: 15px;
+.social-login-container {
+    text-align: center;
+}
+
+.social-login {
+    margin: 0 auto;
+}
+.social-login .facebook, 
+.social-login .googleplus {
+    border-radius: 5px;
     width: 200px;
 }
 
-.login-google {
-    height: 40px;
+.social-login .login-icons {
+    font-size: 2.5em;
+    margin-right: 4px;
 }
 
-.btn-facebook {
-    background: linear-gradient(#5676BC, #31497B) repeat scroll 0% 0% transparent;
-    border-width: 1px;
-    border-style: solid;
-    border-right: 1px solid #293E69;
-    border-color: #31497B #293E69 #293E69;
-    -moz-border-top-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    border-image: none;
-    color: #444;
-    text-shadow: 0px 1px #FFF;
-}
+
 .center {
     justify: center;
 }
