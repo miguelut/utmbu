@@ -1,10 +1,21 @@
-.facebook {
-    height: 36px;
+.social-login-container {
+    text-align: center;
 }
 
-.google {
-    height: 40px;
+.social-login {
+    margin: 0 auto;
 }
+.social-login .facebook, 
+.social-login .googleplus {
+    border-radius: 5px;
+    width: 200px;
+}
+
+.social-login .login-icons {
+    font-size: 2.5em;
+    margin-right: 4px;
+}
+
 
 .center {
     justify: center;
@@ -35,4 +46,10 @@
 .user-type-page {
     position: relative;
     top: 100px;
+}
+
+.hero-image {
+    background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Boy_Scouts_of_America_corporate_trademark.svg/890px-Boy_Scouts_of_America_corporate_trademark.svg.png");
+    background-repeat: no-repeat;
+    background-position: center center;
 }
