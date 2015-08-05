@@ -1,4 +1,18 @@
 {% extends 'base.html' %}
-{% block content %}
-    Home page content goes here.
-{% endblock content %}
+
+
+{% block container %}
+    <div class="jumbotron hero-image">
+        <div class="container">
+            {% block content %}
+                
+                <h1>Hello, scouts!</h1>
+                <p>Join the wonderful world of MAGIC MIKE...</p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Register</a>
+                    <a class="btn btn-primary btn-lg btn-warning" href="{% url 'login' %}" role="button">Login</a>
+                </p>
+            {% endblock content %}
+        </div>
+    </div>
+{% endblock container %}
