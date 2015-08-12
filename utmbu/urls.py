@@ -2,7 +2,8 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 #General Views
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$', 'mbu.views.view_home_page', name='mbu_home'),
@@ -38,6 +39,13 @@ urlpatterns += patterns(
     url(r'^scoutmaster/viewtroop/$', 'mbu.views.view_troop_enrollees', name='sm_view_troop'),
     url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'mbu.views.sm_view_class', name='sm_view_classes'),
     url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile')
+)
+
+#Paypal URLS
+urlpatterns += patterns(
+    '',
+    url(r'^pay', 'mbu.views.pay_with_paypal', name='pay-with-paypal'),
+    url(r'^paypal/notify', include('paypal.standard.ipn.urls'))
 )
 
 #Dev URLs -- REMOVE BEFORE DEPLOYMENT

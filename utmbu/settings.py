@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'paypal.standard.ipn',
     'social.apps.django_app.default',
     'crispy_forms',
     'widget_tweaks',
@@ -169,3 +170,7 @@ EMAIL_HOST_PASSWORD = 'etzilch'
 
 SITE_URL = 'http://localhost:8000'
 MBU_LOCATION = 'The University of Texas at Austin'
+
+PAYPAL_RECEIVER_EMAIL='mbu@vexule.com'
+PAYPAL_TEST=True
+PAYPAL_NOTIFY_URL='http://localhost:8080/paypal/notify'
