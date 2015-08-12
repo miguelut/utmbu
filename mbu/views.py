@@ -1,4 +1,5 @@
 import logging
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.core.context_processors import csrf
 from django.contrib import messages
@@ -6,10 +7,12 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
+from paypal.standard.forms import PayPalPaymentsForm
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from mbu.scout_forms import EditClassesForm
+from utmbu import settings
 
 logger = logging.getLogger(__name__)
 
@@ -236,3 +239,19 @@ def populate_courses(request):
     _populate_courses()
     messages.add_message(request, messages.SUCCESS, 'Courses updated.')
     return redirect('mbu_home')
+
+def pay_with_paypal(request):
+
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': '100', # calculate this amount dynamically
+        'item_name': 'MBU 2015', #change this dynamically
+        'invoice': 1, # generate invoice id from database
+        'notify_url': 'http://localhost:8000' + reverse('paypal-ipn'),
+        'return_url': 'http://localhost:8000', # set this to user's home page
+        'cancel_return': 'http://localhost:8000' # set to user's home page
+    }
+
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    args = {'form': form}
+    return render(request, 'mbu/payment.html', args)
