@@ -1,3 +1,8 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
 .social-login-container {
     text-align: center;
 }
@@ -8,12 +13,40 @@
 .social-login .facebook, 
 .social-login .googleplus {
     border-radius: 5px;
-    width: 200px;
+    width: 95%;
+    color: #fff;
+}
+.social-login a {
+    padding-left: 0.4em;
+    padding-right: 0;
+    text-align: left;
+    height: 3.0em;
+}
+
+.social-login .facebook {
+    background-color: #3b5998;
+}
+.social-login .googleplus {
+    background-color: #dd4b39;
+}
+
+.social-login .social-icon {
+    text-align: left;
+    width: 3.5em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.social-login .social-text {
+    height: 100%;
+    text-align: left;
+    display: inline-block;
+    font-weight: 300;
 }
 
 .social-login .login-icons {
-    font-size: 2.5em;
-    margin-right: 4px;
+    font-size: 2.0em;
+    margin: 0 0.2em;
 }
 
 
