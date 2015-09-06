@@ -177,6 +177,11 @@ def scout_edit_classes(request):
 
     args.update({'form': form})
     args.update(csrf(request))
+
+    course_catalog = CourseInstance.objects.exclude(enrollees=user)
+    args.update({'course_catalog': course_catalog})
+    course_enrollments = user.enrollments.all()
+    args.update({'course_enrollments': course_enrollments})
     return render(request, 'mbu/edit_classes.html', args)
 
 

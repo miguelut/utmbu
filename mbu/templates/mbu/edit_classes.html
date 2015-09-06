@@ -13,13 +13,25 @@
 
     <div id="dropzone-div">
         <div id="course-catalog-dropzone" class="course-dropzones">
+            <h3>Course Catalog</h3>
             <ul id="catalog-course-list">
-                <li class="draggable-course"></li>
-                <li class="draggable-course"></li>
+                {% for course_instance in course_catalog %}
+                    <li class="draggable-course">
+                        {{ course_instance.course }}<br>
+                        {{ course_instance.session }}
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div id="added-course-dropzone" class="course-dropzones">
+            <h3>Enrolled Courses</h3>
             <ul id="added-course-list">
+                {% for course_enrollment in course_enrollments %}
+                    <li class="draggable-course">
+                        {{ course_enrollment.course }}<br>
+                        {{ course_enrollment.session }}
+                    </li>
+                {% endfor %}
             </ul>
         </div>
 
