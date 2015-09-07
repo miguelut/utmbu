@@ -58,3 +58,17 @@ $('#council_submit_button').on('click', function() {
     console.log("form submitted!")
     add_council();
 });
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        var csrftoken = $.cookie('csrftoken');
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});

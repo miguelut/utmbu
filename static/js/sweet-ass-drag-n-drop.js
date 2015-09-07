@@ -1,14 +1,23 @@
 var SweetAssDragNDrop = {
     init: function() {
         $(".draggable-course").draggable({
-            revert: "invalid"
+            revert: 'invalid'
         });
 
         $("#course-catalog-dropzone").droppable({
             drop: function(event, ui) {
                 var droppedCourse = ui.draggable;
                 var appendingList = $("#catalog-course-list");
-                handleDrop(droppedCourse, appendingList);
+                var csrftoken = $.cookie('csrftoken');
+                $.post(
+                    "http://localhost:8000/scout/unenroll_course/",
+                    {'course_instance_id': droppedCourse.attr('id')},
+                    function(data) {
+                        handleDrop(droppedCourse, appendingList);
+                    }
+                ).error(function() {
+                    ui.draggable.draggable('option', 'revert', true);
+                });
             }
         });
 
@@ -16,7 +25,16 @@ var SweetAssDragNDrop = {
             drop: function(event, ui) {
                 var droppedCourse = ui.draggable;
                 var appendingList = $("#added-course-list");
-                handleDrop(droppedCourse, appendingList);
+                var csrftoken = $.cookie('csrftoken');
+                $.post(
+                    "http://localhost:8000/scout/enroll_course/",
+                    {'course_instance_id': droppedCourse.attr('id')},
+                    function(data) {
+                        handleDrop(droppedCourse, appendingList);
+                    }
+                ).error(function() {
+                    ui.draggable.draggable('option', 'revert', true);
+                });
             }
         });
 

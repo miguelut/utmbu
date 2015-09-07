@@ -7,7 +7,9 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
+from django.views.decorators.http import require_http_methods
 from paypal.standard.forms import PayPalPaymentsForm
+from django.http import HttpResponse
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
@@ -183,6 +185,25 @@ def scout_edit_classes(request):
     course_enrollments = user.enrollments.all()
     args.update({'course_enrollments': course_enrollments})
     return render(request, 'mbu/edit_classes.html', args)
+
+
+@require_http_methods(["POST"])
+def enroll_course(request):
+    course_instance_id = request.POST.get('course_instance_id')
+    course_instance = CourseInstance.objects.get(pk=course_instance_id)
+    user = request.user
+    user.enrollments.add(course_instance)
+    user.save()
+    return HttpResponse(request.GET.get('course_instance_id'))
+
+@require_http_methods(["POST"])
+def unenroll_course(request):
+    course_instance_id = request.POST.get('course_instance_id')
+    course_instance = CourseInstance.objects.get(pk=course_instance_id)
+    user = request.user
+    user.enrollments.remove(course_instance)
+    user.save()
+    return HttpResponse(request.GET.get('course_instance_id'))
 
 
 def view_registered_classes(request):

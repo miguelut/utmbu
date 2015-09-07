@@ -16,7 +16,7 @@
             <h3>Course Catalog</h3>
             <ul id="catalog-course-list">
                 {% for course_instance in course_catalog %}
-                    <li class="draggable-course">
+                    <li id="{{ course_instance.id }}" class="draggable-course">
                         {{ course_instance.course }}<br>
                         {{ course_instance.session }}
                     </li>
@@ -27,7 +27,7 @@
             <h3>Enrolled Courses</h3>
             <ul id="added-course-list">
                 {% for course_enrollment in course_enrollments %}
-                    <li class="draggable-course">
+                    <li id="{{ course_enrollment.id }}" class="draggable-course">
                         {{ course_enrollment.course }}<br>
                         {{ course_enrollment.session }}
                     </li>
