@@ -8,7 +8,6 @@ var SweetAssDragNDrop = {
             drop: function(event, ui) {
                 var droppedCourse = ui.draggable;
                 var appendingList = $("#catalog-course-list");
-                var csrftoken = $.cookie('csrftoken');
                 $.post(
                     "http://localhost:8000/scout/unenroll_course/",
                     {'course_instance_id': droppedCourse.attr('id')},
@@ -25,7 +24,6 @@ var SweetAssDragNDrop = {
             drop: function(event, ui) {
                 var droppedCourse = ui.draggable;
                 var appendingList = $("#added-course-list");
-                var csrftoken = $.cookie('csrftoken');
                 $.post(
                     "http://localhost:8000/scout/enroll_course/",
                     {'course_instance_id': droppedCourse.attr('id')},

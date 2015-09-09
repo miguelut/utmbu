@@ -194,7 +194,7 @@ def enroll_course(request):
     user = request.user
     user.enrollments.add(course_instance)
     user.save()
-    return HttpResponse(request.GET.get('course_instance_id'))
+    return HttpResponse(course_instance_id)
 
 @require_http_methods(["POST"])
 def unenroll_course(request):
@@ -203,7 +203,7 @@ def unenroll_course(request):
     user = request.user
     user.enrollments.remove(course_instance)
     user.save()
-    return HttpResponse(request.GET.get('course_instance_id'))
+    return HttpResponse(course_instance_id)
 
 
 def view_registered_classes(request):

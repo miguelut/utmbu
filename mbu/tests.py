@@ -160,3 +160,18 @@ class RegisterUserTypeTests(TestCase):
 
         self.assertEqual(0, Scoutmaster.objects.filter(user=self.user).count())
         self.assertRedirects(response, '/')
+
+
+class CourseEnrollmentTests(TestCase):
+    fixtures = ['test_users', 'test_courses_courseinstances']
+
+    def setUp(self):
+        self.client.login(username='Gracie', password='Gracie')
+        self.user = User.objects.get(username='Gracie')
+
+    def test_should_enroll_in_course(self):
+        request = {
+            'course_instance_id': '1'
+        }
+        response = self.client.post('/scout/enroll_course/', request)
+        self.assertEqual(200, response.status_code)
