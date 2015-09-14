@@ -196,6 +196,7 @@ def enroll_course(request):
     user.save()
     return HttpResponse(course_instance_id)
 
+
 @require_http_methods(["POST"])
 def unenroll_course(request):
     course_instance_id = request.POST.get('course_instance_id')

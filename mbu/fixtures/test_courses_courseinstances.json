@@ -17,6 +17,14 @@
       "requirements": "None"
     }
   },
+  {
+    "model": "mbu.Course",
+    "pk": 2,
+    "fields": {
+      "name": "Cat Surfing",
+      "requirements": "None"
+    }
+  },
 
   {
     "model": "mbu.TimeBlock",
@@ -36,6 +44,17 @@
       "course": 1,
       "session": 1,
       "counselor": "Eric Clapton",
+      "location": "UT",
+      "max_enrollees": 10
+    }
+  },
+  {
+    "model": "mbu.CourseInstance",
+    "pk": 2,
+    "fields": {
+      "course": 2,
+      "session": 1,
+      "counselor": "Jackson Hoodle",
       "location": "UT",
       "max_enrollees": 10
     }
