@@ -18,7 +18,7 @@ def _get_sessions():
     return sessions
 
 
-def check_overlapping_enrollment(user, course_to_enroll):
+def has_overlapping_enrollment(user, course_to_enroll):
     enrollments = user.enrollments.all()
     for enrollment in enrollments:
         if do_sessions_overlap(enrollment.session, course_to_enroll.session):

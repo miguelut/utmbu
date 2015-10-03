@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from mbu.models import Troop, Scout, Scoutmaster, CourseInstance, TimeBlock, MeritBadgeUniversity
 from mbu.forms import ScoutProfileForm, ScoutmasterProfileForm
-from mbu.course_utils import do_sessions_overlap, check_overlapping_enrollment
+from mbu.course_utils import do_sessions_overlap, has_overlapping_enrollment
 
 
 class EditScoutProfileTests(TestCase):
@@ -170,15 +170,24 @@ class CourseEnrollmentTests(TestCase):
         self.client.login(username='Gracie', password='Gracie')
         self.user = User.objects.get(username='Gracie')
 
-    def test_should_enroll_in_course(self):
-        request = {
-            'course_instance_id': '1'
-        }
-        response = self.client.post('/scout/enroll_course/', request)
-        self.assertEqual(200, response.status_code)
+    def should_enroll_in_course(self):
+        request = {'course_instance_id': '1'}
 
-    def test_should_not_enroll_in_course_if_overlapping_session(self):
-        self.assertTrue(True)
+        response = self.client.post('/scout/enroll_course/', request)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('{"result": true}', response.content)
+
+    def should_not_enroll_in_course_if_overlapping_session(self):
+        course_instance = CourseInstance.objects.get(pk=1)
+        self.user.enrollments.add(course_instance)
+        self.user.save()
+        request = {'course_instance_id': '2'}
+
+        response = self.client.post('/scout/enroll_course/', request)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('{"result": false}', response.content)
 
 
 class CourseUtilsTest(TestCase):
@@ -248,13 +257,13 @@ class CourseUtilsTest(TestCase):
         self.user.save()
         overlapping_course_to_enroll = CourseInstance.objects.get(pk=2)
 
-        result = check_overlapping_enrollment(self.user, overlapping_course_to_enroll)
+        result = has_overlapping_enrollment(self.user, overlapping_course_to_enroll)
 
         self.assertTrue(result)
 
     def should_return_false_if_enrolling_in_course_with_no_overlaps(self):
         overlapping_course_to_enroll = CourseInstance.objects.get(pk=2)
 
-        result = check_overlapping_enrollment(self.user, overlapping_course_to_enroll)
+        result = has_overlapping_enrollment(self.user, overlapping_course_to_enroll)
 
         self.assertFalse(result)
