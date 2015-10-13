@@ -4,18 +4,41 @@
 
 .social-login {
     margin: 0 auto;
+    width: 90%;
+    justify-items: center;
+    justify-content: center;
+    justify-self: center;
 }
 .social-login .facebook, 
 .social-login .googleplus {
+    display: flex;
+    align-items: center;
+    color: white;
     border-radius: 5px;
-    width: 200px;
 }
 
 .social-login .login-icons {
     font-size: 2.5em;
-    margin-right: 4px;
+    margin-right: 6px;
 }
 
+.fa {
+    color: white;
+}
+
+.facebook{
+    background-color: #3b5998;
+    font-weight: 600;
+}
+
+.googleplus {
+    background-color: #dc4e41;
+    font-weight: 600;
+}
+
+hr {
+    border-top: 1px solid #aaa;
+}
 
 .center {
     justify: center;
@@ -52,8 +75,16 @@
     background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Boy_Scouts_of_America_corporate_trademark.svg/890px-Boy_Scouts_of_America_corporate_trademark.svg.png");
     background-repeat: no-repeat;
     background-position: center center;
+    height: 300px;
 }
 
+.first-div{
+    margin-top: 30px;
+}
+
+.mbu-navbar {
+    margin-bottom: 0px;
+}
 
 /* dropzone styling */
 

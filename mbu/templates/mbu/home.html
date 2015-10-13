@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
 
-
+{% block hero %}
+    <div class="jumbotron hero-image"></div>
+{% endblock %}
+{% block header %}
+{%  endblock %}
 {% block container %}
-    <div class="jumbotron hero-image">
-        <div class="container">
+    <div class="container">
             {% block content %}
-                
+
                 <h1>Hello, scouts!</h1>
-                <p>Join the wonderful world of MAGIC MIKE...</p>
+                <p>Welcome to the University of Texas Merit Badge University Registration website!</p>
                 <p>
-                    <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Register</a>
-                    <a class="btn btn-primary btn-lg btn-warning" href="{% url 'login' %}" role="button">Login</a>
+                    <a class="btn btn-primary btn-lg btn-warning" href="{% url 'login' %}" role="button">Login or Register</a>
                 </p>
             {% endblock content %}
         </div>
-    </div>
 {% endblock container %}
