@@ -88,37 +88,24 @@ hr {
 
 /* dropzone styling */
 
-#dropzone-div {
-    position: relative;
+.add-edit-container {
+    margin-top: 30px;
 }
 
-#added-course-dropzone {
-    float: right;
-}
-
-.course-dropzones {
-    background-color: #a6e1ec;
-    width: 475px;
-    height: 800px;
-    margin: 100px 0;
-    display: inline-block;
-}
-
-.course-dropzones ul {
-    list-style-type:  none;
-    padding-left: 0;
-}
-
-.course-dropzones li {
-    margin: 25px 0px 25px 25px
-}
-
-.course-dropzones h3 {
-    margin-left: 25px;
-}
-
-.draggable-course {
-    background-color: #c12e2a;
-    width: 425px;
+.add-edit-session {
     height: 50px;
+    border: 2px solid;
+}
+.add-edit-instance {
+    height: 50px;
+    border: 2px solid;
+}
+.add-edit-lunch {
+    height: 50px;
+    border: 2px solid;
+}
+
+.add-edit-available{
+    height: 250px;
+    border: 2px solid;
 }
