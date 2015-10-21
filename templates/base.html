@@ -4,12 +4,12 @@
 <head>
     <title>{% block title %}Merit Badge University{% endblock %}</title>
 </head>
-<body class="container">
+<body>
 {% block infobar %}
 {% endblock %}
 {% block navbar %}
     <nav class="navbar navbar-default mbu-navbar" role="navigation">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#header-navbar-collapse" aria-expanded="false">
@@ -46,9 +46,11 @@
 {% endif %}
 <div id="message">{{ message }}</div>
 
+<div class="container">
 {% block container %}
     {% block content %}{% endblock content %}
 {% endblock container %}
+</div>
 
 
 <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css" %}"/>
