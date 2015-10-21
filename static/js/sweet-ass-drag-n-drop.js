@@ -1,7 +1,9 @@
 var SweetAssDragNDrop = {
     init: function() {
         $(".draggable-course").draggable({
-            revert: 'invalid'
+            revert: 'invalid',
+            appendTo: 'body',
+            helper: 'clone'
         });
 
         $("#course-catalog-dropzone").droppable({
