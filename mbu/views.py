@@ -224,7 +224,8 @@ def view_troop_enrollees(request):
     troop = Troop.objects.get(scoutmaster=scoutmaster)
     scouts = Scout.objects.all().filter(troop=troop)
     args.update({'scouts': scouts})
-    return render(request, 'scoutmaster/view_troop.html', args)
+    args.update({'troop': troop})
+    return render(request, 'mbu/view_troop.html', args)
 
 
 def sm_signup(request):
