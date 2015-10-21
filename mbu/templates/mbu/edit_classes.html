@@ -17,7 +17,6 @@
                     </div>
                     </div>
                     <div class="row">
-
                             <div class="col-xs-2">
                                 <div class="add-edit-session">Session 1</div>
                                 <div class="add-edit-session">Session 2</div>
@@ -33,7 +32,14 @@
                                 <div class="add-edit-instance"></div>
                             </div>
                         <div class="col-xs-5 add-edit-available">
-
+                            <ul id="course-catalog-list">
+                                {% for course_instance in course_catalog %}
+                                    <li id="{{ course_instance.id }}" class="draggable-course">
+                                        {{ course_instance.course }}<br>
+                                        {{ course_instance.session }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 </div>
