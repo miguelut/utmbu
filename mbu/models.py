@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
-from mbu.model_utils import _send_sm_request_email, _get_hash_str
+from mbu.model_utils import send_sm_request_email, get_hash_str
+
 
 # This class will represent the yearly MBU so we can
 # retain information across multiple years
@@ -38,6 +39,8 @@ class Troop(models.Model):
 class Scout(models.Model):
     user = models.OneToOneField(User)
     troop = models.ForeignKey(Troop, blank=True, null=True)
+    paid = models.BooleanField(default=False)
+    waiver = models.BooleanField(default=False)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
@@ -69,9 +72,9 @@ class ScoutmasterRequest(models.Model):
     key = models.CharField(max_length=64, unique=True)
 
     def save(self, *args, **kwargs):
-        self.key = _get_hash_str(self.email)
+        self.key = get_hash_str(self.email)
         super(ScoutmasterRequest, self).save(args, kwargs)
-        _send_sm_request_email(email=self.email, key=self.key, troop=self.troop)
+        send_sm_request_email(email=self.email, key=self.key, troop=self.troop)
 
 
 class ScoutmasterRequestAdmin(admin.ModelAdmin):

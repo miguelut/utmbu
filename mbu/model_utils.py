@@ -6,14 +6,15 @@ from django.conf import settings
 
 __author__ = 'michael'
 
-def _get_hash_str(email=None):
+
+def get_hash_str(email=None):
     key = hashlib.sha256()
     key.update(email.encode())
     key.update(b'Elmertzilch')
     return key.hexdigest()
 
 
-def _send_sm_request_email(email=None, key=None, troop=None):
+def send_sm_request_email(email=None, key=None, troop=None):
     """This method will send the confirmation email to a Scoutmaster.
 
     Keyword arguments:

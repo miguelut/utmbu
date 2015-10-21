@@ -9,9 +9,16 @@ html, body {
 
 .social-login {
     margin: 0 auto;
+    width: 90%;
+    justify-items: center;
+    justify-content: center;
+    justify-self: center;
 }
 .social-login .facebook, 
 .social-login .googleplus {
+    display: flex;
+    align-items: center;
+    color: white;
     border-radius: 5px;
     width: 95%;
     color: #fff;
@@ -45,10 +52,27 @@ html, body {
 }
 
 .social-login .login-icons {
-    font-size: 2.0em;
-    margin: 0 0.2em;
+    font-size: 2.5em;
+    margin-right: 6px;
 }
 
+.fa {
+    color: white;
+}
+
+.facebook{
+    background-color: #3b5998;
+    font-weight: 600;
+}
+
+.googleplus {
+    background-color: #dc4e41;
+    font-weight: 600;
+}
+
+hr {
+    border-top: 1px solid #aaa;
+}
 
 .center {
     justify: center;
@@ -85,4 +109,54 @@ html, body {
     background-image: url("https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Boy_Scouts_of_America_corporate_trademark.svg/890px-Boy_Scouts_of_America_corporate_trademark.svg.png");
     background-repeat: no-repeat;
     background-position: center center;
+    height: 300px;
+}
+
+.first-div{
+    margin-top: 30px;
+}
+
+.mbu-navbar {
+    margin-bottom: 0px;
+}
+
+/* dropzone styling */
+
+.add-edit-container {
+    margin-top: 30px;
+}
+
+.add-edit-session {
+    height: 50px;
+    border: 2px solid;
+}
+.add-edit-instance {
+    height: 50px;
+    border: 2px solid;
+}
+.add-edit-lunch {
+    height: 50px;
+    border: 2px solid;
+}
+
+.add-edit-available {
+    height: 250px;
+    border: 2px solid;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.add-edit-available ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.add-edit-available li {
+    margin: 25px 0px;
+}
+
+.draggable-course {
+    background-color: #c12e2a;
+    width: 425px;
+    height: 50px;
 }

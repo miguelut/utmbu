@@ -1,0 +1,62 @@
+[
+  {
+    "model": "mbu.MeritBadgeUniversity",
+    "pk": 1,
+    "fields": {
+      "name": "2015 MBU",
+      "year": "2015-01-01",
+      "current": true
+    }
+  },
+
+  {
+    "model": "mbu.Course",
+    "pk": 1,
+    "fields": {
+      "name": "Car Driving",
+      "requirements": "None"
+    }
+  },
+  {
+    "model": "mbu.Course",
+    "pk": 2,
+    "fields": {
+      "name": "Cat Surfing",
+      "requirements": "None"
+    }
+  },
+
+  {
+    "model": "mbu.TimeBlock",
+    "pk": 1,
+    "fields": {
+      "name": "Session 1",
+      "start_time": "2015-03-16T08:00:00",
+      "end_time": "2015-03-16T09:00:00",
+      "mbu": 1
+    }
+  },
+
+  {
+    "model": "mbu.CourseInstance",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "session": 1,
+      "counselor": "Eric Clapton",
+      "location": "UT",
+      "max_enrollees": 10
+    }
+  },
+  {
+    "model": "mbu.CourseInstance",
+    "pk": 2,
+    "fields": {
+      "course": 2,
+      "session": 1,
+      "counselor": "Jackson Hoodle",
+      "location": "UT",
+      "max_enrollees": 10
+    }
+  }
+]

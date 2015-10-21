@@ -7,12 +7,15 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
+from django.views.decorators.http import require_http_methods
 from paypal.standard.forms import PayPalPaymentsForm
+from django.http import JsonResponse
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from mbu.scout_forms import EditClassesForm
 from utmbu import settings
+from mbu.course_utils import has_overlapping_enrollment
 
 logger = logging.getLogger(__name__)
 
@@ -177,7 +180,34 @@ def scout_edit_classes(request):
 
     args.update({'form': form})
     args.update(csrf(request))
+
+    course_catalog = CourseInstance.objects.exclude(enrollees=user)
+    args.update({'course_catalog': course_catalog})
+    course_enrollments = user.enrollments.all()
+    args.update({'course_enrollments': course_enrollments})
     return render(request, 'mbu/edit_classes.html', args)
+
+
+@require_http_methods(["POST"])
+def enroll_course(request):
+    course_instance_id = request.POST.get('course_instance_id')
+    course_instance = CourseInstance.objects.get(pk=course_instance_id)
+    user = request.user
+    if has_overlapping_enrollment:
+        return JsonResponse({'result': False})
+    user.enrollments.add(course_instance)
+    user.save()
+    return JsonResponse({'result': True})
+
+
+@require_http_methods(["POST"])
+def unenroll_course(request):
+    course_instance_id = request.POST.get('course_instance_id')
+    course_instance = CourseInstance.objects.get(pk=course_instance_id)
+    user = request.user
+    user.enrollments.remove(course_instance)
+    user.save()
+    return JsonResponse({'result': True})
 
 
 def view_registered_classes(request):

@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from mbu.models import Troop, Scout, Scoutmaster
+from mbu.models import Troop, Scout, Scoutmaster, CourseInstance, TimeBlock, MeritBadgeUniversity
 from mbu.forms import ScoutProfileForm, ScoutmasterProfileForm
+from mbu.course_utils import do_sessions_overlap, has_overlapping_enrollment
 
 
 class EditScoutProfileTests(TestCase):
@@ -160,3 +161,109 @@ class RegisterUserTypeTests(TestCase):
 
         self.assertEqual(0, Scoutmaster.objects.filter(user=self.user).count())
         self.assertRedirects(response, '/')
+
+
+class CourseEnrollmentTests(TestCase):
+    fixtures = ['test_users', 'test_courses_courseinstances']
+
+    def setUp(self):
+        self.client.login(username='Gracie', password='Gracie')
+        self.user = User.objects.get(username='Gracie')
+
+    def should_enroll_in_course(self):
+        request = {'course_instance_id': '1'}
+
+        response = self.client.post('/scout/enroll_course/', request)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('{"result": true}', response.content)
+
+    def should_not_enroll_in_course_if_overlapping_session(self):
+        course_instance = CourseInstance.objects.get(pk=1)
+        self.user.enrollments.add(course_instance)
+        self.user.save()
+        request = {'course_instance_id': '2'}
+
+        response = self.client.post('/scout/enroll_course/', request)
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual('{"result": false}', response.content)
+
+
+class CourseUtilsTest(TestCase):
+    fixtures = ['test_users', 'test_courses_courseinstances']
+
+    def setUp(self):
+        self.client.login(username='Gracie', password='Gracie')
+        self.user = User.objects.get(username='Gracie')
+
+    def sessions_should_overlap_if_they_have_same_start_end_times(self):
+        mbu = MeritBadgeUniversity.objects.get(pk=1)
+        session1 = TimeBlock.objects.create(name='session1', start_time='2015-01-01 00:00:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+        session2 = TimeBlock.objects.create(name='session2', start_time='2015-01-01 00:00:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+
+        result = do_sessions_overlap(session1, session2)
+
+        self.assertTrue(result)
+
+    def sessions_should_overlap_if_one_session_occurs_within_another_starting_at_same_time(self):
+        mbu = MeritBadgeUniversity.objects.get(pk=1)
+        session1 = TimeBlock.objects.create(name='session1', start_time='2015-01-01 00:00:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+        overlapping_session = TimeBlock.objects.create(name='session2', start_time='2015-01-01 00:00:00', end_time='2015-01-01 00:30:00', mbu=mbu)
+
+        result = do_sessions_overlap(session1, overlapping_session)
+
+        self.assertTrue(result)
+
+    def sessions_should_overlap_if_one_session_occurs_within_another_ending_at_same_time(self):
+        mbu = MeritBadgeUniversity.objects.get(pk=1)
+        session1 = TimeBlock.objects.create(name='session1', start_time='2015-01-01 00:00:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+        overlapping_session = TimeBlock.objects.create(name='session2', start_time='2015-01-01 00:30:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+
+        result = do_sessions_overlap(session1, overlapping_session)
+
+        self.assertTrue(result)
+
+    def sessions_should_overlap_if_one_session_occurs_within_another(self):
+        mbu = MeritBadgeUniversity.objects.get(pk=1)
+        session1 = TimeBlock.objects.create(name='session1', start_time='2015-01-01 00:00:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+        overlapping_session = TimeBlock.objects.create(name='session2', start_time='2015-01-01 00:30:00', end_time='2015-01-01 00:35:00', mbu=mbu)
+
+        result = do_sessions_overlap(session1, overlapping_session)
+
+        self.assertTrue(result)
+
+    def sessions_should_not_overlap_if_one_session_occurs_before_another(self):
+        mbu = MeritBadgeUniversity.objects.get(pk=1)
+        session1 = TimeBlock.objects.create(name='session1', start_time='2015-01-01 00:00:00', end_time='2015-01-01 01:00:00', mbu=mbu)
+        overlapping_session = TimeBlock.objects.create(name='session2', start_time='2015-01-01 01:00:00', end_time='2015-01-01 02:00:00', mbu=mbu)
+
+        result = do_sessions_overlap(session1, overlapping_session)
+
+        self.assertFalse(result)
+
+    def sessions_should_not_overlap_if_one_session_occurs_after_another(self):
+        mbu = MeritBadgeUniversity.objects.get(pk=1)
+        session1 = TimeBlock.objects.create(name='session1', start_time='2015-01-01 02:00:00', end_time='2015-01-01 03:00:00', mbu=mbu)
+        overlapping_session = TimeBlock.objects.create(name='session2', start_time='2015-01-01 01:00:00', end_time='2015-01-01 02:00:00', mbu=mbu)
+
+        result = do_sessions_overlap(session1, overlapping_session)
+
+        self.assertFalse(result)
+
+    def should_return_true_if_enrolling_in_overlapping_course(self):
+        course_instance = CourseInstance.objects.get(pk=1)
+        self.user.enrollments.add(course_instance)
+        self.user.save()
+        overlapping_course_to_enroll = CourseInstance.objects.get(pk=2)
+
+        result = has_overlapping_enrollment(self.user, overlapping_course_to_enroll)
+
+        self.assertTrue(result)
+
+    def should_return_false_if_enrolling_in_course_with_no_overlaps(self):
+        overlapping_course_to_enroll = CourseInstance.objects.get(pk=2)
+
+        result = has_overlapping_enrollment(self.user, overlapping_course_to_enroll)
+
+        self.assertFalse(result)
