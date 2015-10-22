@@ -1,13 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="panel panel-default">
-        <div class="panel-heading">{{ troop }}</div>
-        <div class="panel-body">
-            <ul>
-                {% for scout in scouts %}
-                    <li>{{ scout }}</li>
-                {% endfor %}
-            </ul>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ troop }}</div>
+            {% for scout, enrollments in scouts_and_enrollments.items %}
+            <div class="panel-heading">
+                <a role="button" data-toggle="collapse" href="#collapse{{ scout.pk }}" aria-expanded="false" aria-controls="collapse{{ scout.pk }}">
+                    <h4>{{ scout.user.first_name }} {{ scout.user.last_name }}</h4>
+                </a>
+            </div>
+            <div id="collapse{{ scout.pk }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ scout.pk }}">
+                <div class="panel-body">
+                    <ul>
+                        {% for enrollment in enrollments %}
+                            <li>{{ enrollment }}</li>
+                        {% empty %}
+                            No course enrollments
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock content %}

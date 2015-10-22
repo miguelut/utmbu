@@ -1,0 +1,12 @@
+[
+  {
+    "model": "mbu.Scout",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "troop": 1,
+      "paid": true,
+      "waiver": true
+    }
+  }
+]

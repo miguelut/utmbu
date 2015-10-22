@@ -3,6 +3,7 @@ from django.test import TestCase
 from mbu.models import Troop, Scout, Scoutmaster, CourseInstance, TimeBlock, MeritBadgeUniversity
 from mbu.forms import ScoutProfileForm, ScoutmasterProfileForm
 from mbu.course_utils import do_sessions_overlap, has_overlapping_enrollment
+from mbu.views import _create_scout_enrollment_dict
 
 
 class EditScoutProfileTests(TestCase):
@@ -188,6 +189,26 @@ class CourseEnrollmentTests(TestCase):
 
         self.assertEqual(200, response.status_code)
         self.assertEqual('{"result": false}', response.content)
+
+
+class HelperMethods(TestCase):
+    fixtures = ['test_users',
+                'test_courses_courseinstances',
+                'test_scouts',
+                'test_troops_councils'
+               ]
+
+    def should_create_scout_class_dict(self):
+        scouts = Scout.objects.all()
+
+        result = _create_scout_enrollment_dict(scouts)
+        first_enrollment = result[scouts[0]][0]
+        second_enrollment = result[scouts[0]][1]
+        number_of_enrollments = len(result[scouts[0]])
+
+        self.assertEqual(2, number_of_enrollments)
+        self.assertEqual(CourseInstance.objects.get(pk=1), first_enrollment)
+        self.assertEqual(CourseInstance.objects.get(pk=2), second_enrollment)
 
 
 class CourseUtilsTest(TestCase):
