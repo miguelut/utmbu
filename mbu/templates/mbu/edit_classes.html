@@ -1,50 +1,91 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="add-edit-container panel panel-default">
-        <div class="panel-heading">Hello!</div>
-        <div class="panel-body">
-            <form method="post" action="./">
-                {% csrf_token %}
-
-                <div id="added-course-dropzone" class="course-dropzones">
-                    <div class="row">
-                    <div class="col-xs-7">
-                        <h3>Enrolled Courses</h3>
-                    </div>
-                        <div class="col-xs-5">
-                        <h3>Course Catalog</h3>
-                    </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-2">
-                            <div class="add-edit-session">Session 1</div>
-                            <div class="add-edit-session">Session 2</div>
-                            <div class="add-edit-session">Lunch</div>
-                            <div class="add-edit-session">Session 3</div>
-                            <div class="add-edit-session">Session 4</div>
-                        </div>
-                        <div class="col-xs-5 course-dropzones">
-                            <div class="add-edit-instance"></div>
-                            <div class="add-edit-instance"></div>
-                            <div class="add-edit-lunch"></div>
-                            <div class="add-edit-instance"></div>
-                            <div class="add-edit-instance"></div>
-                        </div>
-                        <div class="col-xs-5 add-edit-available">
-                            <ul id="course-catalog-list">
-                                {% for course_instance in course_catalog %}
-                                    <li id="{{ course_instance.id }}" class="draggable-course">
-                                        {{ course_instance.course }}<br>
-                                        {{ course_instance.session }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
+    
+    <div class="row schedule">
+        <div class="col-md-7">
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Session</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>8:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>9:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>10:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>11:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>12:00</td>
+                        <td><em>Lunch</em></td>
+                    </tr>
+                    <tr>
+                        <td>1:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>2:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>3:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>4:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                    <tr>
+                        <td>5:00</td>
+                        <td><em>Empty</em></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5 class-list">
+            <div class="row">
+                <div class="col-md-3">
+                    Class A
                 </div>
-                <input type="submit" value="Submit" class="btn btn-primary"/>
-            </form>
+                <div class="col-md-9">
+                    This is a cool class you should take
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    Class B
+                </div>
+                <div class="col-md-9">
+                    This is another cool class you should take
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    Class C
+                </div>
+                <div class="col-md-9">
+                    This class is boring
+                </div>
+            </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+        
 {% endblock %}

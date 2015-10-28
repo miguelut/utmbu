@@ -1,3 +1,8 @@
+html, body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
 .social-login-container {
     text-align: center;
 }
@@ -15,6 +20,35 @@
     align-items: center;
     color: white;
     border-radius: 5px;
+    width: 95%;
+    color: #fff;
+}
+.social-login a {
+    padding-left: 0.4em;
+    padding-right: 0;
+    text-align: left;
+    height: 3.0em;
+}
+
+.social-login .facebook {
+    background-color: #3b5998;
+}
+.social-login .googleplus {
+    background-color: #dd4b39;
+}
+
+.social-login .social-icon {
+    text-align: left;
+    width: 3.5em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.social-login .social-text {
+    height: 100%;
+    text-align: left;
+    display: inline-block;
+    font-weight: 300;
 }
 
 .social-login .login-icons {
@@ -88,41 +122,15 @@ hr {
 
 /* dropzone styling */
 
-.add-edit-container {
-    margin-top: 30px;
+
+.schedule {
+    
 }
 
-.add-edit-session {
-    height: 50px;
-    border: 2px solid;
-}
-.add-edit-instance {
-    height: 50px;
-    border: 2px solid;
-}
-.add-edit-lunch {
-    height: 50px;
-    border: 2px solid;
-}
-
-.add-edit-available {
-    height: 250px;
-    border: 2px solid;
+.schedule .class-list {
     overflow-y: scroll;
-    overflow-x: hidden;
 }
 
-.add-edit-available ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.add-edit-available li {
-    margin: 25px 0px;
-}
-
-.draggable-course {
-    background-color: #c12e2a;
-    width: 425px;
-    height: 50px;
+.schedule .button {
+    
 }
