@@ -38,9 +38,10 @@ urlpatterns += patterns(
     '',
     url(r'^scoutmaster/register/$', 'mbu.views.sm_signup', name='sm_signup'),
     url(r'^scoutmaster/register/complete/(?P<key>.+)$', 'mbu.views.sm_complete_signup', name='sm_complete_signup'),
-    url(r'^scoutmaster/viewtroop/$', 'mbu.views.view_troop_enrollees', name='sm_view_troop'),
+    url(r'^scoutmaster/troop/$', 'mbu.views.view_troop_enrollees', name='sm_view_troop'),
     url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'mbu.views.sm_view_class', name='sm_view_classes'),
-    url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile')
+    url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile'),
+    url(r'^scoutmaster/troop/report/payment$', 'mbu.views.sm_view_troop_payment', name='sm_troop_payment')
 )
 
 #Paypal URLS
