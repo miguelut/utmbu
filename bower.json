@@ -1,0 +1,20 @@
+{
+  "name": "UTMBU",
+  "homepage": "https://github.com/miguelut/utmbu",
+  "authors": [
+    "Daniel Yim <addison.freeman@parivedasolutions.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
