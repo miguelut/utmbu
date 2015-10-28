@@ -1,0 +1,19 @@
+{
+  "name": "utmbu",
+  "version": "1.0.0",
+  "description": "utmbu =====",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miguelut/utmbu.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miguelut/utmbu/issues"
+  },
+  "homepage": "https://github.com/miguelut/utmbu#readme"
+}
