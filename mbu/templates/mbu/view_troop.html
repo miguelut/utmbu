@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{ troop }}</div>
+            {% for scout, enrollments in scouts_and_enrollments.items %}
+            <div class="panel-heading">
+                <a role="button" data-toggle="collapse" href="#collapse{{ scout.pk }}" aria-expanded="false" aria-controls="collapse{{ scout.pk }}">
+                    <h4>{{ scout.user.first_name }} {{ scout.user.last_name }}</h4>
+                </a>
+            </div>
+            <div id="collapse{{ scout.pk }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ scout.pk }}">
+                <div class="panel-body">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Course Name</th>
+                                <th>Session</th>
+                                <th>Time</th>
+                                <th>Room</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for enrollment in enrollments %}
+                                <tr>
+                                    <td>{{ enrollment.course.name }}</td>
+                                    <td>{{ enrollment.session.name }}</td>
+                                    <td>{{ enrollment.session.start_time }} - {{ enrollment.session.end_time }}</td>
+                                    <td>{{ enrollment.location }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">No course enrollments</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

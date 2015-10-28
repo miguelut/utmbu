@@ -223,8 +223,18 @@ def view_troop_enrollees(request):
     scoutmaster = Scoutmaster.objects.get(user=request.user)
     troop = Troop.objects.get(scoutmaster=scoutmaster)
     scouts = Scout.objects.all().filter(troop=troop)
-    args.update({'scouts': scouts})
-    return render(request, 'scoutmaster/view_troop.html', args)
+    scouts_and_enrollments = _create_scout_enrollment_dict(scouts)
+    args.update({'scouts_and_enrollments': scouts_and_enrollments})
+    args.update({'troop': troop})
+    return render(request, 'mbu/view_troop.html', args)
+
+
+def _create_scout_enrollment_dict(scouts):
+    scout_course_dict = {}
+    for scout in scouts:
+        course_enrollments = Scout.objects.get(pk=scout.pk).user.enrollments.all()
+        scout_course_dict[scout] = course_enrollments
+    return scout_course_dict
 
 
 def sm_signup(request):
