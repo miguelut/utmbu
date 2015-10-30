@@ -297,22 +297,32 @@ def pay_with_paypal(request):
     return render(request, 'mbu/payment.html', args)
 
 
-def sm_view_troop_payment(request):
+def sm_view_troop_payments(request):
     args = {'data': []}
     scoutmaster = Scoutmaster.objects.get(user=request.user)
     troop = Troop.objects.get(scoutmaster=scoutmaster)
     scouts = Scout.objects.all().filter(troop=troop)
     for scout in scouts:
-        amount_invoiced = _get_amount_invoiced(scout)
-        amount_paid = _get_amount_paid(scout)
-        amount_owed = amount_invoiced - amount_paid
-        args['data'].append(
-            {'scout': scout.user.first_name + ' ' + scout.user.last_name,
-             'amount_owed': amount_owed,
-             'amount_invoiced': amount_invoiced,
-             'amount_paid': amount_paid
-             })
-    return render(request, 'mbu/payment_report.html', args)
+        args['data'].append(_create_scout_payment_data(scout))
+    return render(request, 'mbu/sm_report_troop_payments.html', args)
+
+
+def scout_view_payments(request):
+    scout = Scout.objects.get(user=request.user)
+    args = _create_scout_payment_data(scout)
+    return render(request, 'mbu/scout_report_payments.html', args)
+
+
+def _create_scout_payment_data(scout):
+    amount_invoiced = _get_amount_invoiced(scout)
+    amount_paid = _get_amount_paid(scout)
+    amount_owed = amount_invoiced - amount_paid
+    return {
+        'scout': scout,
+        'amount_owed': amount_owed,
+        'amount_invoiced': amount_invoiced,
+        'amount_paid': amount_paid
+    }
 
 
 def _get_amount_invoiced(scout):
@@ -322,7 +332,7 @@ def _get_amount_invoiced(scout):
 
 
 def _get_amount_paid(scout):
-    amount = 0.0
+    amount = 0.00
     payments = Payment.objects.all().filter(scout=scout)
     for payment in payments:
         amount += payment.amount
