@@ -12,12 +12,16 @@
             </thead>
             <tbody class="table-striped">
                 {% for course in enrollments %}
-                <tr>
-                    <td>{{ course.course.name }}</td>
-                    <td>{{ course.session.name }}</td>
-                    <td>{{ course.session.start_time }}</td>
-                    <td>{{ course.session.end_time }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ course.course.name }}</td>
+                        <td>{{ course.session.name }}</td>
+                        <td>{{ course.session.start_time }}</td>
+                        <td>{{ course.session.end_time }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No course enrollments</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
