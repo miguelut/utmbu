@@ -9,19 +9,23 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Scout</th>
-                            <th>Amount Invoiced</th>
-                            <th>Amount Paid</th>
-                            <th>Amount Owed</th>
+                            <th>Tracking Number</th>
+                            <th>Amount</th>
+                            <th>Timestamp</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>{{ scout.user.first_name }}  {{ scout.user.last_name }}</td>
-                            <td>{{ amount_invoiced }}</td>
-                            <td>{{ amount_paid }}</td>
-                            <td>{{ amount_owed }}</td>
-                        </tr>
+                        {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.tracking_number }}</td>
+                                <td>{{ payment.amount }}</td>
+                                <td>{{ payment.timestamp }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="3">No payments made</td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

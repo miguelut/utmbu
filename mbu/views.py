@@ -310,6 +310,8 @@ def sm_view_troop_payments(request):
 def scout_view_payments(request):
     scout = Scout.objects.get(user=request.user)
     args = _create_scout_payment_data(scout)
+    payments = Payment.objects.all().filter(scout=scout)
+    args.update({'payments': payments})
     return render(request, 'mbu/scout_report_payments.html', args)
 
 
