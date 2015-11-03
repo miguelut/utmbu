@@ -16,6 +16,7 @@ from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from mbu.scout_forms import EditClassesForm
 from utmbu import settings
 from mbu.course_utils import has_overlapping_enrollment
+from decimal import Decimal
 
 logger = logging.getLogger(__name__)
 
@@ -318,7 +319,7 @@ def scout_view_payments(request):
 def _create_scout_payment_data(scout):
     amount_invoiced = _get_amount_invoiced(scout)
     amount_paid = _get_amount_paid(scout)
-    amount_owed = amount_invoiced - amount_paid
+    amount_owed = Decimal(amount_invoiced) - Decimal(amount_paid)
     return {
         'scout': scout,
         'amount_owed': amount_owed,
@@ -334,8 +335,8 @@ def _get_amount_invoiced(scout):
 
 
 def _get_amount_paid(scout):
-    amount = 0.00
+    amount = Decimal(0.00)
     payments = Payment.objects.all().filter(scout=scout)
     for payment in payments:
-        amount += payment.amount
+        amount += Decimal(payment.amount)
     return amount

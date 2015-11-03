@@ -19,9 +19,9 @@
                         {% for scout_data in data %}
                             <tr>
                                 <td>{{ scout_data.scout.user.first_name }} {{ scout_data.scout.user.last_name }}</td>
-                                <td>{{ scout_data.amount_invoiced }}</td>
-                                <td>{{ scout_data.amount_paid }}</td>
-                                <td>{{ scout_data.amount_owed }}</td>
+                                <td>{{ scout_data.amount_invoiced|stringformat:"1.2f" }}</td>
+                                <td>{{ scout_data.amount_paid|stringformat:"1.2f" }}</td>
+                                <td>{{ scout_data.amount_owed|stringformat:"1.2f" }}</td>
                             </tr>
                         {% empty %}
                             <tr>
