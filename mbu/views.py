@@ -160,7 +160,7 @@ def view_class_requirements(request, id=-1):
 
 
 def view_reports(request):
-    return render(request, 'mbu/reports.html')
+    return render(request, 'mbu/report_landing.html')
 
 
 @permission_required('mbu.edit_scout_schedule', raise_exception=True)

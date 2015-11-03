@@ -149,10 +149,10 @@ MESSAGE_TAGS = {
 
 #MBU Settings
 DEFAULT_LINKS = [
-    {'href':'reports', 'label':'About'},
-    {'href':'reports', 'label':'FAQ'},
-    {'href':'reports', 'label':'Reports'},
-    {'href':'class_list', 'label':'Class List'}
+    {'href': 'reports', 'label': 'About'},
+    {'href': 'reports', 'label': 'FAQ'},
+    {'href': 'reports', 'label': 'Reports'},
+    {'href': 'class_list', 'label': 'Class List'}
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
