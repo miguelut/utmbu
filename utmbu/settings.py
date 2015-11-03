@@ -174,3 +174,5 @@ MBU_LOCATION = 'The University of Texas at Austin'
 PAYPAL_RECEIVER_EMAIL='mbu@vexule.com'
 PAYPAL_TEST=True
 PAYPAL_NOTIFY_URL='http://localhost:8080/paypal/notify'
+
+PRICE_PER_COURSE = 7.5

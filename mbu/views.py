@@ -280,8 +280,8 @@ def populate_courses(request):
     messages.add_message(request, messages.SUCCESS, 'Courses updated.')
     return redirect('mbu_home')
 
-def pay_with_paypal(request):
 
+def pay_with_paypal(request):
     paypal_dict = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
         'amount': '100', # calculate this amount dynamically
@@ -295,3 +295,47 @@ def pay_with_paypal(request):
     form = PayPalPaymentsForm(initial=paypal_dict)
     args = {'form': form}
     return render(request, 'mbu/payment.html', args)
+
+
+def sm_view_troop_payments(request):
+    args = {'data': []}
+    scoutmaster = Scoutmaster.objects.get(user=request.user)
+    troop = Troop.objects.get(scoutmaster=scoutmaster)
+    scouts = Scout.objects.all().filter(troop=troop)
+    for scout in scouts:
+        args['data'].append(_create_scout_payment_data(scout))
+    return render(request, 'mbu/sm_report_troop_payments.html', args)
+
+
+def scout_view_payments(request):
+    scout = Scout.objects.get(user=request.user)
+    args = _create_scout_payment_data(scout)
+    payments = Payment.objects.all().filter(scout=scout)
+    args.update({'payments': payments})
+    return render(request, 'mbu/scout_report_payments.html', args)
+
+
+def _create_scout_payment_data(scout):
+    amount_invoiced = _get_amount_invoiced(scout)
+    amount_paid = _get_amount_paid(scout)
+    amount_owed = amount_invoiced - amount_paid
+    return {
+        'scout': scout,
+        'amount_owed': amount_owed,
+        'amount_invoiced': amount_invoiced,
+        'amount_paid': amount_paid
+    }
+
+
+def _get_amount_invoiced(scout):
+    enrollments = scout.user.enrollments.all()
+    number_of_enrollments = len(enrollments)
+    return settings.PRICE_PER_COURSE * number_of_enrollments
+
+
+def _get_amount_paid(scout):
+    amount = 0.00
+    payments = Payment.objects.all().filter(scout=scout)
+    for payment in payments:
+        amount += payment.amount
+    return amount

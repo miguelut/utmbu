@@ -12,12 +12,19 @@
             </thead>
             <tbody class="table-striped">
                 {% for course in enrollments %}
-                <tr>
-                    <td>{{ course.course.name }}</td>
-                    <td>{{ course.session.name }}</td>
-                    <td>{{ course.session.start_time }}</td>
-                    <td>{{ course.session.end_time }}</td>
-                </tr>
+                    <tr>
+                        <td>{{ course.course.name }}</td>
+                        <td>{{ course.session.name }}</td>
+                        <td>{{ course.session.start_time }}</td>
+                        <td>{{ course.session.end_time }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">
+                            No course enrollments<br><br>
+                            <a href="{% url 'scout_edit_classes' %}"><button class="btn-primary">Click here to enroll</button></a>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

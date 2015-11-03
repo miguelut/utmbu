@@ -30,7 +30,8 @@ urlpatterns += patterns(
     url(r'^scout/viewclasses/$', 'mbu.views.view_registered_classes', name='scout_view_classes'),
     url(r'^scout/profile/edit/$', 'mbu.views.edit_scout_profile', name='scout_edit_profile'),
     url(r'^scout/enroll_course/$', 'mbu.views.enroll_course', name='scout_enroll_course'),
-    url(r'^scout/unenroll_course/$', 'mbu.views.unenroll_course', name='scout_unenroll_course')
+    url(r'^scout/unenroll_course/$', 'mbu.views.unenroll_course', name='scout_unenroll_course'),
+    url(r'^scout/report/payments/$', 'mbu.views.scout_view_payments', name='scout_report_payments')
 )
 
 #Scoutmaster URLs
@@ -38,9 +39,10 @@ urlpatterns += patterns(
     '',
     url(r'^scoutmaster/register/$', 'mbu.views.sm_signup', name='sm_signup'),
     url(r'^scoutmaster/register/complete/(?P<key>.+)$', 'mbu.views.sm_complete_signup', name='sm_complete_signup'),
-    url(r'^scoutmaster/viewtroop/$', 'mbu.views.view_troop_enrollees', name='sm_view_troop'),
+    url(r'^scoutmaster/troop/$', 'mbu.views.view_troop_enrollees', name='sm_view_troop'),
     url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'mbu.views.sm_view_class', name='sm_view_classes'),
-    url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile')
+    url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile'),
+    url(r'^scoutmaster/troop/report/payments/$', 'mbu.views.sm_view_troop_payments', name='sm_report_troop_payments')
 )
 
 #Paypal URLS

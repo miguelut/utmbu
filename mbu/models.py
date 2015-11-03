@@ -39,7 +39,6 @@ class Troop(models.Model):
 class Scout(models.Model):
     user = models.OneToOneField(User)
     troop = models.ForeignKey(Troop, blank=True, null=True)
-    paid = models.BooleanField(default=False)
     waiver = models.BooleanField(default=False)
 
     def __str__(self):
@@ -110,3 +109,10 @@ class CourseInstance(models.Model):
 
     def __str__(self):
         return self.course.name + str(self.session)
+
+
+class Payment(models.Model):
+    timestamp = models.DateTimeField()
+    tracking_number = models.CharField(max_length=100)
+    amount = models.DecimalField(decimal_places=2, max_digits=6)
+    scout = models.ForeignKey(Scout)
