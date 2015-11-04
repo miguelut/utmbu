@@ -153,8 +153,6 @@ def view_class_list(request):
 def view_class_requirements(request, id=-1):
     args = {}
     args.update(csrf(request))
-    #if (id < 0):
-        #handle error
     args.update({'id': id})
     return render(request, 'mbu/classrequirements.html', args)
 

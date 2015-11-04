@@ -3,9 +3,11 @@
 	<div class="row">
         <div class="col-md-3" role="navigation">
             <ul class="nav nav-pills nav-stacked">
-                <li><a href="{% url 'scout_report_payments' %}">Payments</a></li>
-                <li><a href="{% url 'scout_report_payments' %}">Courses</a></li>
-                <li><a href="{% url 'scout_report_payments' %}">Requirements</a></li>
+                {% for report_link in report_links %}
+                    <li>
+                        <a href="{% url report_link.href %}">{{ report_link.label }}</a>
+                    </li>
+                {% endfor %}
             </ul>
         </div>
         <div class="col-md-9">

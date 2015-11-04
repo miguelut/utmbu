@@ -47,6 +47,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.login_redirect',
     'mbu.context_processors.default_links',
     'mbu.context_processors.add_links',
+    'mbu.context_processors.add_report_links',
 )
 
 # Application definition
@@ -151,7 +152,6 @@ MESSAGE_TAGS = {
 DEFAULT_LINKS = [
     {'href': 'reports', 'label': 'About'},
     {'href': 'reports', 'label': 'FAQ'},
-    {'href': 'reports', 'label': 'Reports'},
     {'href': 'class_list', 'label': 'Class List'}
 ]
 
