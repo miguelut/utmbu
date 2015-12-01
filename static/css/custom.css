@@ -145,4 +145,8 @@ hr {
         border-top: none !important;
         border-bottom: 1px solid #DDD !important;
     }
+
+    .jumbotron {
+        display: none;
+    }
 }
