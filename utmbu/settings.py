@@ -150,8 +150,8 @@ MESSAGE_TAGS = {
 
 #MBU Settings
 DEFAULT_LINKS = [
-    {'href': 'reports', 'label': 'About'},
-    {'href': 'reports', 'label': 'FAQ'},
+    {'href': 'mbu_home', 'label': 'About'},
+    {'href': 'mbu_home', 'label': 'FAQ'},
     {'href': 'class_list', 'label': 'Class List'}
 ]
 

@@ -36,11 +36,7 @@
                                 <li>
                                     <a href="{% url report_link.href %}">{{ report_link.label }}</a>
                                 </li>
-                                <li role="separator" class="divider"></li>
                             {% endfor %}
-                            <li>
-                                <a href="{% url 'reports' %}">View All Reports</a>
-                            </li>
                         </ul>
                     </li>
                     {% for link in links %}
