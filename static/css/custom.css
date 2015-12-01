@@ -134,3 +134,15 @@ hr {
 .schedule .button {
     
 }
+
+@media print {
+    .collapse {
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .panel-body {
+        border-top: none !important;
+        border-bottom: 1px solid #DDD !important;
+    }
+}
