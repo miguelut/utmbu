@@ -129,6 +129,11 @@ hr {
 
 .schedule .class-list {
     overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.class-dragable {
+    height: 30px;
 }
 
 .schedule .button {
