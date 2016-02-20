@@ -98,17 +98,17 @@ class TimeBlock(models.Model):
         return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))
 
 
-class CourseInstance(models.Model):
+class ScoutCourseInstance(models.Model):
     course = models.ForeignKey(Course)
-    session = models.ForeignKey(TimeBlock)
+    timeblock = models.ForeignKey(TimeBlock)
     counselor = models.CharField(max_length=100)
-    enrollees = models.ManyToManyField(User, related_name='enrollments', blank=True)
+    enrollees = models.ManyToManyField(Scout, related_name='enrollments', blank=True)
     teaching_assistants = models.ManyToManyField(User, related_name='assistant_courses', blank=True)
     location = models.CharField(max_length=100)
     max_enrollees = models.IntegerField()
 
     def __str__(self):
-        return self.course.name + str(self.session)
+        return self.course.name + str(self.timeblock)
 
 
 class Payment(models.Model):

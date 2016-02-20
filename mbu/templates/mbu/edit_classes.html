@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    
     <div class="row schedule">
         <div class="col-md-7">
             <table class="table table-striped">
@@ -12,46 +11,12 @@
                   </tr>
                 </thead>
                 <tbody>
+                    {% for enrollment in data.enrollments %}
                     <tr>
-                        <td>8:00</td>
-                        <td class="class-dropable"><em>Empty</em></td>
+                        <td>{{ enrollment.timeblock.start_time }} - {{ enrollment.timeblock.end_time }}</td>
+                        <td class="class-dropable">{{ enrollment.course.name }}</td>
                     </tr>
-                    <tr>
-                        <td>9:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>10:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>11:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>12:00</td>
-                        <td><em>Lunch</em></td>
-                    </tr>
-                    <tr>
-                        <td>1:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>2:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>3:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>4:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
-                    <tr>
-                        <td>5:00</td>
-                        <td><em>Empty</em></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

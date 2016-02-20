@@ -10,13 +10,14 @@ from django.contrib.auth.models import Permission, ContentType
 from django.views.decorators.http import require_http_methods
 from paypal.standard.forms import PayPalPaymentsForm
 from django.http import JsonResponse
+from mbu.viewmodels.scout import Schedule
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
-from mbu.scout_forms import EditClassesForm
 from utmbu import settings
 from mbu.course_utils import has_overlapping_enrollment
 from decimal import Decimal
+from pprint import PrettyPrinter
 
 logger = logging.getLogger(__name__)
 
@@ -75,7 +76,7 @@ def view_home_page(request):
 
 
 def _render_scout_homepage(request):
-    args = {'enrollments': request.user.enrollments.all()}
+    args = {'enrollments': Scout.objects.get(user=request.user).enrollments.all()}
     return render(request, 'mbu/scout_home.html', args)
 
 
@@ -145,7 +146,7 @@ def view_class_list(request):
         mbu = None
     if mbu is not None:
         sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
-        course_instances = CourseInstance.objects.filter(session__pk__in=sessions)
+        course_instances = ScoutCourseInstance.objects.filter(session__pk__in=sessions)
         args.update({'classlist': course_instances })
     return render(request, 'mbu/classlist.html', args)
 
@@ -161,24 +162,18 @@ def view_class_requirements(request, id=-1):
 def scout_edit_classes(request):
     args = {}
     user = request.user
-    form = EditClassesForm(user=user)
+    scout = Scout.objects.get(user=user)
+    data = Schedule(scout=scout)
     if request.POST:
-        form = EditClassesForm(request.POST, user=user)
-        if form.is_valid():
-            user.enrollments.clear()
-            for name, course_instance in form.cleaned_data.items():
-                if course_instance is not None:
-                    user.enrollments.add(course_instance)
-            user.save()
-            messages.add_message(request, messages.SUCCESS, 'Your schedule has been updated.')
-            return redirect('mbu_home')
+        data = Schedule(request.POST, scout=scout)
+        return redirect('mbu_home')
 
-    args.update({'form': form})
+    args.update({'data': data})
     args.update(csrf(request))
 
-    course_catalog = CourseInstance.objects.exclude(enrollees=user)
+    course_catalog = ScoutCourseInstance.objects.exclude(enrollees=scout)
     args.update({'course_catalog': course_catalog})
-    course_enrollments = user.enrollments.all()
+    course_enrollments = scout.enrollments.all()
     args.update({'course_enrollments': course_enrollments})
     return render(request, 'mbu/edit_classes.html', args)
 
@@ -186,7 +181,7 @@ def scout_edit_classes(request):
 @require_http_methods(["POST"])
 def enroll_course(request):
     course_instance_id = request.POST.get('course_instance_id')
-    course_instance = CourseInstance.objects.get(pk=course_instance_id)
+    course_instance = ScoutCourseInstance.objects.get(pk=course_instance_id)
     user = request.user
     if has_overlapping_enrollment:
         return JsonResponse({'result': False})
@@ -198,7 +193,7 @@ def enroll_course(request):
 @require_http_methods(["POST"])
 def unenroll_course(request):
     course_instance_id = request.POST.get('course_instance_id')
-    course_instance = CourseInstance.objects.get(pk=course_instance_id)
+    course_instance = ScoutCourseInstance.objects.get(pk=course_instance_id)
     user = request.user
     user.enrollments.remove(course_instance)
     user.save()
@@ -207,8 +202,8 @@ def unenroll_course(request):
 
 def view_registered_classes(request):
     args = {}
-    user = request.user
-    enrolled_courses = user.enrollments.all()
+    scout = Scout.objects.get(user=request.user)
+    enrolled_courses = scout.enrollments.all()
     args.update({'enrolled_courses': enrolled_courses})
     return render(request, 'mbu/view_classes.html', args)
 
@@ -264,7 +259,7 @@ def sm_complete_signup(request, key=None):
 
 def sm_view_class(request, scout_id):
     args = {}
-    course_enrollments = Scout.objects.get(pk=scout_id).user.enrollments.all()
+    course_enrollments = Scout.objects.get(pk=scout_id).enrollments.all()
     args.update({'course_enrollments': course_enrollments})
     print (course_enrollments)
     return render(request, 'scoutmaster/view_troop_courses.html', args)
@@ -323,7 +318,7 @@ def _create_scout_payment_data(scout):
 
 
 def _get_amount_invoiced(scout):
-    enrollments = scout.user.enrollments.all()
+    enrollments = scout.enrollments.all()
     number_of_enrollments = len(enrollments)
     return settings.PRICE_PER_COURSE * number_of_enrollments
 
