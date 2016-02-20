@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/miguelut/utmbu/issues"
   },
-  "homepage": "https://github.com/miguelut/utmbu#readme"
+  "homepage": "https://github.com/miguelut/utmbu#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "grunt": "^0.4.5",
+    "grunt-browser-sync": "^2.2.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-reload": "^0.2.0"
+  }
 }

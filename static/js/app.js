@@ -1,5 +1,5 @@
 function add_troop() {
-    console.log("create post is working!")
+    console.log("create post is working!");
     var form_data = $('#troop_modal_form').serialize();
 
     $.ajax({
@@ -20,16 +20,16 @@ function add_troop() {
             console.log(err);
         }
     });
-};
+}
 
 $('#troop_submit_button').on('click', function() {
     event.preventDefault();
-    console.log("form submitted!")
+    console.log("form submitted!");
     add_troop();
 });
 
 function add_council() {
-    console.log("create post is working!")
+    console.log("create post is working!");
     var form_data = $('#council_modal_form').serialize();
 
     $.ajax({
@@ -48,14 +48,14 @@ function add_council() {
         },
 
         error : function(xhr,errmsg,err) {
-            console.log("form submission error")
+            console.log("form submission error");
         }
     });
-};
+}
 
 $('#council_submit_button').on('click', function() {
     event.preventDefault();
-    console.log("form submitted!")
+    console.log("form submitted!");
     add_council();
 });
 

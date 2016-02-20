@@ -176,3 +176,4 @@ PAYPAL_TEST=True
 PAYPAL_NOTIFY_URL='http://localhost:8080/paypal/notify'
 
 PRICE_PER_COURSE = 7.5
+PROJECT_PATH='/home/michael/virpy3/utmbu'
