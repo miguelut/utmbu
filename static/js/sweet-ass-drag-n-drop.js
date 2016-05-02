@@ -1,18 +1,26 @@
-var SweetAssDragNDrop = {
-    init: function() {
-        $(".class-dragable").draggable({
+(function () {
+
+    var init = function() {
+        $(".class-draggable").draggable({
             appendTo: 'body',
             revert: 'invalid',
             containment: '.schedule',
             helper: 'clone'
         });
 
-        $(".class-dropable").droppable({
-            drop: function(event, ui){
+        $(".class-schedule-droppable").droppable({
+            drop: function(event, ui) {
+                this.innerHTML = '';
                 this.appendChild(ui.draggable[0]);
             }
         });
-    }
-};
 
-SweetAssDragNDrop.init();
+        $(".courses-droppable").droppable({
+            drop: function(event, ui) {
+                this.appendChild(ui.draggable[0]);
+            }
+        });
+    };
+
+    init();
+}());

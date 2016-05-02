@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
     <div class="row schedule">
@@ -13,35 +14,46 @@
                 <tbody>
                     {% for enrollment in data.enrollments %}
                     <tr>
-                        <td>{{ enrollment.timeblock.start_time }} - {{ enrollment.timeblock.end_time }}</td>
-                        <td class="class-dropable">{{ enrollment.course.name }}</td>
+                        <td>{{ enrollment.start_time }} - {{ enrollment.end_time }}</td>
+                        <td class="class-schedule-droppable">{{ enrollment.course.name }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="col-md-5 class-list">
-            <div class="row class-dragable">
-                <div class="col-md-3">
-                    Class A
+        <div class="col-md-5 class-list courses-droppable">
+            {% for course in data.courses %}
+
+            {% endfor %}
+            <div class="row class-draggable">
+                <div class="course-icon">
+                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
                 </div>
-                <div class="col-md-9">
-                    This is a cool class you should take
-                </div>
-            </div>
-            <div class="row class-dragable">
-                <div class="col-md-3">
-                    Class B
-                </div>
-                <div class="col-md-9">
-                    This is another cool class you should take
+                <div class="course-desc">
+                    This is a cool
                 </div>
             </div>
-            <div class="row class-dragable">
-                <div class="col-md-3">
-                    Class C
+            <div class="row class-draggable">
+                <div class="course-icon">
+                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
                 </div>
-                <div class="col-md-9">
+                <div class="course-desc">
+                    This is another cool
+                </div>
+            </div>
+            <div class="row class-draggable">
+                <div class="course-icon">
+                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
+                </div>
+                <div class="course-desc">
+                    This class is boring
+                </div>
+            </div>
+            <div class="row class-draggable">
+                <div class="course-icon">
+                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
+                </div>
+                <div class="course-desc">
                     This class is boring
                 </div>
             </div>

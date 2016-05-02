@@ -130,14 +130,44 @@ hr {
 .schedule .class-list {
     overflow-y: scroll;
     overflow-x: hidden;
+    height: 240px;
 }
 
-.class-dragable {
-    height: 30px;
+.courses-droppable {
+
 }
 
 .schedule .button {
     
+}
+
+.class-draggable {
+    position: relative;
+}
+
+.course-icon {
+    position: relative;
+    display: inline-block;
+    float:left;
+    left: 0;
+    top: 0;
+    height: 80px;
+    width: 80px;
+    background: red;
+}
+
+.course-desc {
+    position: relative;
+    display: inline-block;
+    height: 80px;
+    width: 200px;
+    overflow: visible;
+    background: blue;
+}
+
+.mb-course {
+    width: 80px;
+    height: 80px;
 }
 
 @media print {

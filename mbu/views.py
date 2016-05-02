@@ -17,7 +17,6 @@ from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from utmbu import settings
 from mbu.course_utils import has_overlapping_enrollment
 from decimal import Decimal
-from pprint import PrettyPrinter
 
 logger = logging.getLogger(__name__)
 
