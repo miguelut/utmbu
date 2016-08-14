@@ -3,7 +3,10 @@
     "model": "mbu.Council",
     "pk": 1,
     "fields": {
-      "name": "Gracie Academy"
+      "name": "Gracie Academy",
+      "number": 1,
+      "city": "Bort",
+      "state": "Simpson"
     }
   },
 

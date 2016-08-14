@@ -49,8 +49,7 @@ class ScoutProfileForm(ModelForm):
 
     class Meta:
         model = Scout
-        exclude = ['user']
-        widgets = {'dob': SelectDateWidget(years=range(2015, 1950, -1))}
+        exclude = ['user', 'waiver']
 
 
 class ScoutmasterProfileForm(ModelForm):

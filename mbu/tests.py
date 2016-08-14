@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from mbu.models import Troop, Scout, Scoutmaster, CourseInstance, TimeBlock, MeritBadgeUniversity
+from mbu.models import Troop, Scout, Scoutmaster, ScoutCourseInstance, TimeBlock, MeritBadgeUniversity
 from mbu.forms import ScoutProfileForm, ScoutmasterProfileForm
 from mbu.course_utils import do_sessions_overlap, has_overlapping_enrollment
 from mbu.views import _create_scout_enrollment_dict
@@ -20,7 +20,8 @@ class EditScoutProfileTests(TestCase):
             'first_name': 'Helio',
             'last_name': 'Gracie',
             'email': 'gracie@gmail.com',
-            'troop': expected_troop.id
+            'troop': expected_troop.id,
+            'rank': 'Star'
         }
 
         response = self.client.post('/scout/profile/edit/', expected_form)
@@ -40,7 +41,9 @@ class EditScoutProfileTests(TestCase):
         expected_form = {
             'first_name': 'Helio',
             'last_name': 'Gracie',
-            'troop': expected_troop.id
+            'troop': expected_troop.id,
+            'rank': 'Star',
+            'email': ''
         }
         self.client.post('/scout/profile/edit/', expected_form)
 
@@ -66,7 +69,8 @@ class EditScoutProfileTests(TestCase):
     def test_scout_form_should_be_valid(self):
         expected_troop = Troop.objects.get(pk=1)
         expected_form = {
-            'troop': expected_troop.pk
+            'troop': expected_troop.pk,
+            'rank': 'Star'
         }
         scout_form = ScoutProfileForm(expected_form)
 
@@ -180,7 +184,7 @@ class CourseEnrollmentTests(TestCase):
         self.assertEqual('{"result": true}', response.content)
 
     def should_not_enroll_in_course_if_overlapping_session(self):
-        course_instance = CourseInstance.objects.get(pk=1)
+        course_instance = ScoutCourseInstance.objects.get(pk=1)
         self.user.enrollments.add(course_instance)
         self.user.save()
         request = {'course_instance_id': '2'}
@@ -207,8 +211,8 @@ class HelperMethods(TestCase):
         number_of_enrollments = len(result[scouts[0]])
 
         self.assertEqual(2, number_of_enrollments)
-        self.assertEqual(CourseInstance.objects.get(pk=1), first_enrollment)
-        self.assertEqual(CourseInstance.objects.get(pk=2), second_enrollment)
+        self.assertEqual(ScoutCourseInstance.objects.get(pk=1), first_enrollment)
+        self.assertEqual(ScoutCourseInstance.objects.get(pk=2), second_enrollment)
 
 
 class CourseUtilsTest(TestCase):
@@ -273,17 +277,17 @@ class CourseUtilsTest(TestCase):
         self.assertFalse(result)
 
     def should_return_true_if_enrolling_in_overlapping_course(self):
-        course_instance = CourseInstance.objects.get(pk=1)
+        course_instance = ScoutCourseInstance.objects.get(pk=1)
         self.user.enrollments.add(course_instance)
         self.user.save()
-        overlapping_course_to_enroll = CourseInstance.objects.get(pk=2)
+        overlapping_course_to_enroll = ScoutCourseInstance.objects.get(pk=2)
 
         result = has_overlapping_enrollment(self.user, overlapping_course_to_enroll)
 
         self.assertTrue(result)
 
     def should_return_false_if_enrolling_in_course_with_no_overlaps(self):
-        overlapping_course_to_enroll = CourseInstance.objects.get(pk=2)
+        overlapping_course_to_enroll = ScoutCourseInstance.objects.get(pk=2)
 
         result = has_overlapping_enrollment(self.user, overlapping_course_to_enroll)
 
