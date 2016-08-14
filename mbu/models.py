@@ -16,7 +16,10 @@ class MeritBadgeUniversity(models.Model):
 
 
 class Council(models.Model):
+    number = models.IntegerField()
     name = models.CharField(max_length=100)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
@@ -26,7 +29,7 @@ class Council(models.Model):
 
 
 class Troop(models.Model):
-    number = models.CharField(max_length=10)
+    number = models.IntegerField()
     council = models.ForeignKey(Council)
 
     def __str__(self):
@@ -39,6 +42,7 @@ class Troop(models.Model):
 class Scout(models.Model):
     user = models.OneToOneField(User)
     troop = models.ForeignKey(Troop, blank=True, null=True)
+    rank = models.CharField(max_length=15)
     waiver = models.BooleanField(default=False)
 
     def __str__(self):
@@ -83,6 +87,7 @@ class ScoutmasterRequestAdmin(admin.ModelAdmin):
 class Course(models.Model):
     name = models.CharField(max_length=200)
     requirements = models.CharField(max_length=200)
+    image_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name

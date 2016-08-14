@@ -144,8 +144,8 @@ def view_class_list(request):
     except MeritBadgeUniversity.DoesNotExist:
         mbu = None
     if mbu is not None:
-        sessions = TimeBlock.objects.filter(mbu=mbu).values('pk')
-        course_instances = ScoutCourseInstance.objects.filter(session__pk__in=sessions)
+        timeblocks = TimeBlock.objects.filter(mbu=mbu).values('pk')
+        course_instances = ScoutCourseInstance.objects.filter(timeblock__pk__in=timeblocks)
         args.update({'classlist': course_instances })
     return render(request, 'mbu/classlist.html', args)
 

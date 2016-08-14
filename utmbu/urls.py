@@ -54,5 +54,5 @@ urlpatterns += patterns(
 #Dev URLs -- REMOVE BEFORE DEPLOYMENT
 urlpatterns += patterns(
     '',
-    url(r'^setup_dummy_data/', 'dev.views.setup_dummy_data', name='setup_dummy_data')
+    url(r'^setup_data/', 'dev.views.setup_data', name='setup_data')
 )
