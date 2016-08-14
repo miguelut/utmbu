@@ -1,11 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from mbu.models import TimeBlock
 from mbu.models import ScoutCourseInstance, Course
+
 __author__ = 'michael'
 
 
 class Schedule:
-
     def __init__(self, scout):
         self.scout = scout
         self.enrollments = self.get_enrollments()
@@ -30,8 +30,8 @@ class Schedule:
 
         return result
 
-class Enrollment:
 
+class Enrollment:
     def __init__(self, start_time, end_time, course):
         self.start_time = start_time
         self.end_time = end_time

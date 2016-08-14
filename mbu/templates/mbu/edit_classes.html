@@ -22,41 +22,20 @@
             </table>
         </div>
         <div class="col-md-5 class-list courses-droppable">
-            {% for course in data.courses %}
-
+            {% for course in course_catalog %}
+                <div class="row class-draggable">
+                    <div class="course-icon">
+                        {% with "images/badges/"|add:course.course.image_name as image_path %}
+                        <img src="{% static image_path %}" class="mb-course"/>
+                        {% endwith %}
+                    </div>
+                    <div class="course-desc">
+                        {{ course.course.name }}<br>
+                        {{ course.timeblock.start_time|date:'h:i A' }} - {{ course.timeblock.end_time|date:'h:i A' }}<br>
+                        {{ course.location }}
+                    </div>
+                </div>
             {% endfor %}
-            <div class="row class-draggable">
-                <div class="course-icon">
-                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
-                </div>
-                <div class="course-desc">
-                    This is a cool
-                </div>
-            </div>
-            <div class="row class-draggable">
-                <div class="course-icon">
-                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
-                </div>
-                <div class="course-desc">
-                    This is another cool
-                </div>
-            </div>
-            <div class="row class-draggable">
-                <div class="course-icon">
-                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
-                </div>
-                <div class="course-desc">
-                    This class is boring
-                </div>
-            </div>
-            <div class="row class-draggable">
-                <div class="course-icon">
-                    <img src="{% static "images/mb010c.gif" %}" class="mb-course"/>
-                </div>
-                <div class="course-desc">
-                    This class is boring
-                </div>
-            </div>
         </div>
     </div>
     <div class="row">
