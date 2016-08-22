@@ -2,19 +2,43 @@
 {% load staticfiles %}
 {% block scripts %}
     <script type="application/javascript">
-        var viewModel = {
-            courses: ko.observableArray()
+        var ViewModel = function() {
+            var self = this;
+
+            self.courses = ko.observableArray();
+            self.enrollments = ko.observableArray();
+            self.filteredCourses = ko.computed(function() {
+                return self.courses().filter(function(course) {
+                    var result = true
+                    self.enrollments().forEach(function(enrollment) {
+                        if (enrollment.course.id === course.course.id) {
+                            result = false;
+                        }
+                    });
+                    return result;
+                });
+            }, self)
+        {% for timeblock in timeblocks %}; self.timeblock_{{ timeblock.pk }} = ko.observable(){%  endfor %}
         };
+        var vm = new ViewModel();
         $.getJSON('/api/courses', function(data) {
             data.courses.forEach(function(course) {
                 var start = moment(course.timeblock.start_time).format('hh:mm A');
                 var end = moment(course.timeblock.end_time).format('hh:mm A');
                 course.time = start + ' - ' + end;
-                console.log("time: " + course.time);
-                viewModel.courses.push(course);
+                vm.courses.push(course);
             })
         });
-        ko.applyBindings(viewModel);
+        $.getJSON('/api/enrollments', function(data) {
+            data.enrollments.forEach(function(enrollment) {
+                var start = moment(enrollment.timeblock.start_time).format('hh:mm A');
+                var end = moment(enrollment.timeblock.end_time).format('hh:mm A');
+                enrollment.time = start + ' - ' + end;
+                vm['timeblock_' + enrollment.timeblock.id](enrollment);
+                vm.enrollments.push(enrollment);
+            })
+        });
+        ko.applyBindings(vm);
     </script>
 {% endblock %}
 {% block content %}
@@ -29,18 +53,29 @@
                   </tr>
                 </thead>
                 <tbody>
-                    {% for enrollment in data.enrollments %}
-                    <tr>
-                        <td>{{ enrollment.start_time }} - {{ enrollment.end_time }}</td>
-                        <td class="class-schedule-droppable">{{ enrollment.course.name }}</td>
+                    {% for timeblock in timeblocks %}
+                    <tr style="height: 80px">
+                        <td class="col-md-2">{{ timeblock.start_time|date:"h:i A" }} - {{ timeblock.end_time|date:"h:i A" }}</td>
+                        <td class="col-md-5" data-bind="with: timeblock_{{ timeblock.pk }}">
+                            <div class="row">
+                                <div class="course-icon">
+                                    <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
+                                </div>
+                                <div class="course-desc">
+                                    <div data-bind="text: course.name"></div>
+                                    <div data-bind="text: time"></div>
+                                    <div data-bind="text: location"></div>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        <div class="col-md-5 class-list courses-droppable">
-            <div data-bind="foreach:courses">
-                <div class="row class-draggable">
+        <div class="col-md-5 class-list">
+            <div data-bind="foreach:filteredCourses">
+                <div class="row">
                     <div class="course-icon">
                         <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
                     </div>

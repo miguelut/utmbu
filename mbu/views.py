@@ -161,31 +161,22 @@ def view_class_requirements(request, id=-1):
 @permission_required('mbu.edit_scout_schedule', raise_exception=True)
 def scout_edit_classes(request):
     args = {}
-    user = request.user
-    scout = Scout.objects.get(user=user)
-    data = Schedule(scout=scout)
-    if request.POST:
-        data = Schedule(request.POST, scout=scout)
-        return redirect('mbu_home')
-
-    args.update({'data': data})
+    args.update({'timeblocks': TimeBlock.objects.all()})
     args.update(csrf(request))
 
-    course_catalog = ScoutCourseInstance.objects.exclude(enrollees__user__pk__contains=scout.user.pk)
-    args.update({'course_catalog': course_catalog})
-    course_enrollments = scout.enrollments.all()
-    args.update({'course_enrollments': course_enrollments})
     return render(request, 'mbu/edit_classes.html', args)
 
 
 @api_view(http_method_names=['GET'])
-def get_scout_edit_class_vm(request):
+def get_enrollments(request):
     user = request.user
     scout = Scout.objects.get(user=user)
-    data = Schedule(scout=scout)
-    course_catalog = ScoutCourseInstance.objects.exclude(enrollees=scout)
-    course_enrollments = scout.enrollments.all()
-    pass
+    enrollments = []
+    for enrollment in ScoutCourseInstance.objects.filter(enrollees__user__pk__contains=scout.user.pk):
+        serializer = ScoutCourseInstanceSerializer(enrollment)
+        enrollments.append(serializer.data)
+    result = {'enrollments': enrollments}
+    return JsonResponse(result)
 
 @api_view(http_method_names=['GET'])
 def get_courses(request):

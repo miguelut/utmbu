@@ -60,5 +60,6 @@ urlpatterns += patterns(
 #Rest Calls
 urlpatterns += patterns(
     '',
-    url(r'^api/courses', 'mbu.views.get_courses', name='api_get_courses')
+    url(r'^api/courses', 'mbu.views.get_courses', name='api_get_courses'),
+    url(r'^api/enrollments', 'mbu.views.get_enrollments', name='api_get_enrollments')
 )
