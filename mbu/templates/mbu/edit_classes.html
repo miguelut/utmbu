@@ -1,14 +1,31 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-
+{% block scripts %}
+    <script type="application/javascript">
+        var viewModel = {
+            courses: ko.observableArray()
+        };
+        $.getJSON('/api/courses', function(data) {
+            data.courses.forEach(function(course) {
+                var start = moment(course.timeblock.start_time).format('hh:mm A');
+                var end = moment(course.timeblock.end_time).format('hh:mm A');
+                course.time = start + ' - ' + end;
+                console.log("time: " + course.time);
+                viewModel.courses.push(course);
+            })
+        });
+        ko.applyBindings(viewModel);
+    </script>
+{% endblock %}
 {% block content %}
+    <div data-bind="text: name"></div>
     <div class="row schedule">
         <div class="col-md-7">
             <table class="table table-striped">
                 <thead>
                   <tr>
                     <th>Time</th>
-                    <th>Session</th>
+                    <th>Class Name</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -22,20 +39,18 @@
             </table>
         </div>
         <div class="col-md-5 class-list courses-droppable">
-            {% for course in course_catalog %}
+            <div data-bind="foreach:courses">
                 <div class="row class-draggable">
                     <div class="course-icon">
-                        {% with "images/badges/"|add:course.course.image_name as image_path %}
-                        <img src="{% static image_path %}" class="mb-course"/>
-                        {% endwith %}
+                        <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
                     </div>
                     <div class="course-desc">
-                        {{ course.course.name }}<br>
-                        {{ course.timeblock.start_time|date:'h:i A' }} - {{ course.timeblock.end_time|date:'h:i A' }}<br>
-                        {{ course.location }}
+                        <div data-bind="text: course.name"></div>
+                        <div data-bind="text: time"></div>
+                        <div data-bind="text: location"></div>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
         </div>
     </div>
     <div class="row">

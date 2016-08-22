@@ -1,5 +1,5 @@
 {
-  "name": "UTMBU",
+  "name": "utmbu",
   "homepage": "https://github.com/miguelut/utmbu",
   "authors": [
     "Daniel Yim <daniel.yim@parivedasolutions.com>"
@@ -16,5 +16,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "knockout": "^3.4.0"
+  }
 }

@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'paypal.standard.ipn',
     'social.apps.django_app.default',
+    'rest_framework',
     'crispy_forms',
     'widget_tweaks',
     'mbu',
@@ -177,3 +178,7 @@ PAYPAL_NOTIFY_URL='http://localhost:8080/paypal/notify'
 
 PRICE_PER_COURSE = 7.5
 PROJECT_PATH='/home/michael/virpy3/utmbu'
+
+REST_FRAMEWORK = {
+
+}

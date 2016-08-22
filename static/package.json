@@ -18,6 +18,7 @@
   "homepage": "https://github.com/miguelut/utmbu#readme",
   "dependencies": {
     "browser-sync": "^2.12.5",
+    "moment": "^2.14.1",
     "watchify": "^3.7.0"
   },
   "devDependencies": {

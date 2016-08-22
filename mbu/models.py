@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
 from mbu.model_utils import send_sm_request_email, get_hash_str
+from rest_framework.serializers import ModelSerializer
 
 
 # This class will represent the yearly MBU so we can
@@ -90,6 +91,11 @@ class Course(models.Model):
         return self.name
 
 
+class CourseSerializer(ModelSerializer):
+    class Meta:
+        model = Course
+
+
 class TimeBlock(models.Model):
     name = models.CharField(max_length=255)
     start_time = models.DateTimeField()
@@ -99,6 +105,16 @@ class TimeBlock(models.Model):
     def __str__(self):
         return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))
 
+
+class TimeBlockSerializer(ModelSerializer):
+    class Meta:
+        model = TimeBlock
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','first_name','last_name','email']
 
 class ScoutCourseInstance(models.Model):
     course = models.ForeignKey(Course)
@@ -111,6 +127,13 @@ class ScoutCourseInstance(models.Model):
 
     def __str__(self):
         return self.course.name + str(self.timeblock)
+
+
+class ScoutCourseInstanceSerializer(ModelSerializer):
+    teaching_assistants = UserSerializer(many=True, read_only=True)
+    class Meta:
+        model = ScoutCourseInstance
+        depth = 1
 
 
 class Payment(models.Model):

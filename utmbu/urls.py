@@ -30,7 +30,7 @@ urlpatterns += patterns(
     url(r'^scout/profile/edit/$', 'mbu.views.edit_scout_profile', name='scout_edit_profile'),
     url(r'^scout/enroll_course/$', 'mbu.views.enroll_course', name='scout_enroll_course'),
     url(r'^scout/unenroll_course/$', 'mbu.views.unenroll_course', name='scout_unenroll_course'),
-    url(r'^scout/report/payments/$', 'mbu.views.scout_view_payments', name='scout_report_payments')
+    url(r'^scout/report/payments/$', 'mbu.views.scout_view_payments', name='scout_report_payments'),
 )
 
 #Scoutmaster URLs
@@ -55,4 +55,10 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(r'^setup_data/', 'dev.views.setup_data', name='setup_data')
+)
+
+#Rest Calls
+urlpatterns += patterns(
+    '',
+    url(r'^api/courses', 'mbu.views.get_courses', name='api_get_courses')
 )

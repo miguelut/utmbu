@@ -17,6 +17,7 @@ from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from utmbu import settings
 from mbu.course_utils import has_overlapping_enrollment
 from decimal import Decimal
+from rest_framework.decorators import api_view
 
 logger = logging.getLogger(__name__)
 
@@ -170,12 +171,30 @@ def scout_edit_classes(request):
     args.update({'data': data})
     args.update(csrf(request))
 
-    course_catalog = ScoutCourseInstance.objects.exclude(enrollees=scout)
+    course_catalog = ScoutCourseInstance.objects.exclude(enrollees__user__pk__contains=scout.user.pk)
     args.update({'course_catalog': course_catalog})
     course_enrollments = scout.enrollments.all()
     args.update({'course_enrollments': course_enrollments})
     return render(request, 'mbu/edit_classes.html', args)
 
+
+@api_view(http_method_names=['GET'])
+def get_scout_edit_class_vm(request):
+    user = request.user
+    scout = Scout.objects.get(user=user)
+    data = Schedule(scout=scout)
+    course_catalog = ScoutCourseInstance.objects.exclude(enrollees=scout)
+    course_enrollments = scout.enrollments.all()
+    pass
+
+@api_view(http_method_names=['GET'])
+def get_courses(request):
+    courses = []
+    for course in ScoutCourseInstance.objects.all():
+        serializer = ScoutCourseInstanceSerializer(course)
+        courses.append(serializer.data)
+    result = {'courses': courses}
+    return JsonResponse(result)
 
 @require_http_methods(["POST"])
 def enroll_course(request):
