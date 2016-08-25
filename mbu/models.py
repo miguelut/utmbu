@@ -131,6 +131,7 @@ class ScoutCourseInstance(models.Model):
 
 class ScoutCourseInstanceSerializer(ModelSerializer):
     teaching_assistants = UserSerializer(many=True, read_only=True)
+    timeblock = TimeBlockSerializer(read_only=True)
     class Meta:
         model = ScoutCourseInstance
         depth = 1

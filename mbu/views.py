@@ -10,14 +10,15 @@ from django.contrib.auth.models import Permission, ContentType
 from django.views.decorators.http import require_http_methods
 from paypal.standard.forms import PayPalPaymentsForm
 from django.http import JsonResponse
-from mbu.viewmodels.scout import Schedule
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from utmbu import settings
 from mbu.course_utils import has_overlapping_enrollment
 from decimal import Decimal
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
+from rest_framework.parsers import JSONParser
+from django.utils.six import BytesIO
 
 logger = logging.getLogger(__name__)
 
@@ -167,16 +168,24 @@ def scout_edit_classes(request):
     return render(request, 'mbu/edit_classes.html', args)
 
 
-@api_view(http_method_names=['GET'])
+@api_view(http_method_names=['GET', 'POST'])
 def get_enrollments(request):
     user = request.user
     scout = Scout.objects.get(user=user)
     enrollments = []
-    for enrollment in ScoutCourseInstance.objects.filter(enrollees__user__pk__contains=scout.user.pk):
-        serializer = ScoutCourseInstanceSerializer(enrollment)
-        enrollments.append(serializer.data)
-    result = {'enrollments': enrollments}
-    return JsonResponse(result)
+    if(request.method == 'POST'):
+        for d in request.data:
+            enrollments.append(ScoutCourseInstance.objects.get(pk=d['id']))
+
+        scout.enrollments = enrollments
+        scout.save()
+        return JsonResponse({'data': request.data})
+    else:
+        for enrollment in ScoutCourseInstance.objects.filter(enrollees__user__pk__contains=scout.user.pk):
+            serializer = ScoutCourseInstanceSerializer(enrollment)
+            enrollments.append(serializer.data)
+        result = {'enrollments': enrollments}
+        return JsonResponse(result)
 
 @api_view(http_method_names=['GET'])
 def get_courses(request):

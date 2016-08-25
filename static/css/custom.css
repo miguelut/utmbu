@@ -185,3 +185,11 @@ hr {
         display: none;
     }
 }
+
+.loading {
+    background: url(../../static/images/red-loading.gif) no-repeat center center;
+}
+
+.fa-check {
+    color: green;
+}

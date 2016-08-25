@@ -5,6 +5,9 @@
         var ViewModel = function() {
             var self = this;
 
+            self.submitting = ko.observable(false);
+            self.submitSuccess = ko.observable(false);
+            self.coursesLoading = ko.observable(true);
             self.courses = ko.observableArray();
             self.enrollments = ko.observableArray();
             self.filteredCourses = ko.computed(function() {
@@ -17,7 +20,31 @@
                     });
                     return result;
                 });
-            }, self)
+            }, self);
+            self.add = function(data, model) {
+                if(model['timeblock_' + data.timeblock.id]() != null) {
+                    model.enrollments.remove(model['timeblock_' + data.timeblock.id]());
+                }
+                model.enrollments.push(data);
+                model['timeblock_' + data.timeblock.id](data);
+            };
+            self.remove = function(data, model) {
+                model.enrollments.remove(data);
+                model['timeblock_' + data.timeblock.id](null);
+            };
+            self.submit = function() {
+                self.submitting(true);
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    url: '/api/enrollments',
+                    data: JSON.stringify(self.enrollments()).toString(),
+                    success: function (response) {
+                        self.submitting(false);
+                        self.submitSuccess(true);
+                    }
+                }).fail(function() { self.submitting(false)});
+            }
         {% for timeblock in timeblocks %}; self.timeblock_{{ timeblock.pk }} = ko.observable(){%  endfor %}
         };
         var vm = new ViewModel();
@@ -27,7 +54,8 @@
                 var end = moment(course.timeblock.end_time).format('hh:mm A');
                 course.time = start + ' - ' + end;
                 vm.courses.push(course);
-            })
+            });
+            vm.coursesLoading(false);
         });
         $.getJSON('/api/enrollments', function(data) {
             data.enrollments.forEach(function(enrollment) {
@@ -54,10 +82,10 @@
                 </thead>
                 <tbody>
                     {% for timeblock in timeblocks %}
-                    <tr style="height: 80px">
+                    <tr style="height: 97px">
                         <td class="col-md-2">{{ timeblock.start_time|date:"h:i A" }} - {{ timeblock.end_time|date:"h:i A" }}</td>
-                        <td class="col-md-5" data-bind="with: timeblock_{{ timeblock.pk }}">
-                            <div class="row">
+                        <td class="col-md-5" data-bind="with: timeblock_{{ timeblock.pk }}, dropZone: {accepts: 'enrollment_{{ timeblock.pk }}', drop: add }">
+                            <div class="row" data-bind="dragZone: { name: 'enrollment' }">
                                 <div class="course-icon">
                                     <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
                                 </div>
@@ -73,9 +101,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-5 class-list">
-            <div data-bind="foreach:filteredCourses">
-                <div class="row">
+        <div class="col-md-5 class-list" data-bind="css: {loading: coursesLoading()}">
+            <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
+                <div class="row" data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
                     <div class="course-icon">
                         <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
                     </div>
@@ -90,7 +118,13 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-primary">Submit</button>
+            <button class="btn btn-primary" data-bind="click: submit">Submit</button>
+            <span data-bind="if: submitting">
+                <img src="{% static 'images/ajax-loader.gif' %}" />
+            </span>
+            <span data-bind="if: submitSuccess">
+                <i class="fa fa-check fa-lg"></i>
+            </span>
         </div>
     </div>
         
