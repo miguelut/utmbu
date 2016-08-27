@@ -6,7 +6,7 @@ __author__ = 'michael'
 
 
 @api_view(http_method_names=['GET'])
-def courses():
+def courses(request):
     all_courses = []
     for course in ScoutCourseInstance.objects.all():
         serializer = ScoutCourseInstanceSerializer(course)

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+    <div class="well col-xs-4 col-xs-offset-4 first-div"">
+        <h3>Which of the following best describes you?</h3>
+            <div class="btn-group" style="margin: 5px">
+                <a class="btn btn-primary btn-lg btn-warning" href="{{ action }}type=scout">Scout</a>
+            </div>
+            <div class="btn-group" style="margin: 5px">
+                <a class="btn btn-primary btn-lg btn-danger" href="{{ action }}type=scoutmaster">Scoutmaster</a>
+            </div>
+            <div class="btn-group" style="margin: 5px">
+                <a class="btn btn-primary btn-lg btn-info" href="{{ action }}type=parent">Parent</a>
+            </div>
+    </div>
+{% endblock %}

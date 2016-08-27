@@ -1,6 +1,6 @@
 import logging
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from django.core.context_processors import csrf
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout
@@ -27,20 +27,27 @@ def signup(request):
         form = MbuUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            Scout(user=user).save()
-            ct = ContentType.objects.get(app_label='mbu', model='scout')
-            perms = [
-                Permission.objects.get(codename='edit_scout_schedule', content_type=ct),
-                Permission.objects.get(codename='edit_scout_profile', content_type=ct)
-            ]
-            for perm in perms:
-                user.user_permissions.add(perm)
-            user.save()
-            messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
-            return redirect('mbu_home')
+            user = authenticate(username=user.username, password=form.data['password1'])
+            auth_login(request, user)
+            args = {'action': '/scout/create?'}
+            return render(request, 'mbu/select_type.html', args)
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
 
+
+def create_scout(request):
+    user = request.user
+    Scout(user=user).save()
+    ct = ContentType.objects.get(app_label='mbu', model='scout')
+    perms = [
+        Permission.objects.get(codename='edit_scout_schedule', content_type=ct),
+        Permission.objects.get(codename='edit_scout_profile', content_type=ct)
+    ]
+    for perm in perms:
+        user.user_permissions.add(perm)
+    user.save()
+    messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
+    return redirect('mbu_home')
 
 def login(request):
     args = {}

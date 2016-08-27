@@ -94,8 +94,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-    # 'mbu.pipeline.user_type.user_get_names
-    'mbu.pipeline.user_type.user_make_scout'
+    'mbu.pipeline.user_type.get_type',
+    'mbu.pipeline.user_type.user_create'
 )
 
 ROOT_URLCONF = 'utmbu.urls'
