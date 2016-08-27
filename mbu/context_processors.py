@@ -43,6 +43,10 @@ def _get_links(user):
             'href': 'sm_edit_profile',
             'label': 'Edit Profile'
         })
+    args.get('links').append({
+        'href': 'logout',
+        'label': 'Logout'
+    })
     return args
 
 

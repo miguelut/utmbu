@@ -37,6 +37,7 @@
                             <a href="{% url link.href %}">{{ link.label }}</a>
                         </li>
                     {% endfor %}
+                    {% if report_links|length > 0 %}
                     <li role="presentation" class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                             Reports <span class="caret"></span>
@@ -49,6 +50,7 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    {% endif %}
                     {% for link in links %}
                         <li><a href="{% url link.href %}">{{ link.label }}</a></li>
                     {% endfor %}

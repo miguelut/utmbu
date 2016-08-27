@@ -114,7 +114,8 @@ class TimeBlockSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','first_name','last_name','email']
+        fields = ['id', 'first_name', 'last_name', 'email']
+
 
 class ScoutCourseInstance(models.Model):
     course = models.ForeignKey(Course)
@@ -132,6 +133,7 @@ class ScoutCourseInstance(models.Model):
 class ScoutCourseInstanceSerializer(ModelSerializer):
     teaching_assistants = UserSerializer(many=True, read_only=True)
     timeblock = TimeBlockSerializer(read_only=True)
+
     class Meta:
         model = ScoutCourseInstance
         depth = 1

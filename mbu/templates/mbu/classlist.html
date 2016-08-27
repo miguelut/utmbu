@@ -12,7 +12,7 @@
             <td>Name</td>
             <td>Time</td>
             <td>Location</td>
-            <td>Teacher</td>
+            <td>Counselor</td>
             <td>Requirements</td>
    		</tr>
    	</thead>
@@ -21,7 +21,7 @@
         <tr>
             <td>{{ class.pk }}</td>
             <td>{{ class.course.name }}</td>
-            <td>{{ class.timeblock.start_time }} - {{class.timeblock.end_time}}</td>
+            <td>{{ class.timeblock.start_time|date:"h:i A" }} - {{class.timeblock.end_time|date:"h:i A"}}</td>
             <td>{{ class.location }}</td>
             <td>{{ class.counselor }}</td>
             <td><a href="{{ class.course.requirements }}">Link</a></td>

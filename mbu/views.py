@@ -7,18 +7,14 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
-from django.views.decorators.http import require_http_methods
 from paypal.standard.forms import PayPalPaymentsForm
-from django.http import JsonResponse
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
 from utmbu import settings
-from mbu.course_utils import has_overlapping_enrollment
 from decimal import Decimal
-from rest_framework.decorators import api_view, parser_classes
-from rest_framework.parsers import JSONParser
-from django.utils.six import BytesIO
+from mbu.api.course_instance import *
+from mbu.api.scout import *
 
 logger = logging.getLogger(__name__)
 
@@ -166,56 +162,6 @@ def scout_edit_classes(request):
     args.update(csrf(request))
 
     return render(request, 'mbu/edit_classes.html', args)
-
-
-@api_view(http_method_names=['GET', 'POST'])
-def get_enrollments(request):
-    user = request.user
-    scout = Scout.objects.get(user=user)
-    enrollments = []
-    if(request.method == 'POST'):
-        for d in request.data:
-            enrollments.append(ScoutCourseInstance.objects.get(pk=d['id']))
-
-        scout.enrollments = enrollments
-        scout.save()
-        return JsonResponse({'data': request.data})
-    else:
-        for enrollment in ScoutCourseInstance.objects.filter(enrollees__user__pk__contains=scout.user.pk):
-            serializer = ScoutCourseInstanceSerializer(enrollment)
-            enrollments.append(serializer.data)
-        result = {'enrollments': enrollments}
-        return JsonResponse(result)
-
-@api_view(http_method_names=['GET'])
-def get_courses(request):
-    courses = []
-    for course in ScoutCourseInstance.objects.all():
-        serializer = ScoutCourseInstanceSerializer(course)
-        courses.append(serializer.data)
-    result = {'courses': courses}
-    return JsonResponse(result)
-
-@require_http_methods(["POST"])
-def enroll_course(request):
-    course_instance_id = request.POST.get('course_instance_id')
-    course_instance = ScoutCourseInstance.objects.get(pk=course_instance_id)
-    user = request.user
-    if has_overlapping_enrollment:
-        return JsonResponse({'result': False})
-    user.enrollments.add(course_instance)
-    user.save()
-    return JsonResponse({'result': True})
-
-
-@require_http_methods(["POST"])
-def unenroll_course(request):
-    course_instance_id = request.POST.get('course_instance_id')
-    course_instance = ScoutCourseInstance.objects.get(pk=course_instance_id)
-    user = request.user
-    user.enrollments.remove(course_instance)
-    user.save()
-    return JsonResponse({'result': True})
 
 
 def view_registered_classes(request):
