@@ -28,7 +28,7 @@ class EditScoutProfileTests(TestCase):
 
         updated_user = User.objects.get(username='Gracie')
         updated_scout = updated_user.scout
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(302, response.status_code)
         self.assertEqual('Helio', updated_user.first_name)
         self.assertEqual('Gracie', updated_user.last_name)
         self.assertEqual('gracie@gmail.com', updated_user.email)
@@ -98,7 +98,7 @@ class EditScoutmasterProfileTests(TestCase):
 
         updated_user = User.objects.get(username='Gracie')
         updated_scoutmaster = updated_user.scoutmaster
-        self.assertEqual(200, response.status_code)
+        self.assertEqual(302, response.status_code)
         self.assertEqual('Helio', updated_user.first_name)
         self.assertEqual('Gracie', updated_user.last_name)
         self.assertEqual('gracie@gmail.com', updated_user.email)
@@ -142,30 +142,6 @@ class EditScoutmasterProfileTests(TestCase):
         scoutmaster_form = ScoutmasterProfileForm(expected_form)
 
         self.assertTrue(scoutmaster_form.is_valid())
-
-
-class RegisterUserTypeTests(TestCase):
-    fixtures = ['test_users', 'test_troops_councils']
-
-    def setUp(self):
-        self.client.login(username='Gracie', password='Gracie')
-        self.user = User.objects.get(username='Gracie')
-
-    def test_should_not_register_user_as_scout_if_already_a_scoutmaster(self):
-        Scoutmaster(user=self.user).save()
-
-        response = self.client.get('/register/scout/')
-        self.assertRedirects(response, '/')
-
-        self.assertEqual(0, Scout.objects.filter(user=self.user).count())
-
-    def test_should_not_register_user_as_scoutmaster_if_already_a_scout(self):
-        Scout(user=self.user).save()
-
-        response = self.client.get('/register/scoutmaster/')
-
-        self.assertEqual(0, Scoutmaster.objects.filter(user=self.user).count())
-        self.assertRedirects(response, '/')
 
 
 class CourseEnrollmentTests(TestCase):

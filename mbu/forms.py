@@ -45,9 +45,10 @@ class ScoutProfileForm(ModelForm):
         super(ScoutProfileForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        if kwargs['instance'].troop is not None:
-            if 'troop' in self.fields:
-                del self.fields['troop']
+        if 'instance' in kwargs:
+            if kwargs['instance'].troop is not None:
+                if 'troop' in self.fields:
+                    del self.fields['troop']
 
     class Meta:
         model = Scout
@@ -59,9 +60,10 @@ class ScoutmasterProfileForm(ModelForm):
         super(ScoutmasterProfileForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        if kwargs['instance'].troop is not None:
-            if 'troop' in self.fields:
-                del self.fields['troop']
+        if 'instance' in kwargs:
+            if kwargs['instance'].troop is not None:
+                if 'troop' in self.fields:
+                    del self.fields['troop']
 
     class Meta:
         model = Scoutmaster
@@ -73,9 +75,10 @@ class ParentProfileForm(ModelForm):
         super(ParentProfileForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
-        if kwargs['instance'].troop is not None:
-            if 'troop' in self.fields:
-                del self.fields['troop']
+        if 'instance' in kwargs:
+            if kwargs['instance'].troop is not None:
+                if 'troop' in self.fields:
+                    del self.fields['troop']
 
     class Meta:
         model = Parent
