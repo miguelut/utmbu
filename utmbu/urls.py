@@ -7,12 +7,9 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^$', 'mbu.views.view_home_page', name='mbu_home'),
-    url(r'^scout/create/$', 'mbu.views.create_scout', name='create_scout'),
+    url(r'^create/$', 'mbu.views.create', name='create'),
     url(r'^class/list/$', 'mbu.views.view_class_list', name='class_list'),
     url(r'^class/requirements/(\d)/$', 'mbu.views.view_class_requirements', name='class_requirements'),
-    url(r'^register/scout/$', 'mbu.views.register_user_as_scout', name='register_scout'),
-    url(r'^register/scoutmaster/$', 'mbu.views.register_user_as_scoutmaster', name='register_scoutmaster'),
-    url(r'^populate_courses/$', 'mbu.views.populate_courses', name='populate_courses'),
 )
 
 #Authentication Views
@@ -41,6 +38,13 @@ urlpatterns += patterns(
     url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'mbu.views.sm_view_class', name='sm_view_classes'),
     url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile'),
     url(r'^scoutmaster/troop/report/payments/$', 'mbu.views.sm_view_troop_payments', name='sm_report_troop_payments')
+)
+
+#Parent Urls
+urlpatterns += patterns(
+    '',
+    url(r'^parent/register/$', 'mbu.views.parent_signup', name='parent_signup'),
+    url(r'^parent/profile/edit/$', 'mbu.views.edit_parent_profile', name='parent_edit_profile'),
 )
 
 #Paypal URLS

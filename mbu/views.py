@@ -10,7 +10,7 @@ from django.contrib.auth.models import Permission, ContentType
 from paypal.standard.forms import PayPalPaymentsForm
 from mbu.forms import *
 from mbu.models import *
-from mbu.util import _is_user_scout, _is_user_scoutmaster, _populate_courses
+from mbu.util import _is_user_scout, _is_user_scoutmaster, _is_user_parent
 from utmbu import settings
 from decimal import Decimal
 from mbu.api.course_instance import *
@@ -29,10 +29,20 @@ def signup(request):
             user = form.save()
             user = authenticate(username=user.username, password=form.data['password1'])
             auth_login(request, user)
-            args = {'action': '/scout/create?'}
+            args = {'action': '/create?'}
             return render(request, 'mbu/select_type.html', args)
     args = {'form': form}
     return render(request, 'mbu/signup.html', args)
+
+
+def create(request):
+    type = request.GET['type']
+    if type == 'scout':
+        return create_scout(request)
+    elif type == 'parent':
+        return create_parent(request)
+    elif type == 'scoutmaster':
+        return create_scoutmaster(request)
 
 
 def create_scout(request):
@@ -47,22 +57,56 @@ def create_scout(request):
         user.user_permissions.add(perm)
     user.save()
     messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
-    return redirect('mbu_home')
+    messages.add_message(request, messages.INFO, 'Please complete your profile below.')
+    return redirect('scout_edit_profile')
+
+
+def create_parent(request):
+    user = request.user
+    Parent(user=user).save()
+    ct = ContentType.objects.get(app_label='mbu', model='parent')
+    perms = [
+        Permission.objects.get(codename='parent_edit_scout_schedule', content_type=ct),
+        Permission.objects.get(codename='edit_parent_profile', content_type=ct)
+    ]
+    for perm in perms:
+        user.user_permissions.add(perm)
+    user.save()
+    messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
+    messages.add_message(request, messages.INFO, 'Please complete your profile below.')
+    return redirect('parent_edit_profile')
+
+
+def create_scoutmaster(request):
+    user = request.user
+    Scoutmaster(user=user).save()
+    ct = ContentType.objects.get(app_label='mbu', model='scoutmaster')
+    perms = [
+        Permission.objects.get(codename='can_modify_troop_enrollments', content_type=ct),
+        Permission.objects.get(codename='edit_scoutmaster_profile', content_type=ct)
+    ]
+    for perm in perms:
+        user.user_permissions.add(perm)
+    user.save()
+    messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
+    messages.add_message(request, messages.INFO, 'Please complete your profile below.')
+    return redirect('sm_edit_profile')
+
 
 def login(request):
     args = {}
     form = AuthenticationForm()
-    next = request.POST.get('next', request.GET.get('next','/'))
+    next_page = request.POST.get('next', request.GET.get('next', '/'))
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
             auth_login(request, user)
-            return redirect(next)
+            return redirect(next_page)
         messages.add_message(request, messages.ERROR, 'Invalid username or password')
-    args.update({'form':form})
-    args.update({'next':next})
+    args.update({'form': form})
+    args.update({'next': next_page})
     return render(request, 'login.html', args)
 
 
@@ -74,28 +118,36 @@ def logout_user(request):
 def view_home_page(request):
     if _is_user_scout(request.user):
         return _render_scout_homepage(request)
+    elif _is_user_parent(request.user):
+        return _render_parent_homepage(request)
     elif _is_user_scoutmaster(request.user):
-        return render(request, 'mbu/scoutmaster_home.html')
+        return _render_scoutmaster_homepage(request)
     return render(request, 'mbu/home.html')
 
 
 def _render_scout_homepage(request):
-    args = {'enrollments': Scout.objects.get(user=request.user).enrollments.all()}
+    scout = Scout.objects.get(user=request.user)
+    if scout.troop is None or scout.rank == '':
+        messages.add_message(request, messages.INFO, 'Please complete your profile below.')
+        return redirect('scout_edit_profile')
+    args = {'enrollments': scout.enrollments.all()}
     return render(request, 'mbu/scout_home.html', args)
 
 
-def register_user_as_scout(request):
-    if not _is_user_scout(request.user) and not _is_user_scoutmaster(request.user):
-        Scout(user=request.user).save()
-        return redirect('edit_scout_profile')
-    return redirect('mbu_home')
+def _render_parent_homepage(request):
+    parent = Parent.objects.get(user=request.user)
+    if parent.troop is None:
+        messages.add_message(request, messages.INFO, 'Please complete your profile below.')
+        return redirect('parent_edit_profile')
+    return render(request, 'mbu/parent_home.html')
 
 
-def register_user_as_scoutmaster(request):
-    if not _is_user_scoutmaster(request.user) and not _is_user_scout(request.user):
-        Scoutmaster(user=request.user).save()
-        return redirect('edit_scoutmaster_profile')
-    return redirect('mbu_home')
+def _render_scoutmaster_homepage(request):
+    scoutmaster = Scoutmaster.objects.get(user=request.user)
+    if scoutmaster.troop is None:
+        messages.add_message(request, messages.INFO, 'Please complete your profile below.')
+        return redirect('sm_edit_profile')
+    return render(request, 'mbu/scoutmaster_home.html')
 
 
 @user_passes_test(_is_user_scout, login_url='/login/')
@@ -124,6 +176,19 @@ def edit_scoutmaster_profile(request):
     return _edit_profile(request, scoutmaster_form, scoutmaster, args)
 
 
+@user_passes_test(_is_user_parent, login_url='/login/')
+def edit_parent_profile(request):
+    args = {}
+    parent_form = ParentProfileForm
+    parent = Parent(user=request.user)
+    try:
+        parent = Parent.objects.get(user=request.user)
+    except Parent.DoesNotExist:
+        pass
+
+    return _edit_profile(request, parent_form, parent, args)
+
+
 def _edit_profile(request, ProfileForm, user, args):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user)
@@ -132,6 +197,7 @@ def _edit_profile(request, ProfileForm, user, args):
             form.save()
             profile_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your profile has been saved.')
+            return redirect('mbu_home')
     else:
         form = UserProfileForm(instance=request.user)
         profile_form = ProfileForm(instance=user)
@@ -193,12 +259,16 @@ def view_troop_enrollees(request):
 def _create_scout_enrollment_dict(scouts):
     scout_course_dict = {}
     for scout in scouts:
-        course_enrollments = Scout.objects.get(pk=scout.pk).user.enrollments.all()
+        course_enrollments = Scout.objects.get(pk=scout.pk).enrollments.all()
         scout_course_dict[scout] = course_enrollments
     return scout_course_dict
 
 
 def sm_signup(request):
+    pass
+
+
+def parent_signup(request):
     pass
 
 
@@ -234,12 +304,6 @@ def sm_view_class(request, scout_id):
     args.update({'course_enrollments': course_enrollments})
     print (course_enrollments)
     return render(request, 'scoutmaster/view_troop_courses.html', args)
-
-
-def populate_courses(request):
-    _populate_courses()
-    messages.add_message(request, messages.SUCCESS, 'Courses updated.')
-    return redirect('mbu_home')
 
 
 def pay_with_paypal(request):

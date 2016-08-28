@@ -6,6 +6,7 @@ from mbu.models import *
 from datetime import date, datetime
 import os
 
+
 # Create your views here.
 def setup_data(request):
     councils = create_councils()
@@ -24,6 +25,7 @@ def setup_data(request):
     scout2, create = Scout.objects.get_or_create(user=user2, rank='Star', troop=troop, waiver=False)
     return redirect('mbu_home')
 
+
 def seed_courses():
     result = []
     files = os.listdir('./static/images/badges')
@@ -33,6 +35,7 @@ def seed_courses():
         result.append(course)
 
     return result
+
 
 def create_timeblocks(mbu):
     result = []
@@ -46,6 +49,7 @@ def create_timeblocks(mbu):
     result.append(timeblock4)
     return result
 
+
 def create_course_instances(courses, timeblocks):
     result = []
     mod = len(timeblocks)
@@ -54,6 +58,7 @@ def create_course_instances(courses, timeblocks):
         course_instance, create = ScoutCourseInstance.objects.get_or_create(course=val, timeblock=timeblock, location='Room %s' % str(idx), max_enrollees=10)
         result.append(course_instance)
     return result
+
 
 def create_councils():
     result = []

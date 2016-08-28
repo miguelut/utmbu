@@ -102,7 +102,6 @@ ROOT_URLCONF = 'utmbu.urls'
 
 WSGI_APPLICATION = 'utmbu.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
@@ -124,7 +123,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-#USE_TZ = True
+# USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -134,14 +133,14 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-#Template Directories
+# Template Directories
 TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'mbu_home'
 
-#Setting up Message Tags to be Bootstrap Compliant
+# Setting up Message Tags to be Bootstrap Compliant
 MESSAGE_TAGS = {
     messages.SUCCESS: 'alert-success',
     messages.WARNING: 'alert-warning',
@@ -149,7 +148,7 @@ MESSAGE_TAGS = {
     messages.INFO: 'alert-info',
 }
 
-#MBU Settings
+# MBU Settings
 DEFAULT_LINKS = [
     {'href': 'mbu_home', 'label': 'About'},
     {'href': 'mbu_home', 'label': 'FAQ'},

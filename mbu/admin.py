@@ -13,3 +13,5 @@ admin.site.register(TimeBlock)
 admin.site.register(ScoutCourseInstance)
 admin.site.register(ScoutmasterRequest, ScoutmasterRequestAdmin)
 admin.site.register(Payment)
+admin.site.register(Parent)
+

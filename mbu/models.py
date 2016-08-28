@@ -37,11 +37,24 @@ class Troop(models.Model):
         unique_together = ('number', 'council')
 
 
+class Parent(models.Model):
+    user = models.OneToOneField(User)
+    troop = models.ForeignKey(Troop, null=True)
+
+    class Meta:
+        permissions = (
+            ('parent_edit_scout_schedule', 'Can edit scout schedule'),
+            ('edit_parent_profile', 'Can edit parent profile')
+        )
+
+
+
 class Scout(models.Model):
     user = models.OneToOneField(User)
-    troop = models.ForeignKey(Troop, blank=True, null=True)
+    troop = models.ForeignKey(Troop, null=True)
     rank = models.CharField(max_length=15)
     waiver = models.BooleanField(default=False)
+    parent = models.ForeignKey(Parent, null=True)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
@@ -128,6 +141,9 @@ class ScoutCourseInstance(models.Model):
 
     def __str__(self):
         return self.course.name + str(self.timeblock)
+
+    class Meta:
+        unique_together = ('timeblock', 'location')
 
 
 class ScoutCourseInstanceSerializer(ModelSerializer):
