@@ -21,6 +21,12 @@
                     return result;
                 });
             }, self);
+
+            self.distinctTimeSlots = ko.dependentObservable(function() {
+              var types = ko.utils.arrayMap(self.filteredCourses(), function(item){ return item.time})
+              return ko.utils.arrayGetDistinctValues(types).sort();
+            });
+
             self.add = function(data, model) {
                 if(model['timeblock_' + data.timeblock.id]() != null) {
                     model.enrollments.remove(model['timeblock_' + data.timeblock.id]());
@@ -101,6 +107,16 @@
                 </tbody>
             </table>
         </div>
+
+        <h4>Filter by time slot(s)</h4>
+        <div data-bind="foreach: distinctTimeSlots">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox"><span data-bind="text: $data"/>
+                </label>
+            </div>
+        </div>
+
         <div class="col-md-5 class-list" data-bind="css: {loading: coursesLoading()}">
             <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
                 <div class="row" data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
@@ -127,5 +143,4 @@
             </span>
         </div>
     </div>
-        
 {% endblock %}
