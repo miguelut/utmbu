@@ -15,6 +15,7 @@ from utmbu import settings
 from decimal import Decimal
 from mbu.api.course_instance import *
 from mbu.api.scout import *
+from mbu.api.scoutmaster import *
 
 logger = logging.getLogger(__name__)
 
@@ -147,7 +148,14 @@ def _render_scoutmaster_homepage(request):
     if scoutmaster.troop is None:
         messages.add_message(request, messages.INFO, 'Please complete your profile below.')
         return redirect('sm_edit_profile')
-    return render(request, 'mbu/scoutmaster_home.html')
+    args = {}
+    troop = Troop.objects.get(scoutmaster=scoutmaster)
+    scouts = Scout.objects.all().filter(troop=troop)
+    scouts_and_enrollments = _create_scout_enrollment_dict(scouts)
+    args.update({'scouts_and_enrollments': scouts_and_enrollments})
+    args.update({'troop': troop})
+
+    return render(request, 'mbu/scoutmaster_home.html', args)
 
 
 @user_passes_test(_is_user_scout, login_url='/login/')
@@ -229,9 +237,18 @@ def view_class_requirements(request, id=-1):
 
 
 @permission_required('mbu.edit_scout_schedule', raise_exception=True)
+@user_passes_test(_is_user_scout, login_url='/login/')
 def scout_edit_classes(request):
+    scout = Scout.objects.get(user=request.user)
+    endpoint = '/api/scout/enrollments/'
+    return _render_edit_classes(request, scout, endpoint)
+
+
+def _render_edit_classes(request, scout, endpoint):
     args = {}
     args.update({'timeblocks': TimeBlock.objects.all()})
+    args.update({'scout_id': scout.id})
+    args.update({'endpoint': endpoint})
     args.update(csrf(request))
 
     return render(request, 'mbu/edit_classes.html', args)
@@ -245,65 +262,12 @@ def view_registered_classes(request):
     return render(request, 'mbu/view_classes.html', args)
 
 
-def view_troop_enrollees(request):
-    args = {}
-    scoutmaster = Scoutmaster.objects.get(user=request.user)
-    troop = Troop.objects.get(scoutmaster=scoutmaster)
-    scouts = Scout.objects.all().filter(troop=troop)
-    scouts_and_enrollments = _create_scout_enrollment_dict(scouts)
-    args.update({'scouts_and_enrollments': scouts_and_enrollments})
-    args.update({'troop': troop})
-    return render(request, 'mbu/view_troop.html', args)
-
-
 def _create_scout_enrollment_dict(scouts):
     scout_course_dict = {}
     for scout in scouts:
         course_enrollments = Scout.objects.get(pk=scout.pk).enrollments.all()
         scout_course_dict[scout] = course_enrollments
     return scout_course_dict
-
-
-def sm_signup(request):
-    pass
-
-
-def parent_signup(request):
-    pass
-
-
-def sm_complete_signup(request, key=None):
-    form = MbuUserCreationForm()
-    if request.POST:
-        form = MbuUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            Scoutmaster(user=user).save()
-            ct = ContentType.objects.get(app_label='mbu', model='scoutmaster')
-            perms = [
-                Permission.objects.get(codename='can_modify_troop_enrollments', content_type=ct),
-                Permission.objects.get(codename='edit_scoutmaster_profile', content_type=ct)
-            ]
-            for perm in perms:
-                user.user_permissions.add(perm)
-            user.save()
-            messages.add_message(request, messages.SUCCESS, 'Successfully registered.')
-            return redirect('mbu_home')
-    email = ScoutmasterRequest.objects.get(key=key).email
-    form.fields['email'].initial = email
-    form.fields['email'].widget.attrs['readonly'] = True
-    args = {'form': form}
-    args.update({'route': 'mbu.views.sm_complete_signup'})
-    args.update({'key': key})
-    return render(request, 'mbu/sm_signup.html', args)
-
-
-def sm_view_class(request, scout_id):
-    args = {}
-    course_enrollments = Scout.objects.get(pk=scout_id).enrollments.all()
-    args.update({'course_enrollments': course_enrollments})
-    print (course_enrollments)
-    return render(request, 'scoutmaster/view_troop_courses.html', args)
 
 
 def pay_with_paypal(request):
@@ -322,6 +286,15 @@ def pay_with_paypal(request):
     return render(request, 'mbu/payment.html', args)
 
 
+@permission_required('mbu.can_modify_troop_enrollments', raise_exception=True)
+@user_passes_test(_is_user_scoutmaster, login_url='/login/')
+def sm_edit_scout_classes(request, scout_id):
+    scout = Scout.objects.get(pk=scout_id)
+    endpoint = '/api/scoutmaster/enrollments/'
+    return _render_edit_classes(request, scout, endpoint)
+
+
+@user_passes_test(_is_user_scoutmaster, login_url='/login/')
 def sm_view_troop_payments(request):
     args = {'data': []}
     scoutmaster = Scoutmaster.objects.get(user=request.user)
@@ -332,6 +305,7 @@ def sm_view_troop_payments(request):
     return render(request, 'mbu/sm_report_troop_payments.html', args)
 
 
+@user_passes_test(_is_user_scout, login_url='/login/')
 def scout_view_payments(request):
     scout = Scout.objects.get(user=request.user)
     args = _create_scout_payment_data(scout)

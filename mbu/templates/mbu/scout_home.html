@@ -14,9 +14,9 @@
                 {% for course in enrollments %}
                     <tr>
                         <td>{{ course.course.name }}</td>
-                        <td>{{ course.session.name }}</td>
-                        <td>{{ course.session.start_time }}</td>
-                        <td>{{ course.session.end_time }}</td>
+                        <td>{{ course.timeblock.name }}</td>
+                        <td>{{ course.timeblock.start_time|date:"h:i A" }}</td>
+                        <td>{{ course.timeblock.end_time|date:"h:i A" }}</td>
                     </tr>
                 {% empty %}
                     <tr>

@@ -32,10 +32,7 @@ urlpatterns += patterns(
 #Scoutmaster URLs
 urlpatterns += patterns(
     '',
-    url(r'^scoutmaster/register/$', 'mbu.views.sm_signup', name='sm_signup'),
-    url(r'^scoutmaster/register/complete/(?P<key>.+)$', 'mbu.views.sm_complete_signup', name='sm_complete_signup'),
-    url(r'^scoutmaster/troop/$', 'mbu.views.view_troop_enrollees', name='sm_view_troop'),
-    url(r'^scoutmaster/viewclasses/(?P<scout_id>\d)/$', 'mbu.views.sm_view_class', name='sm_view_classes'),
+    url(r'^scoutmaster/editclasses/(?P<scout_id>\d)/$', 'mbu.views.sm_edit_scout_classes', name='sm_edit_scout_classes'),
     url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile'),
     url(r'^scoutmaster/troop/report/payments/$', 'mbu.views.sm_view_troop_payments', name='sm_report_troop_payments')
 )
@@ -43,7 +40,6 @@ urlpatterns += patterns(
 #Parent Urls
 urlpatterns += patterns(
     '',
-    url(r'^parent/register/$', 'mbu.views.parent_signup', name='parent_signup'),
     url(r'^parent/profile/edit/$', 'mbu.views.edit_parent_profile', name='parent_edit_profile'),
 )
 
@@ -63,6 +59,7 @@ urlpatterns += patterns(
 #Rest Calls
 urlpatterns += patterns(
     '',
-    url(r'^api/courses', 'mbu.views.courses', name='api_courses'),
-    url(r'^api/enrollments', 'mbu.views.enrollments', name='api_enrollments')
+    url(r'^api/courses/$', 'mbu.views.courses', name='api_courses'),
+    url(r'^api/scout/enrollments/(?P<scout_id>\d)$', 'mbu.views.scout_enrollments', name='api_scout_enrollments'),
+    url(r'^api/scoutmaster/enrollments/(?P<scout_id>\d)$', 'mbu.views.scoutmaster_enrollments', name='api_scoutmaster_enrollments')
 )

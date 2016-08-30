@@ -1,18 +1,19 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
 from rest_framework.decorators import api_view
-from mbu.models import Scout, ScoutCourseInstance, ScoutCourseInstanceSerializer
+from mbu.models import Scout, ScoutCourseInstance, ScoutCourseInstanceSerializer, Scoutmaster
 
 __author__ = 'michael'
 
 
-@permission_required('mbu.edit_scout_schedule', raise_exception=True)
+@permission_required('mbu.can_modify_troop_enrollments', raise_exception=True)
 @api_view(http_method_names=['GET', 'POST'])
-def scout_enrollments(request, scout_id):
+def scoutmaster_enrollments(request, scout_id):
     user = request.user
-    scout = Scout.objects.get(user=user)
-    scout_check = Scout.objects.get(pk=scout_id)
-    assert(scout == scout_check)
+    scoutmaster = Scoutmaster.objects.get(user=user)
+    troop = scoutmaster.troop
+    scout = Scout.objects.get(pk=scout_id)
+    assert(troop == scout.troop)
     enrollments = []
     if request.method == 'POST':
         for d in request.data:
