@@ -18,15 +18,45 @@
                             result = false;
                         }
                     });
-                    return course.course.name.toLowerCase().indexOf(self.searchQuery().toLowerCase()) !== -1;
+                    if(result)
+                    {
+                        result = course.course.name.toLowerCase().indexOf(self.searchQuery().toLowerCase()) !== -1;
+                        if(result)
+                        {
+                            var filter = self.selectedDistinctTimeSlots();
+                            if(filter.length > 0)
+                            {
+                                result = self.selectedDistinctTimeSlots.indexOf(course.time) !== -1;
+                            }
+                        }         
+
+                    }
+                    return result;
                 });
             }, self);
             self.searchQuery = ko.observable('');
 
-            self.distinctTimeSlots = ko.dependentObservable(function() {
-              var types = ko.utils.arrayMap(self.filteredCourses(), function(item){ return item.time})
-              return ko.utils.arrayGetDistinctValues(types).sort();
-            });
+            self.originalFilteredCourses = ko.computed(function() {
+                return self.courses().filter(function(course) {
+                    var result = true
+                    self.enrollments().forEach(function(enrollment) {
+                        if (enrollment.course.id === course.course.id) {
+                            result = false;
+                        }
+                    });
+                    return result;
+                });
+            }, self);
+
+            self.distinctTimeSlots = ko.computed(function () { 
+               return ko.utils.arrayGetDistinctValues(
+                   ko.utils.arrayMap(self.originalFilteredCourses(), function(p){
+                      return p.time;
+                   })
+               );   
+            }, self);
+
+            self.selectedDistinctTimeSlots = ko.observableArray([]);
 
             self.add = function(data, model) {
                 if(model['timeblock_' + data.timeblock.id]() != null) {
@@ -117,7 +147,7 @@
         <div data-bind="foreach: distinctTimeSlots">
             <div class="checkbox">
                 <label>
-                  <input type="checkbox"><span data-bind="text: $data"/>
+                  <input type="checkbox" data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots"><span data-bind="text: $data"/>
                 </label>
             </div>
         </div>
