@@ -19,9 +19,46 @@
                             result = false;
                         }
                     });
+                    if(result)
+                    {
+                        result = course.course.name.toLowerCase().indexOf(self.searchQuery().toLowerCase()) !== -1;
+                        if(result)
+                        {
+                            var filter = self.selectedDistinctTimeSlots();
+                            if(filter.length > 0)
+                            {
+                                result = self.selectedDistinctTimeSlots.indexOf(course.time) !== -1;
+                            }
+                        }         
+
+                    }
                     return result;
                 });
             }, self);
+            self.searchQuery = ko.observable('');
+
+            self.originalFilteredCourses = ko.computed(function() {
+                return self.courses().filter(function(course) {
+                    var result = true
+                    self.enrollments().forEach(function(enrollment) {
+                        if (enrollment.course.id === course.course.id) {
+                            result = false;
+                        }
+                    });
+                    return result;
+                });
+            }, self);
+
+            self.distinctTimeSlots = ko.computed(function () { 
+               return ko.utils.arrayGetDistinctValues(
+                   ko.utils.arrayMap(self.originalFilteredCourses(), function(p){
+                      return p.time;
+                   })
+               );   
+            }, self);
+
+            self.selectedDistinctTimeSlots = ko.observableArray([]);
+
             self.add = function(data, model) {
                 if(model['timeblock_' + data.timeblock.id]() != null) {
                     model.enrollments.remove(model['timeblock_' + data.timeblock.id]());
@@ -102,6 +139,20 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="form-group">
+            <input placeholder="Search..." type="text" data-bind="value: searchQuery, valueUpdate: 'keyup'">
+        </div>
+
+        <h4>Filter by time slot(s)</h4>
+        <div data-bind="foreach: distinctTimeSlots">
+            <div class="checkbox">
+                <label>
+                  <input type="checkbox" data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots"><span data-bind="text: $data"/>
+                </label>
+            </div>
+        </div>
+
         <div class="col-md-5 class-list" data-bind="css: {loading: coursesLoading()}">
             <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
                 <div class="row" data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
@@ -128,5 +179,4 @@
             </span>
         </div>
     </div>
-        
 {% endblock %}

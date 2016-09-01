@@ -18,6 +18,8 @@
   "homepage": "https://github.com/miguelut/utmbu#readme",
   "dependencies": {
     "browser-sync": "^2.12.5",
+    "datatables.net": "^1.10.12",
+    "datatables.net-bs": "^1.10.12",
     "moment": "^2.14.1",
     "watchify": "^3.7.0"
   },

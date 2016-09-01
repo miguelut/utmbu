@@ -4,10 +4,17 @@
 <head>
     <title>{% block title %}Merit Badge University{% endblock %}</title>
 
+    <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/datatables.net-bs/css/dataTables.bootstrap.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/custom.css" %}"/>
+
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static "node_modules/datatables.net/js/jquery.dataTables.js" %}"></script>
+    <script src="{% static "node_modules/datatables.net-bs/js/dataTables.bootstrap.js" %}"></script>
     <script src="{% static "bower_components/knockout/dist/knockout.js" %}"></script>
     <script src="{% static "bower_components/knockout-dragdrop/lib/knockout.dragdrop.js" %}"></script>
     <script src="{% static "node_modules/moment/moment.js" %}"></script>
@@ -75,9 +82,6 @@
     {% block content %}{% endblock content %}
 {% endblock container %}
 </div>
-<link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/custom.css" %}"/>
 {% block scripts %}{% endblock %}
 </body>
 </html>

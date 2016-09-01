@@ -5,18 +5,19 @@
 {% endblock %}
 
 {% block content %}
-<table class="table">
+<br>
+<table id="classListTable" class="table table-hover">
 	<thead>
         <tr>
-            <td>ID</td>
-            <td>Name</td>
-            <td>Time</td>
-            <td>Location</td>
-            <td>Counselor</td>
-            <td>Requirements</td>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Time</th>
+            <th>Location</th>
+            <th>Counselor</th>
+            <th>Requirements</th>
    		</tr>
    	</thead>
-   	<tbody class="table-striped">
+   	<tbody">
         {% for class in classlist %}
         <tr>
             <td>{{ class.pk }}</td>
@@ -29,5 +30,19 @@
         {% endfor %}
     </tbody>
 </table>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#classListTable').dataTable({
+    "pageLength": 25,
+    "language": {
+        searchPlaceholder: "Search..."
+    },
+    "columnDefs": [
+        { "orderable": false, "targets": 5 }
+    ]
+  });
+});
+</script>
 
 {% endblock %}
