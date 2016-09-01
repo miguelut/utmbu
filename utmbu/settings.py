@@ -1,4 +1,5 @@
 from django.contrib.messages import constants as messages
+
 try:
     from config import *
 except:
@@ -33,6 +34,25 @@ ALLOWED_HOSTS = []
 
 # Trying Something
 APPEND_SLASH = True
+
+LOGGING ={
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/michael/utmbu/logs/debug.log',
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propogate': True,
+        }
+    },
+}
 
 # Template Context Processors
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -123,7 +143,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-# USE_TZ = True
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -173,7 +193,8 @@ MBU_LOCATION = 'The University of Texas at Austin'
 
 PAYPAL_RECEIVER_EMAIL='mbu@vexule.com'
 PAYPAL_TEST=True
-PAYPAL_NOTIFY_URL='http://localhost:8080/paypal/notify'
+PAYPAL_SANDBOX_IMAGE='https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png'
+PAYPAL_IMAGE='https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png'
 
 PRICE_PER_COURSE = 7.5
 PROJECT_PATH='/home/michael/virpy3/utmbu'
@@ -181,3 +202,6 @@ PROJECT_PATH='/home/michael/virpy3/utmbu'
 REST_FRAMEWORK = {
 
 }
+
+PAYMENT_NEW = 'NEW'
+PAYMENT_PROCESSED = 'PROCESSED'

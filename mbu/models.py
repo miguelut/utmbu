@@ -28,7 +28,7 @@ class Council(models.Model):
 
 class Troop(models.Model):
     number = models.IntegerField()
-    council = models.ForeignKey(Council)
+    council = models.ForeignKey('Council')
 
     def __str__(self):
         return "%s - %s" % (self.number, self.council)
@@ -39,7 +39,7 @@ class Troop(models.Model):
 
 class Parent(models.Model):
     user = models.OneToOneField(User)
-    troop = models.ForeignKey(Troop, null=True)
+    troop = models.ForeignKey('Troop', null=True)
 
     class Meta:
         permissions = (
@@ -48,13 +48,12 @@ class Parent(models.Model):
         )
 
 
-
 class Scout(models.Model):
     user = models.OneToOneField(User)
-    troop = models.ForeignKey(Troop, null=True)
+    troop = models.ForeignKey('Troop', null=True)
     rank = models.CharField(max_length=15)
     waiver = models.BooleanField(default=False)
-    parent = models.ForeignKey(Parent, null=True)
+    parent = models.ForeignKey('Parent', null=True)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
@@ -68,7 +67,7 @@ class Scout(models.Model):
 
 class Scoutmaster(models.Model):
     user = models.OneToOneField(User)
-    troop = models.ForeignKey(Troop, blank=True, null=True)
+    troop = models.ForeignKey('Troop', blank=True, null=True)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
@@ -82,7 +81,7 @@ class Scoutmaster(models.Model):
 
 class ScoutmasterRequest(models.Model):
     email = models.EmailField(unique=True)
-    troop = models.ForeignKey(Troop)
+    troop = models.ForeignKey('Troop')
     key = models.CharField(max_length=64, unique=True)
 
     def save(self, *args, **kwargs):
@@ -113,7 +112,7 @@ class TimeBlock(models.Model):
     name = models.CharField(max_length=255)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    mbu = models.ForeignKey(MeritBadgeUniversity)
+    mbu = models.ForeignKey('MeritBadgeUniversity')
 
     def __str__(self):
         return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))
@@ -131,10 +130,10 @@ class UserSerializer(ModelSerializer):
 
 
 class ScoutCourseInstance(models.Model):
-    course = models.ForeignKey(Course)
-    timeblock = models.ForeignKey(TimeBlock)
+    course = models.ForeignKey('Course')
+    timeblock = models.ForeignKey('TimeBlock')
     counselor = models.CharField(max_length=100)
-    enrollees = models.ManyToManyField(Scout, related_name='enrollments', blank=True)
+    enrollees = models.ManyToManyField('Scout', related_name='enrollments', blank=True)
     teaching_assistants = models.ManyToManyField(User, related_name='assistant_courses', blank=True)
     location = models.CharField(max_length=100)
     max_enrollees = models.IntegerField()
@@ -155,8 +154,12 @@ class ScoutCourseInstanceSerializer(ModelSerializer):
         depth = 1
 
 
+class PaymentSet(models.Model):
+    pp_txn_id = models.CharField(max_length=100, null=True)
+    payments = models.ManyToManyField('Payment')
+
+
 class Payment(models.Model):
-    timestamp = models.DateTimeField()
-    tracking_number = models.CharField(max_length=100)
+    user = models.ForeignKey(User)
     amount = models.DecimalField(decimal_places=2, max_digits=6)
-    scout = models.ForeignKey(Scout)
+    status = models.CharField(max_length=15)

@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+import mbu.paypal_signal_processor
 
 #General Views
 urlpatterns = patterns(
@@ -46,8 +47,7 @@ urlpatterns += patterns(
 #Paypal URLS
 urlpatterns += patterns(
     '',
-    url(r'^pay', 'mbu.views.pay_with_paypal', name='pay-with-paypal'),
-    url(r'^paypal/notify', include('paypal.standard.ipn.urls'))
+    url(r'^paypal/', include('paypal.standard.ipn.urls'))
 )
 
 #Dev URLs -- REMOVE BEFORE DEPLOYMENT

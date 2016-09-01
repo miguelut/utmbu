@@ -1,4 +1,5 @@
 import logging
+from django.db.models import Count
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, render_to_response
 from django.core.context_processors import csrf
@@ -7,6 +8,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Permission, ContentType
+from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.forms import PayPalPaymentsForm
 from mbu.forms import *
 from mbu.models import *
@@ -18,7 +20,6 @@ from mbu.api.scout import *
 from mbu.api.scoutmaster import *
 
 logger = logging.getLogger(__name__)
-
 
 def signup(request):
     """This is the default signup method.
@@ -116,6 +117,7 @@ def logout_user(request):
     return redirect('mbu_home')
 
 
+@csrf_exempt
 def view_home_page(request):
     if _is_user_scout(request.user):
         return _render_scout_homepage(request)
@@ -270,22 +272,6 @@ def _create_scout_enrollment_dict(scouts):
     return scout_course_dict
 
 
-def pay_with_paypal(request):
-    paypal_dict = {
-        'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': '100', # calculate this amount dynamically
-        'item_name': 'MBU 2015', #change this dynamically
-        'invoice': 1, # generate invoice id from database
-        'notify_url': 'http://localhost:8000' + reverse('paypal-ipn'),
-        'return_url': 'http://localhost:8000', # set this to user's home page
-        'cancel_return': 'http://localhost:8000' # set to user's home page
-    }
-
-    form = PayPalPaymentsForm(initial=paypal_dict)
-    args = {'form': form}
-    return render(request, 'mbu/payment.html', args)
-
-
 @permission_required('mbu.can_modify_troop_enrollments', raise_exception=True)
 @user_passes_test(_is_user_scoutmaster, login_url='/login/')
 def sm_edit_scout_classes(request, scout_id):
@@ -308,15 +294,42 @@ def sm_view_troop_payments(request):
 @user_passes_test(_is_user_scout, login_url='/login/')
 def scout_view_payments(request):
     scout = Scout.objects.get(user=request.user)
-    args = _create_scout_payment_data(scout)
-    payments = Payment.objects.all().filter(scout=scout)
+    payments = Payment.objects.all().filter(user=request.user, status=settings.PAYMENT_PROCESSED)
+    args = _create_scout_payment_data(scout, payments)
     args.update({'payments': payments})
+    amount = args['amount_owed']
+
+    try:
+        payment = Payment.objects.get(user=request.user, status=settings.PAYMENT_NEW)
+        payment.amount = amount
+    except:
+        payment = Payment.objects.create(user=request.user, amount=amount, status=settings.PAYMENT_NEW)
+
+    payment.save()
+
+    PaymentSet.objects.filter(payments__id__contains=payment.id).delete()
+    payment_set = PaymentSet.objects.create()
+    payment_set.payments.add(payment)
+    payment_set.save()
+
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': amount, # calculate this amount dynamically
+        'item_name': 'MBU 2016', # change this dynamically
+        'notify_url': 'http://vexule.ddns.net' + reverse('paypal-ipn'),
+        'return_url': 'http://localhost:8000', # set this to user's home page
+        'cancel_return': 'http://localhost:8000', # set to user's home page
+        'custom': payment_set.id
+    }
+
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    args.update({'form': form})
     return render(request, 'mbu/scout_report_payments.html', args)
 
 
-def _create_scout_payment_data(scout):
+def _create_scout_payment_data(scout, payments):
     amount_invoiced = _get_amount_invoiced(scout)
-    amount_paid = _get_amount_paid(scout)
+    amount_paid = _get_amount_paid(payments)
     amount_owed = Decimal(amount_invoiced) - Decimal(amount_paid)
     return {
         'scout': scout,
@@ -332,9 +345,8 @@ def _get_amount_invoiced(scout):
     return settings.PRICE_PER_COURSE * number_of_enrollments
 
 
-def _get_amount_paid(scout):
+def _get_amount_paid(payments):
     amount = Decimal(0.00)
-    payments = Payment.objects.all().filter(scout=scout)
     for payment in payments:
         amount += Decimal(payment.amount)
     return amount
