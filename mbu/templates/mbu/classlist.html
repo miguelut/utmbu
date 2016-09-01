@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block content %}
-<table class="table table-hover">
+<br>
+<table id="classListTable" class="table table-hover">
 	<thead>
         <tr>
             <th>ID</th>
@@ -16,7 +17,7 @@
             <th>Requirements</th>
    		</tr>
    	</thead>
-   	<tbody class="table-striped">
+   	<tbody">
         {% for class in classlist %}
         <tr>
             <td>{{ class.pk }}</td>
@@ -29,5 +30,19 @@
         {% endfor %}
     </tbody>
 </table>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#classListTable').dataTable({
+    "pageLength": 25,
+    "language": {
+        searchPlaceholder: "Search..."
+    },
+    "columnDefs": [
+        { "orderable": false, "targets": 5 }
+    ]
+  });
+});
+</script>
 
 {% endblock %}
