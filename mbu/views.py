@@ -295,6 +295,7 @@ def sm_view_troop_payments(request):
 def scout_view_payments(request):
     scout = Scout.objects.get(user=request.user)
     payments = Payment.objects.all().filter(user=request.user, status=settings.PAYMENT_PROCESSED)
+
     args = _create_scout_payment_data(scout, payments)
     args.update({'payments': payments})
     amount = args['amount_owed']

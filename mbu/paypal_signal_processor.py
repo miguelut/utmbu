@@ -1,7 +1,6 @@
 from utmbu.settings import PAYPAL_RECEIVER_EMAIL
 from mbu.models import PaymentSet
 from utmbu import settings
-from pprint import pprint
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 

@@ -163,3 +163,6 @@ class Payment(models.Model):
     user = models.ForeignKey(User)
     amount = models.DecimalField(decimal_places=2, max_digits=6)
     status = models.CharField(max_length=15)
+
+    def txn_id(self):
+        return PaymentSet.objects.get(payments__id__contains=self.pk).pp_txn_id

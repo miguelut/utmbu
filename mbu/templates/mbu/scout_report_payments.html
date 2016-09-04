@@ -19,7 +19,7 @@
                             <tbody>
                                 {% for payment in payments %}
                                     <tr>
-                                        <td>{{ payment.tracking_number }}</td>
+                                        <td>{{ payment.txn_id }}</td>
                                         <td>${{ payment.amount|stringformat:"1.2f" }}</td>
                                         <td>{{ payment.timestamp }}</td>
                                     </tr>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-        {{ form }}
+        {{ form.render }}
         </div>
     </div>
 {% endblock report %}
