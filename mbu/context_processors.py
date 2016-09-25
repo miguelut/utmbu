@@ -1,5 +1,5 @@
 from django.conf import settings
-from mbu.util import _is_user_scoutmaster, _is_user_scout
+from mbu.util import _is_user_scoutmaster, _is_user_scout, _is_user_parent
 
 
 def default_links(request):
@@ -39,10 +39,21 @@ def _get_links(user):
             'href': 'sm_edit_profile',
             'label': 'Edit Profile'
         })
+    elif _is_user_parent(user):
+        args.get('links').append({
+            'href': 'parent_add_scouts',
+            'label': 'Register Scouts'
+        })
+        args.get('links').append({
+            'href': 'parent_edit_profile',
+            'label': 'Edit Profile'
+        })
     args.get('links').append({
         'href': 'logout',
         'label': 'Logout'
     })
+
+
     return args
 
 

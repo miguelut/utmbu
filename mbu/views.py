@@ -17,6 +17,7 @@ from utmbu import settings
 from decimal import Decimal
 from mbu.api.course_instance import *
 from mbu.api.scout import *
+from mbu.api.parent import *
 from mbu.api.scoutmaster import *
 
 logger = logging.getLogger(__name__)
@@ -142,7 +143,13 @@ def _render_parent_homepage(request):
     if parent.troop is None:
         messages.add_message(request, messages.INFO, 'Please complete your profile below.')
         return redirect('parent_edit_profile')
-    return render(request, 'mbu/parent_home.html')
+    args = {}
+    troop = parent.troop
+    scouts = parent.scouts.all()
+    scouts_and_enrollments = _create_scout_enrollment_dict(scouts)
+    args.update({'scouts_and_enrollments': scouts_and_enrollments})
+    args.update({'troop': troop})
+    return render(request, 'mbu/parent_home.html', args)
 
 
 def _render_scoutmaster_homepage(request):
@@ -351,3 +358,6 @@ def _get_amount_paid(payments):
     for payment in payments:
         amount += Decimal(payment.amount)
     return amount
+
+def parent_add_scouts(request):
+    return render(request, 'mbu/parent_add_scouts.html')

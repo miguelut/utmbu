@@ -13,7 +13,7 @@
             self.enrollments = ko.observableArray();
             self.filteredCourses = ko.computed(function() {
                 return self.courses().filter(function(course) {
-                    var result = true
+                    var result = true;
                     self.enrollments().forEach(function(enrollment) {
                         if (enrollment.course.id === course.course.id) {
                             result = false;
@@ -39,7 +39,7 @@
 
             self.originalFilteredCourses = ko.computed(function() {
                 return self.courses().filter(function(course) {
-                    var result = true
+                    var result = true;
                     self.enrollments().forEach(function(enrollment) {
                         if (enrollment.course.id === course.course.id) {
                             result = false;
