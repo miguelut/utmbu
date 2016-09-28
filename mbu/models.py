@@ -113,6 +113,7 @@ class TimeBlock(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     mbu = models.ForeignKey('MeritBadgeUniversity')
+    double = models.BooleanField(default=False)
 
     def __str__(self):
         return "%s (%s - %s)" % (self.name, str(self.start_time), str(self.end_time))

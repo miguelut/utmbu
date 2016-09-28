@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% block scripts %}
     <script type="application/javascript">
-        var ViewModel = function() {
+        var ViewModel = function () {
             var self = this;
 
             self.scoutId = {{ scout_id }};
@@ -11,25 +11,22 @@
             self.coursesLoading = ko.observable(true);
             self.courses = ko.observableArray();
             self.enrollments = ko.observableArray();
-            self.filteredCourses = ko.computed(function() {
-                return self.courses().filter(function(course) {
+            self.filteredCourses = ko.computed(function () {
+                return self.courses().filter(function (course) {
                     var result = true;
-                    self.enrollments().forEach(function(enrollment) {
+                    self.enrollments().forEach(function (enrollment) {
                         if (enrollment.course.id === course.course.id) {
                             result = false;
                         }
                     });
-                    if(result)
-                    {
+                    if (result) {
                         result = course.course.name.toLowerCase().indexOf(self.searchQuery().toLowerCase()) !== -1;
-                        if(result)
-                        {
+                        if (result) {
                             var filter = self.selectedDistinctTimeSlots();
-                            if(filter.length > 0)
-                            {
+                            if (filter.length > 0) {
                                 result = self.selectedDistinctTimeSlots.indexOf(course.time) !== -1;
                             }
-                        }         
+                        }
 
                     }
                     return result;
@@ -37,10 +34,10 @@
             }, self);
             self.searchQuery = ko.observable('');
 
-            self.originalFilteredCourses = ko.computed(function() {
-                return self.courses().filter(function(course) {
+            self.originalFilteredCourses = ko.computed(function () {
+                return self.courses().filter(function (course) {
                     var result = true;
-                    self.enrollments().forEach(function(enrollment) {
+                    self.enrollments().forEach(function (enrollment) {
                         if (enrollment.course.id === course.course.id) {
                             result = false;
                         }
@@ -49,28 +46,64 @@
                 });
             }, self);
 
-            self.distinctTimeSlots = ko.computed(function () { 
-               return ko.utils.arrayGetDistinctValues(
-                   ko.utils.arrayMap(self.originalFilteredCourses(), function(p){
-                      return p.time;
-                   })
-               );   
+            self.distinctTimeSlots = ko.computed(function () {
+                return ko.utils.arrayGetDistinctValues(
+                        ko.utils.arrayMap(self.originalFilteredCourses(), function (p) {
+                            return p.time;
+                        })
+                );
             }, self);
 
             self.selectedDistinctTimeSlots = ko.observableArray([]);
 
-            self.add = function(data, model) {
-                if(model['timeblock_' + data.timeblock.id]() != null) {
-                    model.enrollments.remove(model['timeblock_' + data.timeblock.id]());
-                }
+            self.add = function (data, model) {
                 model.enrollments.push(data);
-                model['timeblock_' + data.timeblock.id](data);
+                if (data.timeblock.id < 5) {
+                    var removed = null;
+                    if (model['timeblock_' + data.timeblock.id]() != null) {
+                        removed = model.enrollments.remove(model['timeblock_' + data.timeblock.id]());
+                    }
+                    model['timeblock_' + data.timeblock.id](data);
+                    if (removed && removed[0].timeblock.id === 5) {
+                        model['timeblock_' + (data.timeblock.id % 2 + 1)](null);
+                    } else if (removed && removed[0].timeblock.id === 6) {
+                        model['timeblock_' + (data.timeblock.id % 4 + 1)](null);
+                    }
+                } else if (data.timeblock.id === 5) {
+                    if (model['timeblock_1']() != null) {
+                        model.enrollments.remove(model['timeblock_1']());
+                    }
+                    if (model['timeblock_2']() != null) {
+                        model.enrollments.remove(model['timeblock_2']());
+                    }
+                    model['timeblock_1'](data);
+                    model['timeblock_2'](data);
+                } else if (data.timeblock.id === 6) {
+                    if (model['timeblock_3']() != null) {
+                        model.enrollments.remove(model['timeblock_3']());
+                    }
+                    if (model['timeblock_4']() != null) {
+                        model.enrollments.remove(model['timeblock_4']());
+                    }
+                    model['timeblock_3'](data);
+                    model['timeblock_4'](data);
+                }
             };
-            self.remove = function(data, model) {
+            self.remove = function (data, model) {
+                model.enrollments.remove(data);
+                if (data.timeblock.id < 5) {
+                    model['timeblock_' + data.timeblock.id](null);
+                } else if (data.timeblock.id === 5) {
+                    model['timeblock_1'](null);
+                    model['timeblock_2'](null);
+                } else if (data.timeblock.id === 6) {
+                    model['timeblock_3'](null);
+                    model['timeblock_4'](null);
+                }
                 model.enrollments.remove(data);
                 model['timeblock_' + data.timeblock.id](null);
             };
-            self.submit = function() {
+            self.submit = function () {
                 self.submitting(true);
                 $.ajax({
                     type: 'POST',
@@ -81,13 +114,15 @@
                         self.submitting(false);
                         self.submitSuccess(true);
                     }
-                }).fail(function() { self.submitting(false)});
+                }).fail(function () {
+                    self.submitting(false)
+                });
             }
-        {% for timeblock in timeblocks %}; self.timeblock_{{ timeblock.pk }} = ko.observable(){%  endfor %}
+            {% for timeblock in timeblocks %}; self.timeblock_{{ timeblock.pk }} = ko.observable(){%  endfor %}
         };
         var vm = new ViewModel();
-        $.getJSON('/api/courses', function(data) {
-            data.courses.forEach(function(course) {
+        $.getJSON('/api/courses', function (data) {
+            data.courses.forEach(function (course) {
                 var start = moment(course.timeblock.start_time).format('hh:mm A');
                 var end = moment(course.timeblock.end_time).format('hh:mm A');
                 course.time = start + ' - ' + end;
@@ -95,8 +130,8 @@
             });
             vm.coursesLoading(false);
         });
-        $.getJSON('{{ endpoint }}' + vm.scoutId, function(data) {
-            data.enrollments.forEach(function(enrollment) {
+        $.getJSON('{{ endpoint }}' + vm.scoutId, function (data) {
+            data.enrollments.forEach(function (enrollment) {
                 var start = moment(enrollment.timeblock.start_time).format('hh:mm A');
                 var end = moment(enrollment.timeblock.end_time).format('hh:mm A');
                 enrollment.time = start + ' - ' + end;
@@ -108,61 +143,122 @@
     </script>
 {% endblock %}
 {% block content %}
-    <div data-bind="text: name"></div>
     <div class="row schedule">
         <div class="col-md-7">
             <table class="table table-striped">
                 <thead>
-                  <tr>
+                <tr>
                     <th>Time</th>
                     <th>Class Name</th>
-                  </tr>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for timeblock in timeblocks %}
-                    <tr style="height: 97px">
-                        <td class="col-md-2">{{ timeblock.start_time|date:"h:i A" }} - {{ timeblock.end_time|date:"h:i A" }}</td>
-                        <td class="col-md-5" data-bind="with: timeblock_{{ timeblock.pk }}, dropZone: {accepts: 'enrollment_{{ timeblock.pk }}', drop: add }">
-                            <div class="row" data-bind="dragZone: { name: 'enrollment' }">
-                                <div class="course-icon">
-                                    <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
-                                </div>
-                                <div class="course-desc">
-                                    <div data-bind="text: course.name"></div>
-                                    <div data-bind="text: time"></div>
-                                    <div data-bind="text: location"></div>
-                                </div>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.0.start_time|date:"h:i A" }}
+                        - {{ timeblocks.0.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.0.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.0.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
                             </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.1.start_time|date:"h:i A" }}
+                        - {{ timeblocks.1.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.1.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.1.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.2.start_time|date:"h:i A" }}
+                        - {{ timeblocks.2.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.2.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.2.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.3.start_time|date:"h:i A" }}
+                        - {{ timeblocks.3.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.3.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.3.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
                 </tbody>
             </table>
         </div>
 
-        <div class="form-group">
-            <input placeholder="Search..." type="text" data-bind="value: searchQuery, valueUpdate: 'keyup'">
-        </div>
-
-        <h4>Filter by time slot(s)</h4>
-        <div data-bind="foreach: distinctTimeSlots">
-            <div class="checkbox">
-                <label>
-                  <input type="checkbox" data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots"><span data-bind="text: $data"/>
-                </label>
+        <div class="col-md-5">
+            <div class="form-group">
+                <input placeholder="Search..." type="text" data-bind="value: searchQuery, valueUpdate: 'keyup'">
             </div>
-        </div>
 
-        <div class="col-md-5 class-list" data-bind="css: {loading: coursesLoading()}">
-            <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
-                <div class="row" data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
-                    <div class="course-icon">
-                        <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}" class="mb-course"/>
-                    </div>
-                    <div class="course-desc">
-                        <div data-bind="text: course.name"></div>
-                        <div data-bind="text: time"></div>
-                        <div data-bind="text: location"></div>
+            <h4>Filter by time slot(s)</h4>
+
+            <div data-bind="foreach: distinctTimeSlots">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots"><span
+                            data-bind="text: $data"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="class-list" data-bind="css: {loading: coursesLoading()}">
+                <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
+                    <div data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
+                        <div class="course-icon">
+                            <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                 class="mb-course"/>
+                        </div>
+                        <div class="course-desc">
+                            <div data-bind="text: course.name"></div>
+                            <div data-bind="text: time"></div>
+                            <div data-bind="text: location"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,7 +268,7 @@
         <div class="col-md-12">
             <button class="btn btn-primary" data-bind="click: submit">Submit</button>
             <span data-bind="if: submitting">
-                <img src="{% static 'images/ajax-loader.gif' %}" />
+                <img src="{% static 'images/ajax-loader.gif' %}"/>
             </span>
             <span data-bind="if: submitSuccess">
                 <i class="fa fa-check fa-lg"></i>

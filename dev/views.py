@@ -43,10 +43,14 @@ def create_timeblocks(mbu):
     timeblock2, create = TimeBlock.objects.get_or_create(name='Session 2', start_time=datetime(2015,2,14,10,0,0), end_time=datetime(2015,2,14,12,0,0), mbu=mbu)
     timeblock3, create = TimeBlock.objects.get_or_create(name='Session 3', start_time=datetime(2015,2,14,13,0,0), end_time=datetime(2015,2,14,15,0,0), mbu=mbu)
     timeblock4, create = TimeBlock.objects.get_or_create(name='Session 4', start_time=datetime(2015,2,14,15,0,0), end_time=datetime(2015,2,14,17,0,0), mbu=mbu)
+    timeblock5, create = TimeBlock.objects.get_or_create(name='Session 1-Double', start_time=datetime(2015,2,14,8,0,0), end_time=datetime(2015,2,14,12,0,0), mbu=mbu, double=True)
+    timeblock6, create = TimeBlock.objects.get_or_create(name='Session 3-Double', start_time=datetime(2015,2,14,13,0,0), end_time=datetime(2015,2,14,17,0,0), mbu=mbu, double=True)
     result.append(timeblock1)
     result.append(timeblock2)
     result.append(timeblock3)
     result.append(timeblock4)
+    result.append(timeblock5)
+    result.append(timeblock6)
     return result
 
 
