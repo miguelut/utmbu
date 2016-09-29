@@ -1,4 +1,5 @@
 from django.contrib.messages import constants as messages
+import os
 
 try:
     from config import *
@@ -42,7 +43,7 @@ LOGGING ={
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/home/michael/utmbu/logs/debug.log',
+            'filename': os.getenv('UTMBU_LOGGING','/home/michael/utmbu/logs/debug.log'),
         }
     },
     'loggers': {
