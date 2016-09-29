@@ -43,6 +43,7 @@ urlpatterns += patterns(
     '',
     url(r'^parent/profile/edit/$', 'mbu.views.edit_parent_profile', name='parent_edit_profile'),
     url(r'^parent/addscouts/$', 'mbu.views.parent_add_scouts', name='parent_add_scouts'),
+    url(r'^parent/editclasses/(?P<scout_id>\d+)/$', 'mbu.views.parent_edit_scout_classes', name='parent_edit_scout_classes'),
 )
 
 #Paypal URLS
@@ -63,5 +64,6 @@ urlpatterns += patterns(
     url(r'^api/courses/$', 'mbu.views.courses', name='api_courses'),
     url(r'^api/scout/enrollments/(?P<scout_id>\d)$', 'mbu.views.scout_enrollments', name='api_scout_enrollments'),
     url(r'^api/scoutmaster/enrollments/(?P<scout_id>\d)$', 'mbu.views.scoutmaster_enrollments', name='api_scoutmaster_enrollments'),
+    url(r'^api/parent/enrollments/(?P<scout_id>\d)$', 'mbu.views.parent_enrollments', name='api_parent_enrollments'),
     url(r'^api/parent/registerscouts', 'mbu.views.registerscouts', name='api_parents_registerscourts')
 )

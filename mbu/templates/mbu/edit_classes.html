@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% block scripts %}
     <script type="application/javascript">
+        document.ondragstart = function () { return false; };
         var ViewModel = function () {
             var self = this;
 
@@ -123,8 +124,8 @@
         var vm = new ViewModel();
         $.getJSON('/api/courses', function (data) {
             data.courses.forEach(function (course) {
-                var start = moment(course.timeblock.start_time).format('hh:mm A');
-                var end = moment(course.timeblock.end_time).format('hh:mm A');
+                var start = moment(course.timeblock.start_time).utcOffset('Z').format('hh:mm A');
+                var end = moment(course.timeblock.end_time).utcOffset('Z').format('hh:mm A');
                 course.time = start + ' - ' + end;
                 vm.courses.push(course);
             });
@@ -132,10 +133,18 @@
         });
         $.getJSON('{{ endpoint }}' + vm.scoutId, function (data) {
             data.enrollments.forEach(function (enrollment) {
-                var start = moment(enrollment.timeblock.start_time).format('hh:mm A');
-                var end = moment(enrollment.timeblock.end_time).format('hh:mm A');
+                var start = moment(enrollment.timeblock.start_time).utcOffset('Z').format('hh:mm A');
+                var end = moment(enrollment.timeblock.end_time).utcOffset('Z').format('hh:mm A');
                 enrollment.time = start + ' - ' + end;
-                vm['timeblock_' + enrollment.timeblock.id](enrollment);
+                if(enrollment.timeblock.id < 5){
+                    vm['timeblock_' + enrollment.timeblock.id](enrollment);
+                } else if (enrollment.timeblock.id === 5) {
+                    vm['timeblock_1'](enrollment);
+                    vm['timeblock_2'](enrollment);
+                } else if (enrollment.timeblock.id === 6) {
+                    vm['timeblock_3'](enrollment);
+                    vm['timeblock_4'](enrollment);
+                }
                 vm.enrollments.push(enrollment);
             })
         });
@@ -240,9 +249,8 @@
             <div data-bind="foreach: distinctTimeSlots">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"
-                               data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots"><span
-                            data-bind="text: $data"/>
+                        <input type="checkbox" data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots">
+                        <span data-bind="text: $data"></span>
                     </label>
                 </div>
             </div>

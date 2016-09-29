@@ -359,5 +359,16 @@ def _get_amount_paid(payments):
         amount += Decimal(payment.amount)
     return amount
 
+
+@permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
+@user_passes_test(_is_user_parent, login_url='/login/')
 def parent_add_scouts(request):
     return render(request, 'mbu/parent_add_scouts.html')
+
+
+@permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
+@user_passes_test(_is_user_parent, login_url='/login/')
+def parent_edit_scout_classes(request, scout_id):
+    scout = Scout.objects.get(pk=scout_id)
+    endpoint = '/api/parent/enrollments/'
+    return _render_edit_classes(request, scout, endpoint)
