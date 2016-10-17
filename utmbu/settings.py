@@ -1,10 +1,6 @@
 from django.contrib.messages import constants as messages
 import os
 
-try:
-    from config import *
-except:
-    pass
 """
 Django settings for utmbu project.
 
@@ -206,3 +202,8 @@ REST_FRAMEWORK = {
 
 PAYMENT_NEW = 'NEW'
 PAYMENT_PROCESSED = 'PROCESSED'
+
+try:
+    from config import *
+except:
+    pass
