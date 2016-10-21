@@ -13,7 +13,7 @@ from paypal.standard.forms import PayPalPaymentsForm
 from mbu.forms import *
 from mbu.models import *
 from mbu.util import _is_user_scout, _is_user_scoutmaster, _is_user_parent
-from utmbu import settings
+from django.conf import settings
 from decimal import Decimal
 from mbu.api.course_instance import *
 from mbu.api.scout import *
@@ -324,9 +324,9 @@ def scout_view_payments(request):
         'business': settings.PAYPAL_RECEIVER_EMAIL,
         'amount': amount, # calculate this amount dynamically
         'item_name': 'MBU 2016', # change this dynamically
-        'notify_url': 'http://vexule.ddns.net' + reverse('paypal-ipn'),
-        'return_url': 'http://localhost:8000', # set this to user's home page
-        'cancel_return': 'http://localhost:8000', # set to user's home page
+        'notify_url': settings.PAYPAL_NOTIFY_URL + reverse('paypal-ipn'),
+        'return_url': settings.PAYPAL_RETURN_URL,  # set this to user's home page
+        'cancel_return': settings.PAYPAL_CANCEL_RETURN,  # set to user's home page
         'custom': payment_set.id
     }
 
