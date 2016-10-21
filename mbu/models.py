@@ -35,6 +35,7 @@ class Troop(models.Model):
 
     class Meta:
         unique_together = ('number', 'council')
+        ordering = ['number']
 
 
 class Parent(models.Model):
