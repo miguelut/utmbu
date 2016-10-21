@@ -20,6 +20,9 @@
                     rank: ko.observable("")
                 })
             };
+            self.remove = function(item) {
+                console.log(item);
+            };
             self.submit = function() {
                 console.log(self.forms());
                 self.submitting(true);
@@ -36,6 +39,7 @@
             }
         };
         var vm = new ViewModel();
+        vm.add();
         ko.applyBindings(vm);
     </script>
 {% endblock %}
@@ -45,6 +49,9 @@
     <div data-bind="foreach: forms">
         <div class="well">
             <div>
+                <div class="x-cancel" data-bind="click: $parent.remove">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </div>
                 <div class="form-group">
                     <label for="id_username">Username:</label>
                     <input class="form-control" id="id_username" data-bind="value: username">

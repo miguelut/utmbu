@@ -22,6 +22,7 @@ from mbu.api.scoutmaster import *
 
 logger = logging.getLogger(__name__)
 
+
 def signup(request):
     """This is the default signup method.
     This method will register a user and a corresponding Scout."""
@@ -220,7 +221,7 @@ def _edit_profile(request, ProfileForm, user, args):
         profile_form = ProfileForm(instance=user)
     args.update({'form': form})
     args.update({'profile_form': profile_form})
-    
+
     return render(request, 'mbu/edit_profile.html', args)
 
 
@@ -234,7 +235,7 @@ def view_class_list(request):
     if mbu is not None:
         timeblocks = TimeBlock.objects.filter(mbu=mbu).values('pk')
         course_instances = ScoutCourseInstance.objects.filter(timeblock__pk__in=timeblocks)
-        args.update({'classlist': course_instances })
+        args.update({'classlist': course_instances})
     return render(request, 'mbu/classlist.html', args)
 
 

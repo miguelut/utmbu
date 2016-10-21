@@ -197,3 +197,25 @@ hr {
 .course-double {
     height: 194px;
 }
+
+ul.errorlist {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid red;
+    list-style: none;
+    background: #FDD
+}
+
+div.x-cancel {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+div.x-cancel > i.fa.fa-times {
+    color: black;
+}
