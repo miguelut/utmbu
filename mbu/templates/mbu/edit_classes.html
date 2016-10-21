@@ -122,7 +122,7 @@
             {% for timeblock in timeblocks %}; self.timeblock_{{ timeblock.pk }} = ko.observable(){%  endfor %}
         };
         var vm = new ViewModel();
-        $.getJSON('/api/courses', function (data) {
+        $.getJSON('/api/courses/', function (data) {
             data.courses.forEach(function (course) {
                 var start = moment(course.timeblock.start_time).utcOffset('Z').format('hh:mm A');
                 var end = moment(course.timeblock.end_time).utcOffset('Z').format('hh:mm A');

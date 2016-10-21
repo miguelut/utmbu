@@ -202,8 +202,3 @@ REST_FRAMEWORK = {
 
 PAYMENT_NEW = 'NEW'
 PAYMENT_PROCESSED = 'PROCESSED'
-
-try:
-    from config import *
-except:
-    pass

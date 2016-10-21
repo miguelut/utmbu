@@ -142,9 +142,6 @@ class ScoutCourseInstance(models.Model):
     def __str__(self):
         return self.course.name + str(self.timeblock)
 
-    class Meta:
-        unique_together = ('timeblock', 'location')
-
 
 class ScoutCourseInstanceSerializer(ModelSerializer):
     teaching_assistants = UserSerializer(many=True, read_only=True)
