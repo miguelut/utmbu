@@ -21,7 +21,9 @@
                 })
             };
             self.remove = function(item) {
-                console.log(item);
+                if (self.forms().length > 1) {
+                    self.forms.remove(item);
+                }
             };
             self.submit = function() {
                 console.log(self.forms());
@@ -49,8 +51,8 @@
     <div data-bind="foreach: forms">
         <div class="well">
             <div>
-                <div class="x-cancel" data-bind="click: $parent.remove">
-                    <i class="fa fa-times" aria-hidden="true"></i>
+                <div class="x-cancel">
+                    <i class="fa fa-times" aria-hidden="true" data-bind="click: $parent.remove"></i>
                 </div>
                 <div class="form-group">
                     <label for="id_username">Username:</label>
