@@ -68,7 +68,7 @@
                     if (removed && removed[0].timeblock.id === 5) {
                         model['timeblock_' + (data.timeblock.id % 2 + 1)](null);
                     } else if (removed && removed[0].timeblock.id === 6) {
-                        model['timeblock_' + (data.timeblock.id % 4 + 1)](null);
+                        model['timeblock_' + (data.timeblock.id % 4 + 3)](null);
                     }
                 } else if (data.timeblock.id === 5) {
                     if (model['timeblock_1']() != null) {
