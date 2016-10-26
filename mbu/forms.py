@@ -48,7 +48,7 @@ class ScoutProfileForm(ModelForm):
 
     class Meta:
         model = Scout
-        exclude = ['user', 'waiver', 'parent']
+        exclude = ['user', 'parent']
 
 
 class ScoutmasterProfileForm(ModelForm):

@@ -9,16 +9,27 @@
             {% crispy form %}
             {% for field in profile_form %}
                 <div class="form-group">
-                    {{ field.errors }}
-                    {{ field.label_tag }}
-                    <div class="controls">
-                        {{ field|add_class:"textinput textInput form-control" }}
-                    </div>
-                {% if field.name == 'troop' %}
-                    <div style="padding-top: 5px; cursor: pointer" data-toggle="modal" data-target="#troopModal">
-                        <i class="fa fa-plus" style="color: green; padding-right: 5px"></i>Add Troop
-                    </div>
-                {% endif %}
+                    {% if field.name != 'waiver' %}
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        <div class="controls">
+                            {{ field|add_class:"textinput textInput form-control" }}
+                        </div>
+                        {% if field.name == 'troop' %}
+                            <div style="padding-top: 5px; cursor: pointer" data-toggle="modal" data-target="#troopModal">
+                                <i class="fa fa-plus" style="color: green; padding-right: 5px"></i>Add Troop
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        {{ field.errors }}
+                        <div class="checkbox">
+                            <label>
+                                {{ field }}
+                                <span>I am the legal guardian of this scout and have read and consent to the
+                                    <a href="{% static 'documents/waiver.pdf' %}">Consent and Waiver</a> form.</span>
+                            </label>
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
             <input type="submit" class="btn btn-primary" value="Submit" form="edit_profile_form"/>
