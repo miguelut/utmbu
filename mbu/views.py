@@ -351,7 +351,11 @@ def _create_scout_payment_data(scout, payments):
 
 def _get_amount_invoiced(scout):
     enrollments = scout.enrollments.all()
-    number_of_enrollments = len(enrollments)
+    number_of_enrollments = 0
+    for e in enrollments:
+        number_of_enrollments += 1
+        if e.timeblock.double:
+            number_of_enrollments += 1
     return settings.PRICE_PER_COURSE * number_of_enrollments
 
 
