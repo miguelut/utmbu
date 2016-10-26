@@ -206,3 +206,12 @@ REST_FRAMEWORK = {
 
 PAYMENT_NEW = 'NEW'
 PAYMENT_PROCESSED = 'PROCESSED'
+
+SCOUT_RANKS = (
+    ('Tenderfoot', 'Tenderfoot'),
+    ('Second Class', 'Second Class'),
+    ('First Class', 'First Class'),
+    ('Star', 'Star'),
+    ('Life', 'Life'),
+    ('Eagle', 'Eagle')
+)

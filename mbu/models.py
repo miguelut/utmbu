@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 from mbu.model_utils import send_sm_request_email, get_hash_str
 from rest_framework.serializers import ModelSerializer
 
@@ -68,7 +69,7 @@ class Parent(models.Model):
 class Scout(models.Model):
     user = models.OneToOneField(User)
     troop = models.ForeignKey('Troop', null=True)
-    rank = models.CharField(max_length=15)
+    rank = models.CharField(max_length=15, choices=settings.SCOUT_RANKS)
     waiver = models.BooleanField(default=False)
     parent = models.ForeignKey('Parent', null=True, related_name='scouts')
 
