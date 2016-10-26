@@ -9,7 +9,8 @@ __author__ = 'michael'
 def courses(request):
     all_courses = []
     for course in ScoutCourseInstance.objects.all():
-        serializer = ScoutCourseInstanceSerializer(course)
-        all_courses.append(serializer.data)
+        if len(course.enrollees.all()) < course.max_enrollees:
+            serializer = ScoutCourseInstanceSerializer(course)
+            all_courses.append(serializer.data)
     result = {'courses': all_courses}
     return JsonResponse(result)
