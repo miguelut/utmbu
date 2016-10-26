@@ -25,6 +25,14 @@ class Council(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
+
+class CouncilSerializer(ModelSerializer):
+    class Meta:
+        model = Council
+
 
 class Troop(models.Model):
     number = models.IntegerField()
@@ -36,6 +44,14 @@ class Troop(models.Model):
     class Meta:
         unique_together = ('number', 'council')
         ordering = ['number']
+
+
+class TroopSerializer(ModelSerializer):
+    council = CouncilSerializer(read_only=True)
+
+    class Meta:
+        model = Troop
+        depth = 1
 
 
 class Parent(models.Model):

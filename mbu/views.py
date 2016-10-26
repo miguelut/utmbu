@@ -19,6 +19,7 @@ from mbu.api.course_instance import *
 from mbu.api.scout import *
 from mbu.api.parent import *
 from mbu.api.scoutmaster import *
+from mbu.api.troop import *
 
 logger = logging.getLogger(__name__)
 
@@ -221,7 +222,7 @@ def _edit_profile(request, ProfileForm, user, args):
         profile_form = ProfileForm(instance=user)
     args.update({'form': form})
     args.update({'profile_form': profile_form})
-
+    args.update({'troop_form': TroopModalForm()})
     return render(request, 'mbu/edit_profile.html', args)
 
 

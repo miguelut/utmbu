@@ -1,5 +1,138 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% block content %}
+    <div class="row schedule">
+        <div class="col-md-7">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Class Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.0.start_time|date:"h:i A" }}
+                        - {{ timeblocks.0.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.0.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.0.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.1.start_time|date:"h:i A" }}
+                        - {{ timeblocks.1.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.1.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.1.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.2.start_time|date:"h:i A" }}
+                        - {{ timeblocks.2.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.2.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.2.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="height: 97px">
+                    <td class="col-md-2">{{ timeblocks.3.start_time|date:"h:i A" }}
+                        - {{ timeblocks.3.end_time|date:"h:i A" }}</td>
+                    <td class="col-md-5"
+                        data-bind="with: timeblock_{{ timeblocks.3.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.3.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
+                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
+                            <div class="course-icon">
+                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                     class="mb-course"/>
+                            </div>
+                            <div class="course-desc">
+                                <div data-bind="text: course.name"></div>
+                                <div data-bind="text: time"></div>
+                                <div data-bind="text: location"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-5">
+            <div class="form-group">
+                <input placeholder="Search..." type="text" data-bind="value: searchQuery, valueUpdate: 'keyup'">
+            </div>
+
+            <h4>Filter by time slot(s)</h4>
+
+            <div data-bind="foreach: distinctTimeSlots">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots">
+                        <span data-bind="text: $data"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="class-list" data-bind="css: {loading: coursesLoading()}">
+                <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
+                    <div data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
+                        <div class="course-icon">
+                            <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
+                                 class="mb-course"/>
+                        </div>
+                        <div class="course-desc">
+                            <div data-bind="text: course.name"></div>
+                            <div data-bind="text: time"></div>
+                            <div data-bind="text: location"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary" data-bind="click: submit">Submit</button>
+            <span data-bind="if: submitting">
+                <img src="{% static 'images/ajax-loader.gif' %}"/>
+            </span>
+            <span data-bind="if: submitSuccess">
+                <i class="fa fa-check fa-lg"></i>
+            </span>
+        </div>
+    </div>
+{% endblock %}
 {% block scripts %}
     <script type="application/javascript">
         document.ondragstart = function () { return false; };
@@ -150,137 +283,4 @@
         });
         ko.applyBindings(vm);
     </script>
-{% endblock %}
-{% block content %}
-    <div class="row schedule">
-        <div class="col-md-7">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>Class Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr style="height: 97px">
-                    <td class="col-md-2">{{ timeblocks.0.start_time|date:"h:i A" }}
-                        - {{ timeblocks.0.end_time|date:"h:i A" }}</td>
-                    <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.0.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.0.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
-                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
-                            <div class="course-icon">
-                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
-                                     class="mb-course"/>
-                            </div>
-                            <div class="course-desc">
-                                <div data-bind="text: course.name"></div>
-                                <div data-bind="text: time"></div>
-                                <div data-bind="text: location"></div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr style="height: 97px">
-                    <td class="col-md-2">{{ timeblocks.1.start_time|date:"h:i A" }}
-                        - {{ timeblocks.1.end_time|date:"h:i A" }}</td>
-                    <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.1.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.1.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
-                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
-                            <div class="course-icon">
-                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
-                                     class="mb-course"/>
-                            </div>
-                            <div class="course-desc">
-                                <div data-bind="text: course.name"></div>
-                                <div data-bind="text: time"></div>
-                                <div data-bind="text: location"></div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr style="height: 97px">
-                    <td class="col-md-2">{{ timeblocks.2.start_time|date:"h:i A" }}
-                        - {{ timeblocks.2.end_time|date:"h:i A" }}</td>
-                    <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.2.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.2.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
-                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
-                            <div class="course-icon">
-                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
-                                     class="mb-course"/>
-                            </div>
-                            <div class="course-desc">
-                                <div data-bind="text: course.name"></div>
-                                <div data-bind="text: time"></div>
-                                <div data-bind="text: location"></div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr style="height: 97px">
-                    <td class="col-md-2">{{ timeblocks.3.start_time|date:"h:i A" }}
-                        - {{ timeblocks.3.end_time|date:"h:i A" }}</td>
-                    <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.3.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.3.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
-                        <div class="row" data-bind="dragZone: { name: 'enrollment' }">
-                            <div class="course-icon">
-                                <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
-                                     class="mb-course"/>
-                            </div>
-                            <div class="course-desc">
-                                <div data-bind="text: course.name"></div>
-                                <div data-bind="text: time"></div>
-                                <div data-bind="text: location"></div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="col-md-5">
-            <div class="form-group">
-                <input placeholder="Search..." type="text" data-bind="value: searchQuery, valueUpdate: 'keyup'">
-            </div>
-
-            <h4>Filter by time slot(s)</h4>
-
-            <div data-bind="foreach: distinctTimeSlots">
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" data-bind="checkedValue:$data, checked:$parent.selectedDistinctTimeSlots">
-                        <span data-bind="text: $data"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="class-list" data-bind="css: {loading: coursesLoading()}">
-                <div data-bind="foreach:filteredCourses, dropZone: {accepts: 'enrollment', drop: remove}">
-                    <div data-bind="dragZone: {name: 'enrollment_' + timeblock.id}">
-                        <div class="course-icon">
-                            <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
-                                 class="mb-course"/>
-                        </div>
-                        <div class="course-desc">
-                            <div data-bind="text: course.name"></div>
-                            <div data-bind="text: time"></div>
-                            <div data-bind="text: location"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <button class="btn btn-primary" data-bind="click: submit">Submit</button>
-            <span data-bind="if: submitting">
-                <img src="{% static 'images/ajax-loader.gif' %}"/>
-            </span>
-            <span data-bind="if: submitSuccess">
-                <i class="fa fa-check fa-lg"></i>
-            </span>
-        </div>
-    </div>
 {% endblock %}

@@ -1,12 +1,86 @@
 {% extends 'mbu/home.html' %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load staticfiles %}
 {% block content %}
     <div class="well col-xs-4 col-xs-offset-4">
         <form action="." method="POST" id="edit_profile_form">
             {% csrf_token %}
             {% crispy form %}
-            {% crispy profile_form %}
+            {% for field in profile_form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.label_tag }}
+                    <div class="controls">
+                        {{ field|add_class:"textinput textInput form-control" }}
+                    </div>
+                {% if field.name == 'troop' %}
+                    <div style="padding-top: 5px; cursor: pointer" data-toggle="modal" data-target="#troopModal">
+                        <i class="fa fa-plus" style="color: green; padding-right: 5px"></i>Add Troop
+                    </div>
+                {% endif %}
+                </div>
+            {% endfor %}
             <input type="submit" class="btn btn-primary" value="Submit" form="edit_profile_form"/>
         </form>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="troopModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add New Troop</h4>
+          </div>
+          <div class="modal-body">
+              {% crispy troop_form %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" data-bind="click: submit">Add Troop</button>
+            <span data-bind="if: submitting">
+                <img src="{% static 'images/ajax-loader.gif' %}"/>
+            </span>
+            <span data-bind="if: submitSuccess">
+                <i class="fa fa-check fa-lg"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock content %}
+{% block scripts %}
+    <script type="application/javascript">
+        var ViewModel = function () {
+            var self = this;
+
+            self.submitting = ko.observable(false);
+            self.submitSuccess = ko.observable(false);
+            self.submit = function () {
+                self.submitting(true);
+                var postData = {troop_number: $('#id_number').val(), council_id: $('#id_council').val()};
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    url: '/api/troops',
+                    data: JSON.stringify(postData),
+                    success: function (response) {
+                        $('#id_troop').append($('<option>', {
+                            value: response.id,
+                            text: response.number + ' - ' + response.council.name,
+                            selected: true
+                        }));
+                        self.submitting(false);
+                        self.submitSuccess(true);
+                        $('#troopModal').modal('hide');
+                    }
+                }).fail(function () {
+                    self.submitting(false)
+                });
+            }
+        };
+        var vm = new ViewModel();
+        ko.applyBindings(vm);
+    </script>
+{% endblock %}
