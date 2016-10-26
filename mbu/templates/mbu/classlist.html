@@ -25,7 +25,7 @@
             <td>{{ class.timeblock.start_time|date:"h:i A" }} - {{class.timeblock.end_time|date:"h:i A"}}</td>
             <td>{{ class.location }}</td>
             <td>{{ class.counselor }}</td>
-            <td><a href="{{ class.course.requirements }}">Link</a></td>
+            <td><a href="http://meritbadge.org/wiki/index.php/{{ class.course.requirements }}" target="_blank">Link</a></td>
         </tr>
         {% endfor %}
     </tbody>
