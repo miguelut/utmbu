@@ -296,8 +296,15 @@ def sm_view_troop_payments(request):
     troop = Troop.objects.get(scoutmaster=scoutmaster)
     scouts = Scout.objects.all().filter(troop=troop)
     for scout in scouts:
-        args['data'].append(_create_scout_payment_data(scout))
+        payments = Payment.objects.all().filter(user=scout.user, status=settings.PAYMENT_PROCESSED)
+        args['data'].append(_create_scout_payment_data(scout, payments))
     return render(request, 'mbu/sm_report_troop_payments.html', args)
+
+
+@permission_required('mbu.can_modify_troop_enrollments', raise_exception=True)
+@user_passes_test(_is_user_scoutmaster, login_url='/login/')
+def sm_add_scouts(request):
+    return render(request, 'mbu/sm_add_scouts.html')
 
 
 @user_passes_test(_is_user_scout, login_url='/login/')

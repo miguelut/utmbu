@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block scripts %}
+    <script type="application/javascript">
+        var ViewModel = function() {
+            var self = this;
+
+            self.active = null;
+            self.forms = ko.observableArray([]);
+            self.submitting = ko.observable(false);
+            self.submitSuccess = ko.observable(false);
+            self.add = function() {
+                self.forms.push({
+                    username: ko.observable(""),
+                    fname: ko.observable(""),
+                    lname: ko.observable(""),
+                    email: ko.observable("{{ user.email }}"),
+                    password: ko.observable(""),
+                    password2: ko.observable(""),
+                    rank: ko.observable("")
+                })
+            };
+            self.remove = function(item) {
+                if (self.forms().length > 1) {
+                    self.forms.remove(item);
+                }
+            };
+            self.submit = function() {
+                console.log(self.forms());
+                self.submitting(true);
+                $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    url: '/api/scoutmaster/registerscouts',
+                    data: ko.toJSON(self.forms()),
+                    success: function (response) {
+                        self.submitting(false);
+                        self.submitSuccess(true);
+                    }
+                }).fail(function() { self.submitting(false)});
+            }
+        };
+        var vm = new ViewModel();
+        vm.add();
+        ko.applyBindings(vm);
+    </script>
+{% endblock %}
+{% block content %}
+    <div class="panel-group first-div" id="accordion" role="tablist" aria-multiselectable="true"></div>
+    <div class="row col-xs-4 col-xs-offset-4">
+    <div data-bind="foreach: forms">
+        <div class="well">
+            <div>
+                <div class="x-cancel">
+                    <i class="fa fa-times" aria-hidden="true" data-bind="click: $parent.remove"></i>
+                </div>
+                <div class="form-group">
+                    <label for="id_username">Username:</label>
+                    <input class="form-control" id="id_username" data-bind="value: username">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_first_name">First name:</label>
+                    <input class="form-control" id="id_first_name" data-bind="value: fname">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_last_name">Last name:</label>
+                    <input class="form-control" id="id_last_name" data-bind="value: lname">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_email">Email:</label>
+                    <input class="form-control" id="id_email" data-bind="value: email">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="id_password1">Password:</label>
+                    <input class="form-control" id="id_password1" data-bind="value: password">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_password2">Password confirmation:</label>
+                    <input class="form-control" id="id_password2" data-bind="value: password2">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="id_rank">Rank:</label>
+                    <input class="form-control" id="id_rank" data-bind="value: rank">
+                </div>
+            </div>
+        </div>
+    </div>
+        <a class="btn btn-primary" data-bind="click: add"><span>Add</span></a>
+        <a class="btn btn-primary" data-bind="click: submit"><span>Submit</span></a>
+        <span data-bind="if: submitting">
+            <img src="{% static 'images/ajax-loader.gif' %}" />
+        </span>
+        <span data-bind="if: submitSuccess">
+            <i class="fa fa-check fa-lg"></i>
+        </span>
+    </div>
+{% endblock content %}

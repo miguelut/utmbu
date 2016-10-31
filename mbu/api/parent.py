@@ -8,7 +8,7 @@ from mbu.models import Parent, Scout, ScoutCourseInstance, ScoutCourseInstanceSe
 
 @permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
 @api_view(http_method_names=['POST'])
-def registerscouts(request):
+def parent_registerscouts(request):
     parent = Parent.objects.get(user=request.user)
     for scout_data in request.data:
         user = User.objects.create_user(

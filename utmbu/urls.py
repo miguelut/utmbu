@@ -35,6 +35,7 @@ urlpatterns += patterns(
     '',
     url(r'^scoutmaster/editclasses/(?P<scout_id>\d+)/$', 'mbu.views.sm_edit_scout_classes', name='sm_edit_scout_classes'),
     url(r'^scoutmaster/profile/edit/$', 'mbu.views.edit_scoutmaster_profile', name='sm_edit_profile'),
+    url(r'^scoutmaster/addscouts/$', 'mbu.views.sm_add_scouts', name='sm_add_scouts'),
     url(r'^scoutmaster/troop/report/payments/$', 'mbu.views.sm_view_troop_payments', name='sm_report_troop_payments')
 )
 
@@ -62,9 +63,10 @@ urlpatterns += patterns(
 urlpatterns += patterns(
     '',
     url(r'^api/courses/$', 'mbu.views.courses', name='api_courses'),
-    url(r'^api/scout/enrollments/(?P<scout_id>\d)$', 'mbu.views.scout_enrollments', name='api_scout_enrollments'),
-    url(r'^api/scoutmaster/enrollments/(?P<scout_id>\d)$', 'mbu.views.scoutmaster_enrollments', name='api_scoutmaster_enrollments'),
-    url(r'^api/parent/enrollments/(?P<scout_id>\d)$', 'mbu.views.parent_enrollments', name='api_parent_enrollments'),
-    url(r'^api/parent/registerscouts', 'mbu.views.registerscouts', name='api_parents_registerscourts'),
+    url(r'^api/scout/enrollments/(?P<scout_id>\d+)$', 'mbu.views.scout_enrollments', name='api_scout_enrollments'),
+    url(r'^api/scoutmaster/enrollments/(?P<scout_id>\d+)$', 'mbu.views.scoutmaster_enrollments', name='api_scoutmaster_enrollments'),
+    url(r'^api/parent/enrollments/(?P<scout_id>\d+)$', 'mbu.views.parent_enrollments', name='api_parent_enrollments'),
+    url(r'^api/parent/registerscouts', 'mbu.views.parent_registerscouts', name='api_parents_registerscourts'),
+    url(r'^api/scoutmaster/registerscouts', 'mbu.views.scoutmaster_registerscouts', name='api_scoutmaster_registerscourts'),
     url(r'^api/troops', 'mbu.views.add_troop', name='api_add_troop')
 )

@@ -39,6 +39,10 @@ def _get_links(user):
             'href': 'sm_edit_profile',
             'label': 'Edit Profile'
         })
+        args.get('links').append({
+            'href': 'sm_add_scouts',
+            'label': 'Register Scouts'
+        })
     elif _is_user_parent(user):
         args.get('links').append({
             'href': 'parent_add_scouts',
