@@ -15,7 +15,7 @@
                     <td class="col-md-2">{{ timeblocks.0.start_time|date:"h:i A" }}
                         - {{ timeblocks.0.end_time|date:"h:i A" }}</td>
                     <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.0.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.0.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
+                        data-bind="with: timeblock_{{ timeblocks.0.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.0.pk }}', 'enrollment_{{ timeblocks.4.pk }}', 'enrollment_{{ timeblocks.6.pk }}'], drop: add }">
                         <div class="row" data-bind="dragZone: { name: 'enrollment' }">
                             <div class="course-icon">
                                 <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
@@ -33,7 +33,7 @@
                     <td class="col-md-2">{{ timeblocks.1.start_time|date:"h:i A" }}
                         - {{ timeblocks.1.end_time|date:"h:i A" }}</td>
                     <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.1.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.1.pk }}', 'enrollment_{{ timeblocks.4.pk }}'], drop: add }">
+                        data-bind="with: timeblock_{{ timeblocks.1.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.1.pk }}', 'enrollment_{{ timeblocks.4.pk }}', 'enrollment_{{ timeblocks.6.pk }}'], drop: add }">
                         <div class="row" data-bind="dragZone: { name: 'enrollment' }">
                             <div class="course-icon">
                                 <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
@@ -51,7 +51,7 @@
                     <td class="col-md-2">{{ timeblocks.2.start_time|date:"h:i A" }}
                         - {{ timeblocks.2.end_time|date:"h:i A" }}</td>
                     <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.2.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.2.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
+                        data-bind="with: timeblock_{{ timeblocks.2.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.2.pk }}', 'enrollment_{{ timeblocks.5.pk }}', 'enrollment_{{ timeblocks.6.pk }}'], drop: add }">
                         <div class="row" data-bind="dragZone: { name: 'enrollment' }">
                             <div class="course-icon">
                                 <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
@@ -69,7 +69,7 @@
                     <td class="col-md-2">{{ timeblocks.3.start_time|date:"h:i A" }}
                         - {{ timeblocks.3.end_time|date:"h:i A" }}</td>
                     <td class="col-md-5"
-                        data-bind="with: timeblock_{{ timeblocks.3.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.3.pk }}', 'enrollment_{{ timeblocks.5.pk }}'], drop: add }">
+                        data-bind="with: timeblock_{{ timeblocks.3.pk }}, dropZone: {accepts: ['enrollment_{{ timeblocks.3.pk }}', 'enrollment_{{ timeblocks.5.pk }}', 'enrollment_{{ timeblocks.6.pk }}'], drop: add }">
                         <div class="row" data-bind="dragZone: { name: 'enrollment' }">
                             <div class="course-icon">
                                 <img data-bind="attr: {'src': '/static/images/badges/' + course.image_name}"
@@ -197,12 +197,17 @@
                     if (model['timeblock_' + data.timeblock.id]() != null) {
                         removed = model.enrollments.remove(model['timeblock_' + data.timeblock.id]());
                     }
-                    model['timeblock_' + data.timeblock.id](data);
                     if (removed && removed[0].timeblock.id === 5) {
                         model['timeblock_' + (data.timeblock.id % 2 + 1)](null);
                     } else if (removed && removed[0].timeblock.id === 6) {
                         model['timeblock_' + (data.timeblock.id % 4 + 3)](null);
+                    } else if (removed && removed[0].timeblock.id === 7) {
+                        model['timeblock_1'](null);
+                        model['timeblock_2'](null);
+                        model['timeblock_3'](null);
+                        model['timeblock_4'](null);
                     }
+                    model['timeblock_' + data.timeblock.id](data);
                 } else if (data.timeblock.id === 5) {
                     if (model['timeblock_1']() != null) {
                         model.enrollments.remove(model['timeblock_1']());
@@ -221,6 +226,23 @@
                     }
                     model['timeblock_3'](data);
                     model['timeblock_4'](data);
+                } else if (data.timeblock.id === 7) {
+                    if (model['timeblock_1']() != null) {
+                        model.enrollments.remove(model['timeblock_1']());
+                    }
+                    if (model['timeblock_2']() != null) {
+                        model.enrollments.remove(model['timeblock_2']());
+                    }
+                    if (model['timeblock_3']() != null) {
+                        model.enrollments.remove(model['timeblock_3']());
+                    }
+                    if (model['timeblock_4']() != null) {
+                        model.enrollments.remove(model['timeblock_4']());
+                    }
+                    model['timeblock_1'](data);
+                    model['timeblock_2'](data);
+                    model['timeblock_3'](data);
+                    model['timeblock_4'](data);
                 }
             };
             self.remove = function (data, model) {
@@ -233,9 +255,12 @@
                 } else if (data.timeblock.id === 6) {
                     model['timeblock_3'](null);
                     model['timeblock_4'](null);
+                } else if (data.timeblock.id === 7) {
+                    model['timeblock_1'](null);
+                    model['timeblock_2'](null);
+                    model['timeblock_3'](null);
+                    model['timeblock_4'](null);
                 }
-                model.enrollments.remove(data);
-                model['timeblock_' + data.timeblock.id](null);
             };
             self.submit = function () {
                 self.submitting(true);

@@ -356,6 +356,8 @@ def _get_amount_invoiced(scout):
         number_of_enrollments += 1
         if e.timeblock.double:
             number_of_enrollments += 1
+        if e.timeblock.all_day:
+            number_of_enrollments += 3
     return settings.PRICE_PER_COURSE * number_of_enrollments
 
 
