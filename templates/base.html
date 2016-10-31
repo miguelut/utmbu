@@ -61,6 +61,9 @@
                     {% for link in links %}
                         <li><a href="{% url link.href %}">{{ link.label }}</a></li>
                     {% endfor %}
+                    {% if user.is_authenticated %}
+                        <li><p class="navbar-text">Welcome {{ user.first_name }}!</p></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
