@@ -88,7 +88,15 @@
 
                 <div class="form-group">
                     <label for="id_rank">Rank:</label>
-                    <input class="form-control" id="id_rank" data-bind="value: rank">
+                    <select class="textinput textInput form-control" id="id_rank" name="rank" data-bind="value: rank">
+                        <option value="">---------</option>
+                        <option value="Tenderfoot">Tenderfoot</option>
+                        <option value="Second Class">Second Class</option>
+                        <option value="First Class" selected="selected">First Class</option>
+                        <option value="Star">Star</option>
+                        <option value="Life">Life</option>
+                        <option value="Eagle">Eagle</option>
+                    </select>
                 </div>
             </div>
         </div>
