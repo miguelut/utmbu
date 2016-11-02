@@ -11,6 +11,7 @@ urlpatterns = patterns(
     url(r'^create/$', 'mbu.views.create', name='create'),
     url(r'^class/list/$', 'mbu.views.view_class_list', name='class_list'),
     url(r'^class/requirements/(\d)/$', 'mbu.views.view_class_requirements', name='class_requirements'),
+    url(r'^faq/$', 'mbu.views.show_faq', name='faq_page'),
 )
 
 #Authentication Views

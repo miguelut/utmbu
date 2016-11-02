@@ -387,3 +387,7 @@ def parent_edit_scout_classes(request, scout_id):
     scout = Scout.objects.get(pk=scout_id)
     endpoint = '/api/parent/enrollments/'
     return _render_edit_classes(request, scout, endpoint)
+
+
+def show_faq(request):
+    return render(request, 'mbu/faq.html')

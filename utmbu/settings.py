@@ -169,7 +169,7 @@ MESSAGE_TAGS = {
 # MBU Settings
 DEFAULT_LINKS = [
     {'href': 'mbu_home', 'label': 'About'},
-    {'href': 'mbu_home', 'label': 'FAQ'},
+    {'href': 'faq_page', 'label': 'FAQ'},
     {'href': 'class_list', 'label': 'Class List'}
 ]
 
