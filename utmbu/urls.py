@@ -46,6 +46,7 @@ urlpatterns += patterns(
     url(r'^parent/profile/edit/$', 'mbu.views.edit_parent_profile', name='parent_edit_profile'),
     url(r'^parent/addscouts/$', 'mbu.views.parent_add_scouts', name='parent_add_scouts'),
     url(r'^parent/editclasses/(?P<scout_id>\d+)/$', 'mbu.views.parent_edit_scout_classes', name='parent_edit_scout_classes'),
+    url(r'^parent/payments/$', 'mbu.views.parent_payments', name='parent_report_payments')
 )
 
 #Paypal URLS

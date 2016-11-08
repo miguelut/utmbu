@@ -73,4 +73,9 @@ def _get_report_links(user):
             'href': 'sm_report_troop_payments',
             'label': 'Troop Payments'
         })
+    elif _is_user_parent(user):
+        args.get('report_links').append({
+            'href': 'parent_report_payments',
+            'label': 'Payments'
+        })
     return args

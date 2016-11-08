@@ -37,7 +37,7 @@ def parent_registerscouts(request):
 
 
 @permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
-@api_view(http_method_names=['POST'])
+@api_view(http_method_names=['POST', 'GET'])
 def parent_enrollments(request, scout_id):
     user = request.user
     parent = Parent.objects.get(user=user)

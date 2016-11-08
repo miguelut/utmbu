@@ -310,37 +310,7 @@ def sm_add_scouts(request):
 @user_passes_test(_is_user_scout, login_url='/login/')
 def scout_view_payments(request):
     scout = Scout.objects.get(user=request.user)
-    payments = Payment.objects.all().filter(user=request.user, status=settings.PAYMENT_PROCESSED)
-
-    args = _create_scout_payment_data(scout, payments)
-    args.update({'payments': payments})
-    amount = args['amount_owed']
-
-    try:
-        payment = Payment.objects.get(user=request.user, status=settings.PAYMENT_NEW)
-        payment.amount = amount
-    except:
-        payment = Payment.objects.create(user=request.user, amount=amount, status=settings.PAYMENT_NEW)
-
-    payment.save()
-
-    PaymentSet.objects.filter(payments__id__contains=payment.id).delete()
-    payment_set = PaymentSet.objects.create()
-    payment_set.payments.add(payment)
-    payment_set.save()
-
-    paypal_dict = {
-        'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': amount, # calculate this amount dynamically
-        'item_name': 'MBU 2016', # change this dynamically
-        'notify_url': settings.PAYPAL_NOTIFY_URL + reverse('paypal-ipn'),
-        'return_url': settings.PAYPAL_RETURN_URL,  # set this to user's home page
-        'cancel_return': settings.PAYPAL_CANCEL_RETURN,  # set to user's home page
-        'custom': payment_set.id
-    }
-
-    form = PayPalPaymentsForm(initial=paypal_dict)
-    args.update({'form': form})
+    args = _get_payment_report_data([scout])
     return render(request, 'mbu/scout_report_payments.html', args)
 
 
@@ -365,7 +335,7 @@ def _get_amount_invoiced(scout):
             number_of_enrollments += 1
         if e.timeblock.all_day:
             number_of_enrollments += 3
-    return settings.PRICE_PER_COURSE * number_of_enrollments
+    return Decimal(settings.PRICE_PER_COURSE * number_of_enrollments)
 
 
 def _get_amount_paid(payments):
@@ -389,5 +359,67 @@ def parent_edit_scout_classes(request, scout_id):
     return _render_edit_classes(request, scout, endpoint)
 
 
+@permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
+@user_passes_test(_is_user_parent, login_url='/login/')
+def parent_payments(request):
+    parent = Parent.objects.get(user=request.user)
+    scouts = Scout.objects.filter(parent=parent)
+    args = _get_payment_report_data(scouts)
+
+    return render(request, 'mbu/scout_report_payments.html', args)
+
+
+def _get_payment_report_data(scouts):
+    args = {
+        "amount_owed": Decimal(0.00),
+        "amount_paid": Decimal(0.00),
+        "amount_invoiced": Decimal(0.00),
+        "payments": []
+    }
+    payments_for_set = []
+    for scout in scouts:
+        payments = Payment.objects.filter(user=scout.user, status=settings.PAYMENT_PROCESSED)
+        data = _create_scout_payment_data(scout, payments)
+        args["amount_owed"] += data["amount_owed"]
+        args["amount_paid"] += data["amount_paid"]
+        args["amount_invoiced"] += data["amount_invoiced"]
+        args["payments"].extend(payments)
+
+        if data["amount_owed"] != Decimal(0.00):
+            try:
+                payment = Payment.objects.get(user=scout.user, status=settings.PAYMENT_NEW)
+                payment.amount = data["amount_owed"]
+            except:
+                payment = Payment.objects.create(user=scout.user, amount=data["amount_owed"], status=settings.PAYMENT_NEW)
+
+            payment.save()
+            payments_for_set.append(payment)
+
+    payment_set = _get_new_payment_set(payments_for_set)
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': args["amount_owed"],
+        'item_name': 'MBU 2016', # change this dynamically
+        'notify_url': settings.PAYPAL_NOTIFY_URL + reverse('paypal-ipn'),
+        'return_url': settings.PAYPAL_RETURN_URL,  # set this to user's home page
+        'cancel_return': settings.PAYPAL_CANCEL_RETURN,  # set to user's home page
+        'custom': payment_set.id
+    }
+
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    args.update({'form': form})
+    return args
+
+
 def show_faq(request):
     return render(request, 'mbu/faq.html')
+
+
+def _get_new_payment_set(payments):
+    payment_set = PaymentSet.objects.create()
+    for payment in payments:
+        assert(payment.status == settings.PAYMENT_NEW)
+        PaymentSet.objects.filter(payments__id__contains=payment.id).delete()
+        payment_set.payments.add(payment)
+    payment_set.save()
+    return payment_set
