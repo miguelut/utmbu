@@ -59,6 +59,9 @@ class Parent(models.Model):
     user = models.OneToOneField(User)
     troop = models.ForeignKey('Troop', null=True)
 
+    def __str__(self):
+        return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
+
     class Meta:
         permissions = (
             ('parent_edit_scout_schedule', 'Can edit scout schedule'),
