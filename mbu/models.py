@@ -71,7 +71,7 @@ class Scout(models.Model):
     troop = models.ForeignKey('Troop', null=True)
     rank = models.CharField(max_length=15, choices=settings.SCOUT_RANKS)
     waiver = models.BooleanField(default=False)
-    parent = models.ForeignKey('Parent', null=True, related_name='scouts')
+    parent = models.ForeignKey('Parent', blank=True, null=True, related_name='scouts')
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
