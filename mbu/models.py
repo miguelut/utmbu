@@ -185,7 +185,7 @@ class Payment(models.Model):
     status = models.CharField(max_length=15)
 
     def __str__(self):
-        return "%d - %s %s: %s" % (self.pk, self.user.first_name, self.user.last_name, self.status)
+        return "%d - %s %s: %s %s" % (self.pk, self.user.first_name, self.user.last_name, self.status, self.amount)
 
     def txn_id(self):
         return PaymentSet.objects.get(payments__id__contains=self.pk).pp_txn_id
