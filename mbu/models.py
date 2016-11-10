@@ -184,5 +184,8 @@ class Payment(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=6)
     status = models.CharField(max_length=15)
 
+    def __str__(self):
+        return "%d - %s %s: %s" % (self.pk, self.user.first_name, self.user.last_name, self.status)
+
     def txn_id(self):
         return PaymentSet.objects.get(payments__id__contains=self.pk).pp_txn_id
