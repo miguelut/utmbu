@@ -52,7 +52,7 @@ class ScoutCourseInstanceAdmin(admin.ModelAdmin):
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_first_name', 'user_last_name', 'amount', 'status')
-    search_fields = ('user_first_name', 'user_last_name', 'status')
+    search_fields = ('user__first_name', 'user__last_name', 'status')
 
     def user_first_name(self, obj):
         return obj.user.first_name
