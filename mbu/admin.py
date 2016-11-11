@@ -48,6 +48,20 @@ class ScoutAdmin(admin.ModelAdmin):
 class ScoutCourseInstanceAdmin(admin.ModelAdmin):
     filter_horizontal = ('enrollees', )
 
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_first_name', 'user_last_name', 'amount', 'status')
+    search_fields = ('user__first_name', 'user__last_name', 'status')
+
+    def user_first_name(self, obj):
+        return obj.user.first_name
+    user_first_name.short_description = "First Name"
+
+    def user_last_name(self, obj):
+        return obj.user.last_name
+    user_last_name.short_description = "Last Name"
+
 # Register your models here.
 
 admin.site.register(MeritBadgeUniversity)
@@ -57,6 +71,5 @@ admin.site.register(Scoutmaster)
 admin.site.register(Course)
 admin.site.register(TimeBlock)
 admin.site.register(ScoutmasterRequest, ScoutmasterRequestAdmin)
-admin.site.register(Payment)
 admin.site.register(Parent)
 
