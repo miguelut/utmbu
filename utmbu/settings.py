@@ -208,6 +208,7 @@ PAYMENT_NEW = 'NEW'
 PAYMENT_PROCESSED = 'PROCESSED'
 
 SCOUT_RANKS = (
+    ('Scout', 'Scout'),
     ('Tenderfoot', 'Tenderfoot'),
     ('Second Class', 'Second Class'),
     ('First Class', 'First Class'),

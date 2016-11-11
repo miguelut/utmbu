@@ -1,9 +1,28 @@
-from django.contrib import admin
 from mbu.models import *
 from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin.widgets import FilteredSelectMultiple
+
+
+@admin.register(Council)
+class CouncilAdmin(admin.ModelAdmin):
+    list_display = ('number', 'name', 'city', 'state')
+    search_fields = ('name', 'city', 'state')
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_first_name', 'user_last_name', 'amount', 'status')
+    search_fields = ('user__first_name', 'user__last_name', 'status')
+
+    def user_first_name(self, obj):
+        return obj.user.first_name
+    user_first_name.short_description = "First Name"
+
+    def user_last_name(self, obj):
+        return obj.user.last_name
+    user_last_name.short_description = "Last Name"
 
 
 class ScoutAdminForm(forms.ModelForm):
@@ -41,18 +60,9 @@ class ScoutAdminForm(forms.ModelForm):
 
 @admin.register(Scout)
 class ScoutAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_first_name', 'user_last_name', 'user_email', 'troop')
+    search_fields = ('user__first_name', 'user__last_name', 'user__email')
     form = ScoutAdminForm
-
-
-@admin.register(ScoutCourseInstance)
-class ScoutCourseInstanceAdmin(admin.ModelAdmin):
-    filter_horizontal = ('enrollees', )
-
-
-@admin.register(Payment)
-class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_first_name', 'user_last_name', 'amount', 'status')
-    search_fields = ('user__first_name', 'user__last_name', 'status')
 
     def user_first_name(self, obj):
         return obj.user.first_name
@@ -62,11 +72,24 @@ class PaymentAdmin(admin.ModelAdmin):
         return obj.user.last_name
     user_last_name.short_description = "Last Name"
 
+    def user_email(self, obj):
+        return obj.user.email
+    user_email.short_description = "Email Address"
+
+
+@admin.register(ScoutCourseInstance)
+class ScoutCourseInstanceAdmin(admin.ModelAdmin):
+    filter_horizontal = ('enrollees', )
+
+
+@admin.register(Troop)
+class TroopAdmin(admin.ModelAdmin):
+    list_display = ('number', 'council')
+    search_fields = ('number',)
+
 # Register your models here.
 
 admin.site.register(MeritBadgeUniversity)
-admin.site.register(Council)
-admin.site.register(Troop)
 admin.site.register(Scoutmaster)
 admin.site.register(Course)
 admin.site.register(TimeBlock)
