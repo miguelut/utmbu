@@ -72,3 +72,9 @@ urlpatterns += patterns(
     url(r'^api/scoutmaster/registerscouts', 'mbu.views.scoutmaster_registerscouts', name='api_scoutmaster_registerscourts'),
     url(r'^api/troops', 'mbu.views.add_troop', name='api_add_troop')
 )
+
+#User management urls
+urlpatterns += patterns(
+    '',
+    url('', include('django.contrib.auth.urls'))
+ )

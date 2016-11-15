@@ -30,7 +30,12 @@
             <div class="formFooterButtons">
                 <button type="submit"><span>Log In</span></button>
             </div>
-            <span class="link muted">Not registered? <a href="{% url 'mbu.views.signup' %}">Sign Up</a></span>
+            <div>
+                <span class="link muted">Not registered? <a href="{% url 'mbu.views.signup' %}">Sign Up</a></span>
+            </div>
+            <div>
+                <span class="link muted">Forgot password? <a href="{% url 'password_reset' %}">Reset password</a></span>
+            </div>
             <input type="hidden" value="{{ next }}" name="next"/>
         </form>
     </div>
