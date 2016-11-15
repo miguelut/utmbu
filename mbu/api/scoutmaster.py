@@ -25,7 +25,7 @@ def scoutmaster_enrollments(request, scout_id):
         scout.save()
         return JsonResponse({'data': request.data})
     else:
-        for enrollment in ScoutCourseInstance.objects.filter(enrollees__user__pk__contains=scout.user.pk):
+        for enrollment in scout.enrollments.all():
             serializer = ScoutCourseInstanceSerializer(enrollment)
             enrollments.append(serializer.data)
         result = {'enrollments': enrollments}
