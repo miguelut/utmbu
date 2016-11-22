@@ -41,9 +41,8 @@ def parent_registerscouts(request):
 def parent_enrollments(request, scout_id):
     user = request.user
     parent = Parent.objects.get(user=user)
-    troop = parent.troop
     scout = Scout.objects.get(pk=scout_id)
-    assert(troop == scout.troop)
+    assert(parent == scout.parent)
     enrollments = []
     if request.method == 'POST':
         for d in request.data:
