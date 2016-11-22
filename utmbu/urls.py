@@ -46,6 +46,7 @@ urlpatterns += patterns(
     url(r'^parent/profile/edit/$', 'mbu.views.edit_parent_profile', name='parent_edit_profile'),
     url(r'^parent/addscouts/$', 'mbu.views.parent_add_scouts', name='parent_add_scouts'),
     url(r'^parent/editclasses/(?P<scout_id>\d+)/$', 'mbu.views.parent_edit_scout_classes', name='parent_edit_scout_classes'),
+    url(r'^parent/waivers/$', 'mbu.views.parent_view_waivers', name='parent_view_waivers'),
     url(r'^parent/payments/$', 'mbu.views.parent_payments', name='parent_report_payments')
 )
 
@@ -69,6 +70,7 @@ urlpatterns += patterns(
     url(r'^api/scoutmaster/enrollments/(?P<scout_id>\d+)$', 'mbu.views.scoutmaster_enrollments', name='api_scoutmaster_enrollments'),
     url(r'^api/parent/enrollments/(?P<scout_id>\d+)$', 'mbu.views.parent_enrollments', name='api_parent_enrollments'),
     url(r'^api/parent/registerscouts', 'mbu.views.parent_registerscouts', name='api_parents_registerscourts'),
+    url(r'^api/parent/waiver/(?P<scout_id>\d+)$', 'mbu.views.api_parent_waiver', name='api_parent_waiver'),
     url(r'^api/scoutmaster/registerscouts', 'mbu.views.scoutmaster_registerscouts', name='api_scoutmaster_registerscourts'),
     url(r'^api/troops', 'mbu.views.add_troop', name='api_add_troop')
 )

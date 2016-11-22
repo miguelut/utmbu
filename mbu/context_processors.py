@@ -78,4 +78,8 @@ def _get_report_links(user):
             'href': 'parent_report_payments',
             'label': 'Payments'
         })
+        args.get('report_links').append({
+            'href': 'parent_view_waivers',
+            'label': 'Waivers'
+        })
     return args

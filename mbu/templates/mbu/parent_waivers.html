@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Scout Name</th>
+            <th>Waiver</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for scout in scouts %}
+            <tr>
+                <td>{{ scout.user.last_name }}, {{ scout.user.first_name }}</td>
+                {% if scout.waiver %}
+                    <span class="checkbox" id="div_{{ scout.id }}">
+                        <td>Waiver Accepted</td>
+                    </span>
+                {% else %}
+                    <td>
+                        <div class="checkbox">
+                            <span id="span_{{ scout.id }}">
+                                <input id="waiver_{{ scout.id }}" type="checkbox" class="control"
+                                       onclick="submitWaiver({{ scout.id }})"/>
+                                <label for="waiver_{{ scout.id }}">
+                                    <span>I am the legal guardian of this scout and have read and consent to the
+                                    <a href="{% static 'documents/waiver.pdf' %}">Consent and Waiver</a> form.
+                                    </span>
+                                </label>
+                            </span>
+                            <span id="spinner_{{ scout.id }}" hidden>
+                                <img src="{% static 'images/ajax-loader.gif' %}"/>
+                            </span>
+                            <span id="success_{{ scout.id }}" hidden>
+                                <i class="fa fa-check fa-lg"></i>
+                            </span>
+                        </div>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}
+{% block scripts %}
+    <script type="application/javascript">
+        var submitWaiver = function (scout_id) {
+            $('#spinner_' + scout_id).show();
+            $.ajax({
+                    type: 'POST',
+                    contentType: 'application/json',
+                    url: '/api/parent/waiver/' + scout_id,
+                    success: function (response) {
+                        $('#spinner_' + scout_id).hide();
+                        $('#success_' + scout_id).show();
+                        $('#span_' + scout_id).html('<td>Waiver Accepted</td>');
+                    }
+                }).fail(function () {
+                    $('#spinner_' + scout_id).hide();
+                });
+            console.log(scout_id);
+        }
+    </script>
+{% endblock %}

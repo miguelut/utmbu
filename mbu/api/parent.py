@@ -58,3 +58,15 @@ def parent_enrollments(request, scout_id):
             enrollments.append(serializer.data)
         result = {'enrollments': enrollments}
         return JsonResponse(result)
+
+
+@permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
+@api_view(http_method_names=['POST'])
+def api_parent_waiver(request, scout_id):
+    user = request.user
+    parent = Parent.objects.get(user=user)
+    scout = Scout.objects.get(pk=scout_id)
+    assert(scout.parent == parent)
+    scout.waiver = True
+    scout.save()
+    return JsonResponse({'result': 'success'})

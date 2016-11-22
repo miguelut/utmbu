@@ -353,6 +353,14 @@ def parent_add_scouts(request):
 
 @permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
 @user_passes_test(_is_user_parent, login_url='/login/')
+def parent_view_waivers(request):
+    parent = Parent.objects.get(user=request.user)
+    args = {'scouts': parent.scouts.order_by('user__last_name', 'user__first_name').all()}
+    return render(request, 'mbu/parent_waivers.html', args)
+
+
+@permission_required('mbu.parent_edit_scout_schedule', raise_exception=True)
+@user_passes_test(_is_user_parent, login_url='/login/')
 def parent_edit_scout_classes(request, scout_id):
     scout = Scout.objects.get(pk=scout_id)
     endpoint = '/api/parent/enrollments/'

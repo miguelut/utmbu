@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block title %}
     Frequently Asked Questions
@@ -22,9 +23,10 @@
 <br>
 <h3>I am a parent and I don't see where I can accept the liability waiver on behalf of my scout -- where is it?</h3>
 <p>
-    Unfortunately this is a bug in the site that we're currently working on.  For now, as a workaround, you can log
-    into the Scout's account (with the username and login you created for the Scout account) and in the "Edit Profile"
-    screen accept the liability waiver by checking the box.
+    As a parent you should see a link at the top of your page that says "Reports."  One of the reports available is
+    the "Waivers" report.  On this page, you will see a list of yor Scouts along with the status of their Waivers.
+    You can directly accept the waiver for each of your scouts on this page.  Please be sure to read the
+    <a href="{% static 'documents/waiver.pdf' %}">Consent and Waiver</a> form prior to clicking the checkbox.
 </p>
 <br>
 <h3>Who do I contact if I have problems with the website?</h3>
