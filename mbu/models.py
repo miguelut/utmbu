@@ -161,8 +161,18 @@ class ScoutCourseInstance(models.Model):
     location = models.CharField(max_length=100)
     max_enrollees = models.IntegerField()
 
+    @property
+    def status(self):
+        if self.max_enrollees - len(self.enrollees.all()) > 0:
+            return '%d seats left' % (self.max_enrollees - len(self.enrollees.all()))
+        else:
+            return 'Full'
+
     def __str__(self):
         return self.course.name + str(self.timeblock)
+
+    class Meta:
+        ordering = ['course__name']
 
 
 class ScoutCourseInstanceSerializer(ModelSerializer):

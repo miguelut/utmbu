@@ -15,9 +15,10 @@
             <th>Location</th>
             <th>Counselor</th>
             <th>Requirements</th>
+            <th>Status</th>
    		</tr>
    	</thead>
-   	<tbody">
+   	<tbody>
         {% for class in classlist %}
         <tr>
             <td>{{ class.pk }}</td>
@@ -26,6 +27,7 @@
             <td>{{ class.location }}</td>
             <td>{{ class.counselor }}</td>
             <td><a href="http://meritbadge.org/wiki/index.php/{{ class.course.requirements }}" target="_blank">Link</a></td>
+            <td>{{ class.status }}</td>
         </tr>
         {% endfor %}
     </tbody>
@@ -40,7 +42,8 @@ $(document).ready(function() {
     },
     "columnDefs": [
         { "orderable": false, "targets": 5 }
-    ]
+    ],
+    "order":[[1, 'asc']]
   });
 });
 </script>

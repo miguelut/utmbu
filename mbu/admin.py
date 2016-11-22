@@ -79,7 +79,25 @@ class ScoutAdmin(admin.ModelAdmin):
 
 @admin.register(ScoutCourseInstance)
 class ScoutCourseInstanceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'course_name', 'timeblock_name', 'timeblock_start', 'timeblock_end')
+    search_fields = ('course__name', 'timeblock__name')
     filter_horizontal = ('enrollees', )
+
+    def course_name(self, obj):
+        return obj.course.name
+    course_name.short_description = "Name"
+
+    def timeblock_name(self, obj):
+        return obj.timeblock.name
+    timeblock_name.short_description = "Timeblock"
+
+    def timeblock_start(self, obj):
+        return obj.timeblock.start_time
+    timeblock_start.short_description = "Start Time"
+
+    def timeblock_end(self, obj):
+        return obj.timeblock.end_time
+    timeblock_end.short_description = "End Time"
 
 
 @admin.register(Troop)

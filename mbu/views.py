@@ -228,7 +228,6 @@ def _edit_profile(request, ProfileForm, user, args):
 
 def view_class_list(request):
     args = {}
-    args.update(csrf(request))
     try:
         mbu = MeritBadgeUniversity.objects.get(current=True)
     except MeritBadgeUniversity.DoesNotExist:
