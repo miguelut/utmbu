@@ -3,6 +3,7 @@ from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from decimal import Decimal
 
 
 @admin.register(Council)
@@ -105,6 +106,56 @@ class TroopAdmin(admin.ModelAdmin):
     list_display = ('number', 'council')
     search_fields = ('number',)
 
+
+@admin.register(PaymentSet)
+class PaymentSetAdmin(admin.ModelAdmin):
+    list_display = ('pp_txn_id', 'total')
+    filter_horizontal = ('payments', )
+
+    def total(self, obj):
+        result = Decimal(0.00)
+        for payment in obj.payments.all():
+            result += payment.amount
+        return result
+    total.short_description = "Total Amount"
+
+
+class ScoutParentInline(admin.TabularInline):
+    model = Scout
+    show_change_link = True
+    can_delete = False
+    fields = ("id", "user_first_name", "user_last_name")
+    readonly_fields = ("id", "user_first_name", "user_last_name")
+    extra = 0
+
+    def user_first_name(self, obj):
+        return obj.user.first_name
+    user_first_name.short_description = "First Name"
+
+    def user_last_name(self, obj):
+        return obj.user.last_name
+    user_last_name.short_description = "Last Name"
+
+@admin.register(Parent)
+class ParentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_first_name', 'user_last_name', 'user_email', 'troop')
+    search_fields = ('user__first_name', 'user__last_name', 'user__email')
+    inlines = [
+        ScoutParentInline
+    ]
+
+    def user_first_name(self, obj):
+        return obj.user.first_name
+    user_first_name.short_description = "First Name"
+
+    def user_last_name(self, obj):
+        return obj.user.last_name
+    user_last_name.short_description = "Last Name"
+
+    def user_email(self, obj):
+        return obj.user.email
+    user_email.short_description = "Email Address"
+
 # Register your models here.
 
 admin.site.register(MeritBadgeUniversity)
@@ -112,5 +163,4 @@ admin.site.register(Scoutmaster)
 admin.site.register(Course)
 admin.site.register(TimeBlock)
 admin.site.register(ScoutmasterRequest, ScoutmasterRequestAdmin)
-admin.site.register(Parent)
 

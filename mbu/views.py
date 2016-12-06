@@ -112,6 +112,7 @@ def login(request):
         messages.add_message(request, messages.ERROR, 'Invalid username or password')
     args.update({'form': form})
     args.update({'next': next_page})
+    args.update({'google_key': settings.SOCIAL_AUTH_GOOGLE_PLUS_KEY})
     return render(request, 'login.html', args)
 
 
