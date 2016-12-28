@@ -1,6 +1,7 @@
 defusedxml==0.4.1
 Django==1.8
 django-crispy-forms==1.4.0
+django-loginas==0.3.0
 django-paypal==0.3.2
 django-tables2==0.15.0
 django-widget-tweaks==1.3

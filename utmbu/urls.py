@@ -7,6 +7,7 @@ urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^admin/', include('loginas.urls')),
     url(r'^$', 'mbu.views.view_home_page', name='mbu_home'),
     url(r'^create/$', 'mbu.views.create', name='create'),
     url(r'^class/list/$', 'mbu.views.view_class_list', name='class_list'),

@@ -104,3 +104,9 @@ bower_components
 
 # Merge files
 *.orig
+
+# Backup files
+*.bak
+
+# One-off scripts
+untracked_scripts/

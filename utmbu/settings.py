@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'loginas',
     'paypal.standard.ipn',
     'social.apps.django_app.default',
     'rest_framework',
