@@ -37,8 +37,11 @@ def signup(request):
             args = {'action': '/create?'}
             return render(request, 'mbu/select_type.html', args)
     args = {'form': form}
-    return render(request, 'mbu/signup.html', args)
-
+    if _reg_is_open():
+        return render(request, 'mbu/signup.html', args)
+    else:
+        messages.add_message(request, messages.ERROR, "Registration is closed.")
+        return redirect('mbu_home')
 
 def create(request):
     type = request.GET['type']
@@ -435,3 +438,11 @@ def _get_new_payment_set(payments):
         payment_set.payments.add(payment)
     payment_set.save()
     return payment_set
+
+
+def _reg_is_open():
+    status = RegistrationStatus.objects.first()
+    if status:
+        status = status.status
+
+    return status == 'OPEN'
