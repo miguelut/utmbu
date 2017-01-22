@@ -185,6 +185,7 @@ class ScoutCourseInstanceSerializer(ModelSerializer):
 
 
 class PaymentSet(models.Model):
+    # user = models.ForeignKey(User)
     pp_txn_id = models.CharField(max_length=100, null=True)
     payments = models.ManyToManyField('Payment')
 
@@ -199,3 +200,14 @@ class Payment(models.Model):
 
     def txn_id(self):
         return PaymentSet.objects.get(payments__id__contains=self.pk).pp_txn_id
+
+
+class RegistrationStatus(models.Model):
+    status = models.CharField(max_length=7, choices=(('OPEN', 'OPEN'), ('CLOSED', 'CLOSED')))
+
+    def __str__(self):
+        return 'Status: %s' % self.status
+
+    def save(self, *args, **kwargs):
+        self.__class__.objects.exclude(id=self.id).delete()
+        super(RegistrationStatus, self).save(*args, **kwargs)

@@ -163,4 +163,5 @@ admin.site.register(Scoutmaster)
 admin.site.register(Course)
 admin.site.register(TimeBlock)
 admin.site.register(ScoutmasterRequest, ScoutmasterRequestAdmin)
+admin.site.register(RegistrationStatus)
 

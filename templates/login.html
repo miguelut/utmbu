@@ -30,9 +30,11 @@
             <div class="formFooterButtons">
                 <button type="submit"><span>Log In</span></button>
             </div>
+            {% if registration_status == 'OPEN' %}
             <div>
                 <span class="link muted">Not registered? <a href="{% url 'mbu.views.signup' %}">Sign Up</a></span>
             </div>
+            {% endif %}
             <div>
                 <span class="link muted">Forgot password? <a href="{% url 'password_reset' %}">Reset password</a></span>
             </div>

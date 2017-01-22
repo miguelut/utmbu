@@ -113,6 +113,10 @@ def login(request):
     args.update({'form': form})
     args.update({'next': next_page})
     args.update({'google_key': settings.SOCIAL_AUTH_GOOGLE_PLUS_KEY})
+    status = RegistrationStatus.objects.first()
+    if status:
+        status = status.status
+    args.update({'registration_status': status})
     return render(request, 'login.html', args)
 
 
