@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block content %}
+    {% if registration_status != 'OPEN' %}
+        <div class="alert alert-danger">Registration is closed so you will not be able to edit classes at this time.</div>
+    {% else %}
     <div class="row schedule">
         <div class="col-md-7">
             <table class="table table-striped">
@@ -132,8 +135,10 @@
             </span>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 {% block scripts %}
+    {% if registration_status == 'OPEN' %}
     <script type="application/javascript">
         document.ondragstart = function () { return false; };
         var ViewModel = function () {
@@ -333,4 +338,5 @@
         });
         ko.applyBindings(vm);
     </script>
+    {% endif %}
 {% endblock %}

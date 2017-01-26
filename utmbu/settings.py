@@ -66,6 +66,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'mbu.context_processors.default_links',
     'mbu.context_processors.add_links',
     'mbu.context_processors.add_report_links',
+    'mbu.context_processors.add_registration_status',
 )
 
 # Application definition

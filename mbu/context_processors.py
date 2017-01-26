@@ -1,4 +1,5 @@
 from django.conf import settings
+from mbu.models import RegistrationStatus
 from mbu.util import _is_user_scoutmaster, _is_user_scout, _is_user_parent
 
 
@@ -21,6 +22,14 @@ def add_report_links(request):
         return _get_report_links(user)
     else:
         return {}
+
+
+def add_registration_status(request):
+    status = RegistrationStatus.objects.first()
+    if status:
+        status = status.status
+
+    return {'registration_status': status}
 
 
 def _get_links(user):

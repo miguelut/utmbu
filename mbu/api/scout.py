@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
 from rest_framework.decorators import api_view
-from mbu.models import Scout, ScoutCourseInstance, ScoutCourseInstanceSerializer
+from mbu.models import Scout, ScoutCourseInstance, ScoutCourseInstanceSerializer, RegistrationStatus
 
 __author__ = 'michael'
 
@@ -14,7 +14,7 @@ def scout_enrollments(request, scout_id):
     scout_check = Scout.objects.get(pk=scout_id)
     assert(scout == scout_check)
     enrollments = []
-    if request.method == 'POST':
+    if request.method == 'POST' and _reg_is_open():
         for d in request.data:
             enrollments.append(ScoutCourseInstance.objects.get(pk=d['id']))
 
@@ -27,3 +27,11 @@ def scout_enrollments(request, scout_id):
             enrollments.append(serializer.data)
         result = {'enrollments': enrollments}
         return JsonResponse(result)
+
+
+def _reg_is_open():
+    status = RegistrationStatus.objects.first()
+    if status:
+        status = status.status
+
+    return status == 'OPEN'

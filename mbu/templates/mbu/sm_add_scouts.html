@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block scripts %}
+    {% if registration_status == 'OPEN' %}
     <script type="application/javascript">
         var ViewModel = function() {
             var self = this;
@@ -44,8 +45,10 @@
         vm.add();
         ko.applyBindings(vm);
     </script>
+    {% endif %}
 {% endblock %}
 {% block content %}
+    {% if registration_status == 'OPEN' %}
     <div class="panel-group first-div" id="accordion" role="tablist" aria-multiselectable="true"></div>
     <div class="row col-xs-4 col-xs-offset-4">
     <div data-bind="foreach: forms">
@@ -90,6 +93,7 @@
                     <label for="id_rank">Rank:</label>
                     <select class="textinput textInput form-control" id="id_rank" name="rank" data-bind="value: rank">
                         <option value="">---------</option>
+                        <option value="Scout">Scout</option>
                         <option value="Tenderfoot">Tenderfoot</option>
                         <option value="Second Class">Second Class</option>
                         <option value="First Class" selected="selected">First Class</option>
@@ -110,4 +114,7 @@
             <i class="fa fa-check fa-lg"></i>
         </span>
     </div>
+    {% else %}
+        <div class="alert alert-danger">Registration is closed.</div>
+    {% endif %}
 {% endblock content %}
