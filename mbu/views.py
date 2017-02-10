@@ -1,4 +1,5 @@
 import logging
+from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, render_to_response
@@ -378,6 +379,13 @@ def parent_payments(request):
     args = _get_payment_report_data(scouts)
 
     return render(request, 'mbu/scout_report_payments.html', args)
+
+
+@staff_member_required
+def roster_by_troop(request):
+    troops = Troop.objects.annotate(num_scouts=Count("scouts")).filter(num_scouts__gt=0)[:3]
+    args = {"troops": troops}
+    return render(request, 'mbu/scout_rosters_by_troop.html', args)
 
 
 def _get_payment_report_data(scouts):

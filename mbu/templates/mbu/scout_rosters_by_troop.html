@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+    <title>Merit Badge University</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/datatables.net-bs/css/dataTables.bootstrap.css" %}"/>
+    <style type="text/css" media="print">
+        div.page
+        {
+            page-break-after: always;
+        }
+        div.details {
+            margin-bottom: 30px;
+            border-bottom: solid 1px black;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        {% for troop in troops %}
+        <h1>{{ troop.number }} - {{ troop.council }}</h1>
+            {% for scout in troop.sorted_scouts.all %}
+                {% if scout.enrollments.count > 0 %}
+                <div class="details">
+                    <div style="display: flex; flex-direction: row">
+                        <h3 style="font-weight: 600">{{ scout.user.last_name }}, {{ scout.user.first_name }}</h3>
+                        <h3 style="padding-left: 8px">| ID: {{ scout.id }}</h3>
+                    </div>
+                    <table style="width: 500px">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Room</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for enrollment in scout.sorted_enrollments %}
+                            <tr>
+                                <td>{{ enrollment.course.name }}</td>
+                                <td>{{ enrollment.timeblock.start_time|date:"h:i A" }}</td>
+                                <td>{{ enrollment.timeblock.end_time|date:"h:i A" }}</td>
+                                <td>{{ enrollment.location }}</td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+</body>
+</html>

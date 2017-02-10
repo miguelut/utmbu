@@ -42,6 +42,10 @@ class Troop(models.Model):
     def __str__(self):
         return "%s - %s" % (self.number, self.council)
 
+    @property
+    def sorted_scouts(self):
+        return self.scouts.order_by("user__last_name", "user__first_name")
+
     class Meta:
         unique_together = ('number', 'council')
         ordering = ['number']
@@ -71,7 +75,7 @@ class Parent(models.Model):
 
 class Scout(models.Model):
     user = models.OneToOneField(User)
-    troop = models.ForeignKey('Troop', null=True)
+    troop = models.ForeignKey('Troop', null=True, related_name="scouts")
     rank = models.CharField(max_length=15, choices=settings.SCOUT_RANKS)
     waiver = models.BooleanField(default=False)
     parent = models.ForeignKey('Parent', blank=True, null=True, related_name='scouts')
@@ -79,11 +83,16 @@ class Scout(models.Model):
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)
 
+    @property
+    def sorted_enrollments(self):
+        return self.enrollments.order_by("timeblock__start_time")
+
     class Meta:
         permissions = (
             ('edit_scout_schedule', 'Can edit schedule'),
             ('edit_scout_profile', 'Can edit scout profile')
         )
+        ordering = ['user']
 
 
 class Scoutmaster(models.Model):
