@@ -383,7 +383,7 @@ def parent_payments(request):
 
 @staff_member_required
 def roster_by_troop(request):
-    troops = Troop.objects.annotate(num_scouts=Count("scouts")).filter(num_scouts__gt=0)[:3]
+    troops = Troop.objects.annotate(num_scouts=Count("scouts")).filter(num_scouts__gt=0)
     args = {"troops": troops}
     return render(request, 'mbu/scout_rosters_by_troop.html', args)
 
