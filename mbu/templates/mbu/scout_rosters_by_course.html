@@ -1,0 +1,55 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+<head>
+    <title>Merit Badge University</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/datatables.net-bs/css/dataTables.bootstrap.css" %}"/>
+    <style type="text/css" media="print">
+        div.page
+        {
+            page-break-after: always;
+        }
+        div.details {
+            margin-bottom: 30px;
+            border-bottom: solid 1px black;
+            page-break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        {% for course in courses %}
+        <div class="page">
+        <h1 style="margin-bottom: 0">{{ course.course.name }}</h1>
+        <h5 style="margin-top: 2px">
+            Time: {{ course.timeblock.start_time|date:"h:i A" }} - {{ course.timeblock.end_time|date:"h:i A" }} |
+            Room: {{ course.location }}
+        </h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Troop</th>
+                    <th>Council</th>
+                    <th>Present</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for enrollee in course.sorted_enrollees.all %}
+                 <tr>
+                    <td>{{ enrollee.user.last_name }}, {{ enrollee.user.first_name }}</td>
+                    <td>{{ enrollee.troop.number }}</td>
+                    <td>{{ enrollee.troop.council }}</td>
+                    <td><i class="fa fa-square-o" aria-hidden="true"></i></td>
+                 </tr>
+            {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

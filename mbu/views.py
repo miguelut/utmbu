@@ -388,6 +388,13 @@ def roster_by_troop(request):
     return render(request, 'mbu/scout_rosters_by_troop.html', args)
 
 
+@staff_member_required
+def roster_by_course(request):
+    courses = ScoutCourseInstance.objects.all()
+    args = {"courses": courses}
+    return render(request, 'mbu/scout_rosters_by_course.html', args)
+
+
 def _get_payment_report_data(scouts):
     args = {
         "amount_owed": Decimal(0.00),

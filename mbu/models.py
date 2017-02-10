@@ -177,6 +177,10 @@ class ScoutCourseInstance(models.Model):
         else:
             return 'Full'
 
+    @property
+    def sorted_enrollees(self):
+        return self.enrollees.order_by("user__last_name", "user__first_name")
+
     def __str__(self):
         return self.course.name + str(self.timeblock)
 
