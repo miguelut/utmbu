@@ -20,8 +20,9 @@
     </style>
 </head>
 <body>
-    <div class="page">
+    <div>
         {% for troop in troops %}
+        <div class="page">
         <h1>{{ troop.number }} - {{ troop.council }}</h1>
             {% for scout in troop.sorted_scouts.all %}
                 {% if scout.enrollments.count > 0 %}
@@ -54,6 +55,7 @@
                 </div>
                 {% endif %}
             {% endfor %}
+        </div>
         {% endfor %}
     </div>
 </body>
