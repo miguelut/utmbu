@@ -61,6 +61,11 @@ def _get_links(user):
             'href': 'parent_edit_profile',
             'label': 'Edit Profile'
         })
+    elif user.is_staff:
+        args.get('links').append({
+            'href': 'checkin',
+            'label': 'Checkin'
+        })
     args.get('links').append({
         'href': 'logout',
         'label': 'Logout'
@@ -90,5 +95,14 @@ def _get_report_links(user):
         args.get('report_links').append({
             'href': 'parent_view_waivers',
             'label': 'Waivers'
+        })
+    elif user.is_staff:
+        args.get('report_links').append({
+            'href': 'roster_by_troop',
+            'label': 'Troop Roster Report'
+        })
+        args.get('report_links').append({
+            'href': 'roster_by_course',
+            'label': 'Course Roster Report'
         })
     return args

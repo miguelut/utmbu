@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+    Checkin Troop
+{% endblock %}
+
+{% block content %}
+<br>
+<button class="btn btn-primary" onclick="checkinAll()">Checkin Troop</button>
+<hr>
+<table id="troopListTable" class="table table-hover">
+	<thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Waiver</th>
+            <th>Amount Owed</th>
+            <th>Checked In</th>
+   		</tr>
+   	</thead>
+   	<tbody>
+        {% for scout in scouts %}
+        <tr>
+            <td>{{ scout.user.last_name }}</td>
+            <td>{{ scout.user.first_name }}</td>
+            <td>{{ scout.waiver|yesno }}</td>
+            <td>${{ scout.amount_owed|stringformat:"1.2f" }}</td>
+            {% if scout.checked_in %}
+            <td>
+                <div class="checkbox">
+                    <span>Checked In</span>
+                    <span>
+                        <i class="fa fa-check fa-lg"></i>
+                    </span>
+                </div>
+            </td>
+            {% else %}
+            <td>
+                <div class="checkbox">
+                    <span id="span_{{ scout.id }}">
+                        <input id="checkin_{{ scout.id }}" type="checkbox" class="control"
+                               onclick="checkIn({{ scout.id }})"/>
+                        <label for="checkin_{{ scout.id }}">
+                            Check In
+                        </label>
+                    </span>
+                    <span id="spinner_{{ scout.id }}" hidden>
+                        <img src="{% static 'images/ajax-loader.gif' %}"/>
+                    </span>
+                    <span id="success_{{ scout.id }}" hidden>
+                        <i class="fa fa-check fa-lg"></i>
+                    </span>
+                </div>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#troopListTable').dataTable({
+    "pageLength": 50,
+    "language": {
+        searchPlaceholder: "Search..."
+    },
+    "columnDefs": [
+        { "orderable": false, "targets": 2 }
+    ],
+    "order":[[0, 'asc'], [1, 'asc']]
+  });
+});
+</script>
+
+<script type="application/javascript">
+    var checkIn = function (scout_id) {
+        $('#spinner_' + scout_id).show();
+        $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                url: '/api/checkin/' + scout_id,
+                success: function (response) {
+                    $('#spinner_' + scout_id).hide();
+                    $('#success_' + scout_id).show();
+                    $('#span_' + scout_id).html('<td>Checked In</td>');
+                }
+            }).fail(function () {
+                $('#spinner_' + scout_id).hide();
+            });
+        console.log(scout_id);
+    }
+
+    var checkinAll = function() {
+        var inputs = $('input');
+        for(var i = 0; i < inputs.length; ++i) {
+            inputs[i].click();
+        }
+    }
+</script>
+{% endblock %}

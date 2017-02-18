@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Checkin Troop
+{% endblock %}
+
+{% block content %}
+<br>
+<table id="troopListTable" class="table table-hover">
+	<thead>
+        <tr>
+            <th>Troop Number</th>
+            <th>Council</th>
+            <th>Scout Count</th>
+   		</tr>
+   	</thead>
+   	<tbody>
+        {% for troop in troops %}
+        <tr>
+            <td><a href="{% url  "checkin_troop" troop.id%}">{{ troop.number }}</a></td>
+            <td>{{ troop.council.name }}</td>
+            <td>{{ troop.scouts.count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#troopListTable').dataTable({
+    "pageLength": 50,
+    "language": {
+        searchPlaceholder: "Search..."
+    },
+    "columnDefs": [
+        { "orderable": false, "targets": 2 },
+        { "searchable": false, "targets" : 2}
+    ],
+    "order":[[0, 'asc']]
+  });
+});
+</script>
+
+{% endblock %}

@@ -79,6 +79,7 @@ class Scout(models.Model):
     rank = models.CharField(max_length=15, choices=settings.SCOUT_RANKS)
     waiver = models.BooleanField(default=False)
     parent = models.ForeignKey('Parent', blank=True, null=True, related_name='scouts')
+    checked_in = models.BooleanField(default=False)
 
     def __str__(self):
         return "%d - %s %s" % (self.pk, self.user.first_name, self.user.last_name)

@@ -300,8 +300,7 @@ def sm_view_troop_payments(request):
     troop = Troop.objects.get(scoutmaster=scoutmaster)
     scouts = Scout.objects.all().filter(troop=troop)
     for scout in scouts:
-        payments = Payment.objects.all().filter(user=scout.user, status=settings.PAYMENT_PROCESSED)
-        args['data'].append(_create_scout_payment_data(scout, payments))
+        args['data'].append(_create_scout_payment_data(scout))
     return render(request, 'mbu/sm_report_troop_payments.html', args)
 
 
@@ -318,7 +317,8 @@ def scout_view_payments(request):
     return render(request, 'mbu/scout_report_payments.html', args)
 
 
-def _create_scout_payment_data(scout, payments):
+def _create_scout_payment_data(scout):
+    payments = Payment.objects.filter(user=scout.user, status=settings.PAYMENT_PROCESSED)
     amount_invoiced = _get_amount_invoiced(scout)
     amount_paid = _get_amount_paid(payments)
     amount_owed = Decimal(amount_invoiced) - Decimal(amount_paid)
@@ -326,7 +326,8 @@ def _create_scout_payment_data(scout, payments):
         'scout': scout,
         'amount_owed': amount_owed,
         'amount_invoiced': amount_invoiced,
-        'amount_paid': amount_paid
+        'amount_paid': amount_paid,
+        'payments': payments
     }
 
 
@@ -395,6 +396,22 @@ def roster_by_course(request):
     return render(request, 'mbu/scout_rosters_by_course.html', args)
 
 
+def checkin(request):
+    troops = [t for t in Troop.objects.all() if t.scouts.count() > 0]
+    args = {"troops": troops}
+    return render(request, 'mbu/checkin/checkin.html', args)
+
+
+def checkin_troop(request, troop_id):
+    troop = Troop.objects.get(pk=troop_id)
+    scouts = [s for s in troop.scouts.all() if s.enrollments.count() > 0]
+    for scout in scouts:
+        scout.amount_owed = _create_scout_payment_data(scout)["amount_owed"]
+    args = {"scouts": scouts}
+    return render(request, 'mbu/checkin/checkin_troop_view.html', args)
+
+
+
 def _get_payment_report_data(scouts):
     args = {
         "amount_owed": Decimal(0.00),
@@ -404,12 +421,11 @@ def _get_payment_report_data(scouts):
     }
     payments_for_set = []
     for scout in scouts:
-        payments = Payment.objects.filter(user=scout.user, status=settings.PAYMENT_PROCESSED)
-        data = _create_scout_payment_data(scout, payments)
+        data = _create_scout_payment_data(scout)
         args["amount_owed"] += data["amount_owed"]
         args["amount_paid"] += data["amount_paid"]
         args["amount_invoiced"] += data["amount_invoiced"]
-        args["payments"].extend(payments)
+        args["payments"].extend(data["payments"])
 
         if data["amount_owed"] != Decimal(0.00):
             try:

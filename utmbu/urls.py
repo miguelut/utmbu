@@ -6,10 +6,7 @@ import mbu.paypal_signal_processor
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^roster/by/troop/$', 'mbu.views.roster_by_troop', name='roster_by_troop'),
-    url(r'^roster/by/course/$', 'mbu.views.roster_by_course', name='roster_by_course'),
     url('', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^admin/', include('loginas.urls')),
     url(r'^$', 'mbu.views.view_home_page', name='mbu_home'),
     url(r'^create/$', 'mbu.views.create', name='create'),
     url(r'^class/list/$', 'mbu.views.view_class_list', name='class_list'),
@@ -75,11 +72,22 @@ urlpatterns += patterns(
     url(r'^api/parent/registerscouts', 'mbu.views.parent_registerscouts', name='api_parents_registerscourts'),
     url(r'^api/parent/waiver/(?P<scout_id>\d+)$', 'mbu.views.api_parent_waiver', name='api_parent_waiver'),
     url(r'^api/scoutmaster/registerscouts', 'mbu.views.scoutmaster_registerscouts', name='api_scoutmaster_registerscourts'),
-    url(r'^api/troops', 'mbu.views.add_troop', name='api_add_troop')
+    url(r'^api/troops', 'mbu.views.add_troop', name='api_add_troop'),
+    url(r'^api/checkin/(?P<scout_id>\d+)$', 'mbu.views.check_in_scouts', name='api_add_troop')
 )
 
 #User management urls
 urlpatterns += patterns(
     '',
     url('', include('django.contrib.auth.urls'))
+ )
+
+#Admin Views
+urlpatterns += patterns(
+    '',
+    url(r'^admin/', include('loginas.urls')),
+    url(r'^roster/by/troop/$', 'mbu.views.roster_by_troop', name='roster_by_troop'),
+    url(r'^roster/by/course/$', 'mbu.views.roster_by_course', name='roster_by_course'),
+    url(r'^checkin/$', 'mbu.views.checkin', name='checkin'),
+    url(r'^checkin/(?P<troop_id>-?\d+)/$', 'mbu.views.checkin_troop', name='checkin_troop'),
  )

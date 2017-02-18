@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
 from rest_framework.decorators import api_view
@@ -27,6 +28,16 @@ def scout_enrollments(request, scout_id):
             enrollments.append(serializer.data)
         result = {'enrollments': enrollments}
         return JsonResponse(result)
+
+
+@staff_member_required
+@api_view(http_method_names=['POST'])
+def check_in_scouts(request, scout_id):
+    scout = Scout.objects.get(pk=scout_id)
+    scout.checked_in = True
+    scout.save()
+    result = {"scout": scout_id}
+    return JsonResponse(result)
 
 
 def _reg_is_open():
